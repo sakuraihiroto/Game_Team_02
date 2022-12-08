@@ -12,8 +12,8 @@ GameScene::GameScene() {
 GameScene::~GameScene() {
 	delete model_;
 	delete player_;
+	delete stage_;
 	delete modelStage_;
-
 }
 
 void GameScene::Initialize() {
@@ -40,10 +40,9 @@ void GameScene::Initialize() {
 	//ステージの生成
 	stage_ = new Stage();
 	//ステージモデルの生成
-	modelStage_ = Model::CreateFromOBJ("stage", true);
+	modelStage_ = Model::CreateFromOBJ("stage_collar", true);
 	//ステージの初期化
 	stage_->Initialize(modelStage_);
-
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -51,8 +50,10 @@ void GameScene::Initialize() {
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	viewProjection_.eye.z = 10;
-	viewProjection_.eye.y = 50;
+	//視点
+	viewProjection_.eye.z = 40;
+	viewProjection_.eye.y = 100;
+	viewProjection_.fovAngleY = angle;	
 
 	//視点移動
 	viewProjection_.UpdateMatrix();
@@ -62,6 +63,7 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	player_->Update();
+	stage_->Update();
 
 }
 

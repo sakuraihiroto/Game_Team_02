@@ -71,4 +71,7 @@ class GameScene {
 	//ステージ
 	Stage* stage_ = nullptr;
 
+	//視野角
+	float angle = 0.5f;
+
 };

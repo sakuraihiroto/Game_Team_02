@@ -21,6 +21,12 @@ void Player::Initialize(Model* model)
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
+	//キャラクターの移動ベクトル
+	Vector3 move = { 0,2,0 };//座標{x,y,z}
+
+	//初期座標をセット
+	worldTransform_.translation_ = move;
+
 }
 
 //ワールド座標を入れる変数
