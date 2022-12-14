@@ -68,17 +68,54 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
+	//デスグラフが立った敵を削除
+	enemies_.remove_if([](std::unique_ptr<Enemy>& enemy) {
+		return enemy->IsDead();
+		});
 	player_->Update();
 	stage_->Update();
 	for (std::unique_ptr<Enemy>& enemy : enemies_)
 	{
 		enemy->Update();
 	}
+	//当たり判定
+	Collision();
+}
 
-	//デスグラフが立った敵を削除
-	enemies_.remove_if([](std::unique_ptr<Enemy>& enemy) {
-		return enemy->IsDead();
-		});
+void GameScene::Collision()
+{
+	// 判定対象AとBとCの座標
+	Vector3 posA, posB, posC, posD, posE;
+
+	// AとBの距離
+	float posAB = 0.0f;
+
+	// 弾同士の半径
+	float posR = 0.0f;
+	float posR1 = 1.0f;
+	float posR2 = 1.0f;
+
+	// 自機リストの取得
+	// 敵リストの取得
+	const std::list<std::unique_ptr<Enemy>>& enemy = GetEnemies();
+#pragma region 自機と敵の当たり判定
+	for (std::unique_ptr<Enemy>& enemy : enemies_)
+	{
+		posA = player_->GetWorldPosition();
+		posB = enemy->GetWorldPosition();
+
+		posAB = (posB.x - posA.x) * (posB.x - posA.x) + (posB.y - posA.y) * (posB.y - posA.y) + (posB.z - posA.z) * (posB.z - posA.z);
+		posR = (posR1 + posR2) * (posR1 + posR2);
+		// 球と球の交差判定
+		if (posAB <= posR)
+		{
+			// プレイヤーの衝突時コールバックを呼び出す
+			//player_->OnCollision();
+			// 敵弾の衝突時コールバックを呼び出す
+			enemy->OnCollision();
+		}
+	}
+#pragma endregion
 }
 
 void GameScene::Draw() {

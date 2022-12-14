@@ -47,6 +47,11 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 衝突判定
+	/// </summary>
+	void Collision();
+
 	// 弾リストを取得
 	const std::list < std::unique_ptr<Enemy>>& GetEnemies() { return enemies_; }
 

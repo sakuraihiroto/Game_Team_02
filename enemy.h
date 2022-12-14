@@ -24,7 +24,6 @@ public:
 	/// </summary>
 	void Draw(ViewProjection& viewProjection);
 
-
 	//Õ“Ë”»’è
 	void OnCollision();
 
