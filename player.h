@@ -23,15 +23,13 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(ViewProjection& viewProjection_);
+	void Draw(ViewProjection& viewProjection_,WorldTransform worldTransform);
 
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
 	//プレイヤーの座標
-	float GetX() { return worldTransform_.translation_.x; }
-	float GetY() { return worldTransform_.translation_.y; }
-	float GetZ() { return worldTransform_.translation_.z; }
+	WorldTransform* GatWorldPlayer() { return &worldTransform_; }
 
 private:
 
@@ -48,14 +46,6 @@ private:
 	// 入力処理するため
 	Input* input_ = nullptr;
 	
-	//速度
-	Vector3 velocity_;
-	
-	//プレイヤー移動フラグ
-	int leftMoveFlag = 0;  //左方向
-	int rightMoveFlag = 0; //右方向
-	int upMoveFlag = 0;    //上方向
-	int downMoveFlag = 0;  //下方向
 
 };
 
