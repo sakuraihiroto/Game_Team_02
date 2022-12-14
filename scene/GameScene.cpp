@@ -10,10 +10,10 @@ GameScene::GameScene() {
 }
 
 GameScene::~GameScene() {
-	delete model_;
 	delete player_;
+	delete stage_;
+	delete model_;
 	delete modelStage_;
-
 }
 
 void GameScene::Initialize() {
@@ -37,13 +37,18 @@ void GameScene::Initialize() {
 	//自キャラの初期化
 	player_->Initialize(modelPlayer_);
 
+	//敵の生成,初期化
+	std::unique_ptr<Enemy>newEnemy = std::make_unique<Enemy>();
+	newEnemy->Initialize(model_, { 5,2,0 });
+	//敵を登録する
+	enemies_.push_back(std::move(newEnemy));
+
 	//ステージの生成
 	stage_ = new Stage();
 	//ステージモデルの生成
-	modelStage_ = Model::CreateFromOBJ("stage", true);
+	modelStage_ = Model::CreateFromOBJ("stage_collar", true);
 	//ステージの初期化
 	stage_->Initialize(modelStage_);
-
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -51,8 +56,10 @@ void GameScene::Initialize() {
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	viewProjection_.eye.z = 10;
-	viewProjection_.eye.y = 50;
+	//視点
+	viewProjection_.eye.z = 40;
+	viewProjection_.eye.y = 100;
+	viewProjection_.fovAngleY = angle;
 
 	//視点移動
 	viewProjection_.UpdateMatrix();
@@ -62,7 +69,16 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	player_->Update();
+	stage_->Update();
+	for (std::unique_ptr<Enemy>& enemy : enemies_)
+	{
+		enemy->Update();
+	}
 
+	//デスグラフが立った敵を削除
+	enemies_.remove_if([](std::unique_ptr<Enemy>& enemy) {
+		return enemy->IsDead();
+		});
 }
 
 void GameScene::Draw() {
@@ -77,10 +93,10 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
-	
+
 	//背景描画
 	//sprite_background->Draw();
-	
+
 	// スプライト描画後処理
 	Sprite::PostDraw();
 	// 深度バッファクリア
@@ -97,6 +113,13 @@ void GameScene::Draw() {
 
 	//プレイヤーの描画
 	player_->Draw(viewProjection_);
+
+	//敵の描画
+	for (std::unique_ptr<Enemy>& enemy : enemies_)
+	{
+		enemy->Draw(viewProjection_);
+	}
+
 	//ステージの描画
 	stage_->Draw(viewProjection_);
 
@@ -112,7 +135,7 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
-	
+
 
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
