@@ -46,8 +46,8 @@ void GameScene::Initialize() {
 	worldTransform_.Initialize();
 
 
-	viewProjection_.eye.y = -30;
-	viewProjection_.eye.z = -20;
+	viewProjection_.eye.y = 30;
+	viewProjection_.eye.z = -10;
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 

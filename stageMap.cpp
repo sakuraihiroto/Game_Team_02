@@ -4,89 +4,76 @@
 
 void stageMap::Initialize()
 {
-	modelWall_ = Model::CreateFromOBJ("wall");
+	modelWall_ = Model::CreateFromOBJ("proto");
+	debugText_ = DebugText::GetInstance();
 
-	for (int y = 0; y < mapMax; y++)
+	for (int z = 0; z < mapMax; z++)
 	{
 		for (int x = 0; x < mapMax; x++)
 		{
-			worldTransform_[y][x].scale_ = { 0.5f,0.5f,0.5f };
-			worldTransform_[y][x].translation_ = { -7 + x * 2.0f, 10 + y * -2.0f,0 };
-			worldTransform_[y][x].Initialize();
+			worldTransform_[z][x].scale_ = { 1.0f,1.0f,1.0f };
+			worldTransform_[z][x].translation_ = { -7 + x * 2.0f,0, 10 + z * -2.0f };
+			worldTransform_[z][x].Initialize();
 			//行列の計算
-			worldTransform_[y][x].matWorld_ = matWorld_->CreateMatWorld(worldTransform_[y][x]);
+			worldTransform_[z][x].matWorld_ = matWorld_->CreateMatWorld(worldTransform_[z][x]);
 			//行列の転送
-			worldTransform_[y][x].TransferMatrix();
+			worldTransform_[z][x].TransferMatrix();
 
-			worldTransformTile_[y][x].scale_ = { 0.5f,0.5f,0.5f };
-			worldTransformTile_[y][x].translation_ = { -7 + x * 2.0f, 10 + y * -2.0f,2 };
-			worldTransformTile_[y][x].Initialize();
+			worldTransformTile_[z][x].scale_ = { 0.5f,0.5f,0.5f };
+			worldTransformTile_[z][x].translation_ = { -7 + x * 2.0f, 2,10 + z * -2.0f };
+			worldTransformTile_[z][x].Initialize();
 			//行列の計算	  
-			worldTransformTile_[y][x].matWorld_ = matWorld_->CreateMatWorld(worldTransformTile_[y][x]);
+			worldTransformTile_[z][x].matWorld_ = matWorld_->CreateMatWorld(worldTransformTile_[z][x]);
 			//行列の転送	  
-			worldTransformTile_[y][x].TransferMatrix();
+			worldTransformTile_[z][x].TransferMatrix();
 		}
 	}
 }
 
 void stageMap::Draw(ViewProjection viewProjection_)
 {
-	for (int y = 0; y < mapMax; y++)
+	for (int z = 0; z < mapMax; z++)
 	{
 		for (int x = 0; x < mapMax; x++)
 		{
-			if (mapData[y][x] == 1)
+			if (mapData[z][x] == 1)
 			{
-				modelWall_->Draw(worldTransform_[y][x], viewProjection_);
+				modelWall_->Draw(worldTransform_[z][x], viewProjection_);
 			}
 
-			if (TileData[y][x] == 1)
+			/*if (TileData[z][x] == 1)
 			{
-				modelWall_->Draw(worldTransformTile_[y][x], viewProjection_);
-			}
+				modelWall_->Draw(worldTransformTile_[z][x], viewProjection_);
+			}*/
+
+
 		}
 	}
 }
 
-Vector3 stageMap::GetWorldPosition()
-{
-	//ワールド座標を入れる変数
-	Vector3 worldPos;
-	for (int y = 0; y < mapMax; y++)
-	{
-		for (int x = 0; x < mapMax; x++)
-		{
 
-			worldPos.x = worldTransform_[3][x].matWorld_.m[3][0];
-		}
-		worldPos.y = worldTransform_[3][y].matWorld_.m[3][1];
-	}
 
-	return worldPos;
-
-}
-
-bool stageMap::Collision(float px, float py)
+bool stageMap::Collision(float px, float pz)
 {
 	Vector3 position;
-	for (int y = 0; y < mapMax; y++)
+	for (int z = 0; z < mapMax; z++)
 	{
 		
 		for (int x = 0; x < mapMax; x++)
 		{
 			
-			if (mapData[y][x] == 1)
+			if (mapData[z][x] == 1)
 			{
 
-				position.x = worldTransform_[y][x].translation_.x;
-				position.y = worldTransform_[y][x].translation_.y;
+				position.x = worldTransform_[z][x].translation_.x;
+				position.z = worldTransform_[z][x].translation_.z;
 
-				position.y += 1;
+				
 
 				float dx = abs(position.x - px);
-				float dy = abs(position.y - py);
+				float dz = abs(position.z - pz);
 
-				if (dx < 1.8f && dy < 1.8f)
+				if (dx < 1.8f && dz < 1.8f)
 				{
 					return true;
 				}
@@ -94,4 +81,63 @@ bool stageMap::Collision(float px, float py)
 		}
 	}
 	return false;
+}
+
+bool stageMap::CollisionHoll(float px, float pz)
+{
+	Vector3 position;
+	for (int z = 0; z < mapMax; z++)
+	{
+
+		for (int x = 0; x < mapMax; x++)
+		{
+
+			if (TileData[z][x] == 2)
+			{
+
+				position.x = worldTransform_[z][x].translation_.x;
+				position.z = worldTransform_[z][x].translation_.z;
+
+				
+
+				float dx = abs(position.x - px);
+				float dz = abs(position.z - pz);
+
+				if (dx < 1.8f && dz < 1.8f)
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+void stageMap::DeleteBlock(float px, float pz)
+{
+	Vector3 position;
+	Vector3 position2;
+	for (int z = 0; z < mapMax; z++)
+	{
+
+		for (int x = 0; x < mapMax; x++)
+		{
+			position.x = worldTransform_[z][x].translation_.x;
+			position.z = worldTransform_[z][x].translation_.z;
+
+			
+
+			float dx = abs(position.x - px);
+			float dz = abs(position.z - pz);
+
+
+			
+			if (dx < 2.0f && dz < 2.0f)
+			{
+				mapData[z][x] = 0;
+				
+			}
+			
+		}
+	}
 }
