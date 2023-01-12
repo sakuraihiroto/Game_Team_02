@@ -53,11 +53,6 @@ private:
 	//速度
 	Vector3 velocity_;
 	
-	//プレイヤー移動フラグ
-	int leftMoveFlag = 0;  //左方向
-	int rightMoveFlag = 0; //右方向
-	int upMoveFlag = 0;    //上方向
-	int downMoveFlag = 0;  //下方向
-
+	int deathFlag_ = 0;
 };
 

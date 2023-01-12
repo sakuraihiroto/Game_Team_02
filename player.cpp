@@ -43,51 +43,73 @@ void Player::Update()
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 
-	//左方向
-	if (input_->PushKey(DIK_A)) {
-		
-		float px = worldTransform_.translation_.x - 0.2f;
-		float py = worldTransform_.translation_.y;
+	if (deathFlag_ == 0)
+	{
+		//左方向
+		if (input_->PushKey(DIK_A)) {
 
-		if (stageMap_->Collision(px, py) == false)
-		{
-			move.x -= 0.2f;
+			float px = worldTransform_.translation_.x - 0.2f;
+			float py = worldTransform_.translation_.y;
+
+			if (stageMap_->Collision(px, py) == false)
+			{
+				move.x -= 0.2f;
+			}
+
+			if (stageMap_->CollisionHoll(px, py) == true)
+			{
+				deathFlag_ = 1;
+			}
+		}
+
+		//右方向
+		if (input_->PushKey(DIK_D)) {
+			float px = worldTransform_.translation_.x + 0.2f;
+			float py = worldTransform_.translation_.y;
+
+			if (stageMap_->Collision(px, py) == false)
+			{
+				move.x += 0.2f;
+			}
+
+			if (stageMap_->CollisionHoll(px, py) == true)
+			{
+				deathFlag_ = 1;
+			}
+		}
+
+		// 下方向
+		if (input_->PushKey(DIK_S)) {
+			float px = worldTransform_.translation_.x;
+			float py = worldTransform_.translation_.y - 0.2f;
+
+			if (stageMap_->Collision(px, py) == false)
+			{
+				move.y -= 0.2f;
+			}
+
+			if (stageMap_->CollisionHoll(px, py) == true)
+			{
+				deathFlag_ = 1;
+			}
+		}
+
+		//上方向
+		if (input_->PushKey(DIK_W)) {
+			float px = worldTransform_.translation_.x;
+			float py = worldTransform_.translation_.y + 0.2f;
+
+			if (stageMap_->Collision(px, py) == false)
+			{
+				move.y += 0.2f;
+			}
+
+			if (stageMap_->CollisionHoll(px, py) == true)
+			{
+				deathFlag_ = 1;
+			}
 		}
 	}
-	
-	//右方向
-	if (input_->PushKey(DIK_D)) {
-		float px = worldTransform_.translation_.x + 0.2f;
-		float py = worldTransform_.translation_.y;
-
-		if (stageMap_->Collision(px, py) == false)
-		{
-			move.x += 0.2f;
-		}
-	}
-
-	// 下方向
-	if (input_->PushKey(DIK_S)) {
-		float px = worldTransform_.translation_.x;
-		float py = worldTransform_.translation_.y - 0.2f;
-
-		if (stageMap_->Collision(px, py) == false)
-		{
-			move.y -= 0.2f;
-		}
-	}
-
-	//上方向
-	if (input_->PushKey(DIK_W)) {
-		float px = worldTransform_.translation_.x;
-		float py = worldTransform_.translation_.y + 0.2f;
-
-		if (stageMap_->Collision(px, py) == false)
-		{
-			move.y += 0.2f;
-		}
-	}
-
 
 	worldTransform_.translation_ += move;
 
@@ -101,8 +123,10 @@ void Player::Update()
 //描画処理
 void Player::Draw(ViewProjection& viewProjection_)
 {
-	model_->Draw(worldTransform_, viewProjection_);
-
+	if (deathFlag_ == 0)
+	{
+		model_->Draw(worldTransform_, viewProjection_);
+	}
 	// デバックテキスト
 	debugText_->SetPos(20, 80);
 	debugText_->Printf(

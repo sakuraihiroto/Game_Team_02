@@ -17,7 +17,9 @@ public:
 
 	void Draw(ViewProjection viewProjection_);
 
-	bool Collision(float px, float pz);
+	bool Collision(float px, float py);
+
+	bool CollisionHoll(float px, float py);
 
 	Vector3 GetWorldPosition();
 
@@ -48,8 +50,8 @@ private:
 		{1,1,1,1,1,1,1,1,1,1},
 		{1,1,1,1,1,1,1,1,1,1},
 		{1,1,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,2,1,2,1,1,1,1},
+		{1,1,1,2,1,2,1,1,1,1},
 		{1,1,1,1,1,1,1,1,1,1}
 	};
 

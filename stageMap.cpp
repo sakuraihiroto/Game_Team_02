@@ -95,3 +95,33 @@ bool stageMap::Collision(float px, float py)
 	}
 	return false;
 }
+
+bool stageMap::CollisionHoll(float px, float py)
+{
+	Vector3 position;
+	for (int y = 0; y < mapMax; y++)
+	{
+
+		for (int x = 0; x < mapMax; x++)
+		{
+
+			if (TileData[y][x] == 2)
+			{
+
+				position.x = worldTransform_[y][x].translation_.x;
+				position.y = worldTransform_[y][x].translation_.y;
+
+				position.y += 1;
+
+				float dx = abs(position.x - px);
+				float dy = abs(position.y - py);
+
+				if (dx < 1.8f && dy < 1.8f)
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
