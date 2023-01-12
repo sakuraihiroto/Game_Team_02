@@ -5,6 +5,7 @@
 #include "TextureManager.h"
 #include "Input.h"
 #include "matWorld.h"
+#include"enemy.h"
 
 class Stage
 {
@@ -17,6 +18,11 @@ public:
 
 	void Draw(ViewProjection viewProjection);
 
+	//ワールドトランスフォームを取得
+	WorldTransform* GetWorldTransformPtr();
+	WorldTransform GetWorldTransform();
+	//
+	Matrix4 GetMatWorld();
 private:
 
 	//ワールド変換データ
@@ -27,6 +33,6 @@ private:
 	Input* input_ = nullptr;
 	//モデル
 	Model* model_ = nullptr;
-
-
+	//敵
+	Enemy* enemy_ = nullptr;
 };

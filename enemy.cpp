@@ -14,18 +14,31 @@ void Enemy::Initialize(Model* model, const Vector3& position) {
 	//テクスチャ読み込み
 	textureHandle_ = TextureManager::Load("yellow.png");
 
+	//input_ = Input::GetInstance();
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 
 	//初期座標をセット
 	worldTransform_.translation_ = position;
 
+	//親を設定
+	//worldTransform_.parent_ =stage->GetWorldTransformPtr();
 }
 
 void Enemy::Update()
 {
 	//行列の計算
+	//stage->GetMatWorld() = enemyMatworld->CreateMatWorld(stage->GetWorldTransform());
+	//行列の転送
+	//worldTransform_.TransferMatrix();
+
+	//行列の計算
 	worldTransform_.matWorld_ = enemyMatworld->CreateMatWorld(worldTransform_);
+
+	/*if (worldTransform_.parent_ != nullptr)
+	{
+		worldTransform_.matWorld_ *= stage->GetMatWorld();
+	}*/
 	//行列の転送
 	worldTransform_.TransferMatrix();
 }
@@ -40,6 +53,11 @@ Vector3 Enemy::GetWorldPosition()
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
+}
+
+WorldTransform* Enemy::GetWorldTransform()
+{
+	return &worldTransform_;
 }
 
 //衝突判定

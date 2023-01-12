@@ -4,6 +4,7 @@
 #include"WorldTransform.h"
 #include"Model.h"
 #include"matWorld.h"
+//#include"stage.h"
 
 
 class Enemy
@@ -30,6 +31,9 @@ public:
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	//
+	WorldTransform*GetWorldTransform();
+
 	bool IsDead() const { return isDead_; }
 
 private:
@@ -44,6 +48,10 @@ private:
 	//行列計算クラス
 	MatWorld* enemyMatworld = nullptr;
 
+
+	//Input* input_ = nullptr;
+	//ステージ
+	//Stage* stage = nullptr;
 	//デスフラグ
 	bool isDead_ = false;
 };

@@ -50,46 +50,19 @@ void Player::Update()
 
 	//¶•ûŒü
 	if (input_->PushKey(DIK_A)) {
-		leftMoveFlag = 1;
-		rightMoveFlag = 0;
-		upMoveFlag = 0;
-		downMoveFlag = 0;
-	}
-	if (leftMoveFlag == 1)
-	{
 		move.x += 0.2f;
 	}
 	//‰E•ûŒü
 	if (input_->PushKey(DIK_D)) {
-		rightMoveFlag = 1;
-		leftMoveFlag = 0;
-		downMoveFlag = 0;
-		upMoveFlag = 0;
-	}
-	if (rightMoveFlag == 1)
-	{
 		move.x -= 0.2f;
 	}
 	// ‰º•ûŒü
 	if (input_->PushKey(DIK_S)) {
-		downMoveFlag = 1;
-		upMoveFlag = 0;
-		rightMoveFlag = 0;
-		leftMoveFlag = 0;
-	}
-	if (downMoveFlag == 1)
-	{
 		move.z += 0.2f;
 	}
+
 	//ã•ûŒü
 	if (input_->PushKey(DIK_W)) {
-		upMoveFlag = 1;
-		downMoveFlag = 0;
-		leftMoveFlag = 0;
-		rightMoveFlag = 0;
-	}
-	if (upMoveFlag == 1)
-	{
 		move.z -= 0.2f;
 	}
 

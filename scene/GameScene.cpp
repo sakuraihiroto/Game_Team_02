@@ -42,7 +42,7 @@ void GameScene::Initialize() {
 	newEnemy->Initialize(model_, { 5,2,0 });
 	//敵を登録する
 	enemies_.push_back(std::move(newEnemy));
-
+	
 	//ステージの生成
 	stage_ = new Stage();
 	//ステージモデルの生成
@@ -80,6 +80,8 @@ void GameScene::Update() {
 	}
 	//当たり判定
 	Collision();
+	
+
 }
 
 void GameScene::Collision()
