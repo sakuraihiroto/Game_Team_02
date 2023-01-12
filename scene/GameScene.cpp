@@ -37,7 +37,7 @@ void GameScene::Initialize() {
 	//自キャラモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("cube", true);
 	//自キャラの初期化
-	player_->Initialize(modelPlayer_);
+	player_->Initialize(modelPlayer_,stageMap_);
 
 	stageMap_->Initialize();
 
@@ -45,6 +45,9 @@ void GameScene::Initialize() {
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 
+
+	viewProjection_.eye.y = -30;
+	viewProjection_.eye.z = -20;
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 

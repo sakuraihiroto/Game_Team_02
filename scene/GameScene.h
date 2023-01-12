@@ -10,7 +10,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "player.h"
-#include "stageMap.h"
+
 
 
 /// <summary>

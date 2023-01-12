@@ -3,6 +3,12 @@
 #include "WorldTransform.h"
 #include "MatWorld.h"
 #include "ViewProjection.h"
+#include <DirectXMath.h>
+
+
+using namespace DirectX;
+
+
 class stageMap
 {
 
@@ -10,6 +16,11 @@ public:
 	void Initialize();
 
 	void Draw(ViewProjection viewProjection_);
+
+	bool Collision(float px, float pz);
+
+	Vector3 GetWorldPosition();
+
 public:
 	static const int mapMax = 10;
 
