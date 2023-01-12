@@ -48,8 +48,7 @@ void GameScene::Initialize() {
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	viewProjection_.eye.z = 10;
-	viewProjection_.eye.y = 50;
+
 
 	//視点移動
 	viewProjection_.UpdateMatrix();

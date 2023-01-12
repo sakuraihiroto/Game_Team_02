@@ -51,7 +51,7 @@ void Player::Update()
 	}
 	if (leftMoveFlag == 1)
 	{
-		move.x += 0.2f;
+		move.x -= 0.2f;
 	}
 	//‰E•ûŒü
 	if (input_->PushKey(DIK_D)) {
@@ -62,7 +62,7 @@ void Player::Update()
 	}
 	if (rightMoveFlag == 1)
 	{
-		move.x -= 0.2f;
+		move.x += 0.2f;
 	}
 	// ‰º•ûŒü
 	if (input_->PushKey(DIK_S)) {
@@ -73,7 +73,7 @@ void Player::Update()
 	}
 	if (downMoveFlag == 1)
 	{
-		move.z += 0.2f;
+		move.y -= 0.2f;
 	}
 	//ã•ûŒü
 	if (input_->PushKey(DIK_W)) {
@@ -84,7 +84,7 @@ void Player::Update()
 	}
 	if (upMoveFlag == 1)
 	{
-		move.z -= 0.2f;
+		move.y += 0.2f;
 	}
 
 	worldTransform_.translation_ += move;
