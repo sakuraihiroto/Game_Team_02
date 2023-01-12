@@ -17,6 +17,14 @@ void stageMap::Initialize()
 			worldTransform_[y][x].matWorld_ = matWorld_->CreateMatWorld(worldTransform_[y][x]);
 			//s—ñ‚Ì“]‘—
 			worldTransform_[y][x].TransferMatrix();
+
+			worldTransformTile_[y][x].scale_ = { 0.5f,0.5f,0.5f };
+			worldTransformTile_[y][x].translation_ = { -7 + x * 2.0f, 10 + y * -2.0f,2 };
+			worldTransformTile_[y][x].Initialize();
+			//s—ñ‚ÌŒvŽZ	  
+			worldTransformTile_[y][x].matWorld_ = matWorld_->CreateMatWorld(worldTransformTile_[y][x]);
+			//s—ñ‚Ì“]‘—	  
+			worldTransformTile_[y][x].TransferMatrix();
 		}
 	}
 }
@@ -30,6 +38,11 @@ void stageMap::Draw(ViewProjection viewProjection_)
 			if (mapData[y][x] == 1)
 			{
 				modelWall_->Draw(worldTransform_[y][x], viewProjection_);
+			}
+
+			if (TileData[y][x] == 1)
+			{
+				modelWall_->Draw(worldTransformTile_[y][x], viewProjection_);
 			}
 		}
 	}
