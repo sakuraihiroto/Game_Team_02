@@ -10,7 +10,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "player.h"
-#include "stage.h"
+#include "stageMap.h"
 
 
 /// <summary>
@@ -59,7 +59,7 @@ class GameScene {
 	//3Dモデル
 	Model* model_ = nullptr;
 	Model* modelPlayer_ = nullptr; //プレイヤーモデル
-	Model* modelStage_ = nullptr;  //ステージモデル
+
 
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
@@ -68,7 +68,6 @@ class GameScene {
 
 	//自キャラ
 	Player* player_ = nullptr;
-	//ステージ
-	Stage* stage_ = nullptr;
 
+	stageMap* stageMap_ =nullptr;
 };

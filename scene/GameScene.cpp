@@ -12,7 +12,7 @@ GameScene::GameScene() {
 GameScene::~GameScene() {
 	delete model_;
 	delete player_;
-	delete modelStage_;
+	delete stageMap_;
 
 }
 
@@ -32,17 +32,14 @@ void GameScene::Initialize() {
 
 	//自キャラの生成
 	player_ = new Player();
+
+	stageMap_ = new stageMap();
 	//自キャラモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("cube", true);
 	//自キャラの初期化
 	player_->Initialize(modelPlayer_);
 
-	//ステージの生成
-	stage_ = new Stage();
-	//ステージモデルの生成
-	modelStage_ = Model::CreateFromOBJ("stage", true);
-	//ステージの初期化
-	stage_->Initialize(modelStage_);
+	stageMap_->Initialize();
 
 
 	//ワールドトランスフォームの初期化
@@ -97,8 +94,7 @@ void GameScene::Draw() {
 
 	//プレイヤーの描画
 	player_->Draw(viewProjection_);
-	//ステージの描画
-	stage_->Draw(viewProjection_);
+	stageMap_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
