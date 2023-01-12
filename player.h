@@ -8,12 +8,12 @@
 #include<list>
 #include "matWorld.h"
 #include "ViewProjection.h"
-
+#include "stageMap.h"
 
 class Player
 {
 public:
-	void Initialize(Model* model);
+	void Initialize(Model* model,stageMap* stageMap);
 
 	///<summary>
 	///XV
@@ -47,7 +47,9 @@ private:
 	DebugText* debugText_ = nullptr;
 	// “ü—Íˆ—‚·‚é‚½‚ß
 	Input* input_ = nullptr;
-	
+
+	stageMap* stageMap_ = nullptr;
+
 	//‘¬“x
 	Vector3 velocity_;
 	
