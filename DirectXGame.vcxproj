@@ -107,6 +107,7 @@
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="stage.cpp" />
+    <ClCompile Include="stageMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\DebugText.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="stage.h" />
+    <ClInclude Include="stageMap.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">
