@@ -8,12 +8,12 @@
 #include<list>
 #include "matWorld.h"
 #include "ViewProjection.h"
-
+#include "stageMap.h"
 
 class Player
 {
 public:
-	void Initialize(Model* model);
+	void Initialize(Model* model, stageMap* stageMap);
 
 	///<summary>
 	///更新
@@ -47,15 +47,11 @@ private:
 	DebugText* debugText_ = nullptr;
 	// 入力処理するため
 	Input* input_ = nullptr;
-	
+
+	stageMap* stageMap_ = nullptr;
+
 	//速度
 	Vector3 velocity_;
-	
-	//プレイヤー移動フラグ
-	int leftMoveFlag = 0;  //左方向
-	int rightMoveFlag = 0; //右方向
-	int upMoveFlag = 0;    //上方向
-	int downMoveFlag = 0;  //下方向
 
+	int deathFlag_ = 0;
 };
-

@@ -10,10 +10,10 @@ GameScene::GameScene() {
 }
 
 GameScene::~GameScene() {
-	delete player_;
-	delete stage_;
 	delete model_;
-	delete modelStage_;
+	delete player_;
+	delete stageMap_;
+
 }
 
 void GameScene::Initialize() {
@@ -32,34 +32,23 @@ void GameScene::Initialize() {
 
 	//自キャラの生成
 	player_ = new Player();
+
+	stageMap_ = new stageMap();
 	//自キャラモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("cube", true);
 	//自キャラの初期化
-	player_->Initialize(modelPlayer_);
+	player_->Initialize(modelPlayer_, stageMap_);
 
-	//敵の生成,初期化
-	std::unique_ptr<Enemy>newEnemy = std::make_unique<Enemy>();
-	newEnemy->Initialize(model_, { 5,2,0 });
-	//敵を登録する
-	enemies_.push_back(std::move(newEnemy));
-	
-	//ステージの生成
-	stage_ = new Stage();
-	//ステージモデルの生成
-	modelStage_ = Model::CreateFromOBJ("stage_collar", true);
-	//ステージの初期化
-	stage_->Initialize(modelStage_);
+	stageMap_->Initialize();
+
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 
+	//viewProjection_.eye.y = -30;
+	//viewProjection_.eye.z = -20;
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-
-	//視点
-	viewProjection_.eye.z = 40;
-	viewProjection_.eye.y = 100;
-	viewProjection_.fovAngleY = angle;
 
 	//視点移動
 	viewProjection_.UpdateMatrix();
@@ -68,56 +57,31 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	//デスグラフが立った敵を削除
-	enemies_.remove_if([](std::unique_ptr<Enemy>& enemy) {
-		return enemy->IsDead();
-		});
-	player_->Update();
-	stage_->Update();
-	for (std::unique_ptr<Enemy>& enemy : enemies_)
+	switch (scene)
 	{
-		enemy->Update();
+	case title:
+		
+		break;
+	case tutorial:
+		break;
+	case gameScene:
+		player_->Update();
+		break;
+	case gameOver:
+		break;
+	default:
+		break;
 	}
-	//当たり判定
-	Collision();
-	
-
-}
-
-void GameScene::Collision()
-{
-	// 判定対象AとBとCの座標
-	Vector3 posA, posB, posC, posD, posE;
-
-	// AとBの距離
-	float posAB = 0.0f;
-
-	// 弾同士の半径
-	float posR = 0.0f;
-	float posR1 = 1.0f;
-	float posR2 = 1.0f;
-
-	// 自機リストの取得
-	// 敵リストの取得
-	const std::list<std::unique_ptr<Enemy>>& enemy = GetEnemies();
-#pragma region 自機と敵の当たり判定
-	for (std::unique_ptr<Enemy>& enemy : enemies_)
+	//spaceでシーンチェンジ
+	if (input_->TriggerKey(DIK_SPACE)&&scene<=gameScene)
 	{
-		posA = player_->GetWorldPosition();
-		posB = enemy->GetWorldPosition();
-
-		posAB = (posB.x - posA.x) * (posB.x - posA.x) + (posB.y - posA.y) * (posB.y - posA.y) + (posB.z - posA.z) * (posB.z - posA.z);
-		posR = (posR1 + posR2) * (posR1 + posR2);
-		// 球と球の交差判定
-		if (posAB <= posR)
-		{
-			// プレイヤーの衝突時コールバックを呼び出す
-			//player_->OnCollision();
-			// 敵弾の衝突時コールバックを呼び出す
-			enemy->OnCollision();
-		}
+		scene += 1;
 	}
-#pragma endregion
+	//gameOver&gameClearの時,titleに戻る
+	else if(input_->TriggerKey(DIK_SPACE) && scene >gameScene)
+	{
+		scene = title;
+	}
 }
 
 void GameScene::Draw() {
@@ -145,22 +109,28 @@ void GameScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
-
+	debugText_->SetPos(20, 20);
+	debugText_->Printf("scene:%d", scene);
+	switch (scene)
+	{
+	case title:
+		break;
+	case tutorial:
+		break;
+	case gameScene:
+		//プレイヤーの描画
+		player_->Draw(viewProjection_);
+		stageMap_->Draw(viewProjection_);
+		break;
+	case gameOver:
+		break;
+	default:
+		break;
+	}
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	//プレイヤーの描画
-	player_->Draw(viewProjection_);
-
-	//敵の描画
-	for (std::unique_ptr<Enemy>& enemy : enemies_)
-	{
-		enemy->Draw(viewProjection_);
-	}
-
-	//ステージの描画
-	stage_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -173,7 +143,6 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-
 
 
 	// デバッグテキストの描画

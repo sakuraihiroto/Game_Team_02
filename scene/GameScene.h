@@ -10,10 +10,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "player.h"
-#include "stage.h"
-#include "enemy.h"
-#include<memory>//ユニークポインタ
-#include<list>
+
 
 
 /// <summary>
@@ -47,15 +44,17 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-	/// <summary>
-	/// 衝突判定
-	/// </summary>
-	void Collision();
-
-	// 弾リストを取得
-	const std::list < std::unique_ptr<Enemy>>& GetEnemies() { return enemies_; }
-
 private: // メンバ変数
+	enum シーン
+	{
+		title,				//0
+		tutorial,			//1
+		gameScene,			//2
+		gameOver,			//3
+		gameClear			//4
+	};
+
+
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
@@ -63,18 +62,16 @@ private: // メンバ変数
 
 	//テクスチャハンドル
 	uint32_t textureHandle_background = 0; //背景
+	//シーン
+	uint32_t scene = title;
 
 	//スプライト
 	Sprite* sprite_background = nullptr; //背景
 
-	//敵
-	std::list<std::unique_ptr<Enemy>>enemies_;
-	Enemy* enemy_ = nullptr;
-
 	//3Dモデル
 	Model* model_ = nullptr;
 	Model* modelPlayer_ = nullptr; //プレイヤーモデル
-	Model* modelStage_ = nullptr;  //ステージモデル
+
 
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
@@ -83,10 +80,6 @@ private: // メンバ変数
 
 	//自キャラ
 	Player* player_ = nullptr;
-	//ステージ
-	Stage* stage_ = nullptr;
 
-	//視野角
-	float angle = 0.5f;
-
+	stageMap* stageMap_ = nullptr;
 };

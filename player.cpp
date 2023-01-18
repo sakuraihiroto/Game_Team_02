@@ -3,13 +3,14 @@
 // アフィン行列呼び出し
 MatWorld* playerMatworld = nullptr;
 
-void Player::Initialize(Model* model)
+void Player::Initialize(Model* model, stageMap* stageMap)
 {
 	// NULLポインタチェック
 	assert(model);
 
 	// 引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
+	stageMap_ = stageMap;
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
@@ -20,12 +21,6 @@ void Player::Initialize(Model* model)
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-
-	//キャラクターの移動ベクトル
-	Vector3 move = { 10,2,0 };//座標{x,y,z}
-
-	//初期座標をセット
-	worldTransform_.translation_ = move;
 
 }
 
@@ -48,22 +43,72 @@ void Player::Update()
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 
-	//左方向
-	if (input_->PushKey(DIK_A)) {
-		move.x += 0.2f;
-	}
-	//右方向
-	if (input_->PushKey(DIK_D)) {
-		move.x -= 0.2f;
-	}
-	// 下方向
-	if (input_->PushKey(DIK_S)) {
-		move.z += 0.2f;
-	}
+	if (deathFlag_ == 0)
+	{
+		//左方向
+		if (input_->PushKey(DIK_A)) {
 
-	//上方向
-	if (input_->PushKey(DIK_W)) {
-		move.z -= 0.2f;
+			float px = worldTransform_.translation_.x - 0.2f;
+			float py = worldTransform_.translation_.y;
+
+			if (stageMap_->Collision(px, py) == false)
+			{
+				move.x -= 0.2f;
+			}
+
+			if (stageMap_->CollisionHoll(px, py) == true)
+			{
+				deathFlag_ = 1;
+			}
+		}
+
+		//右方向
+		if (input_->PushKey(DIK_D)) {
+			float px = worldTransform_.translation_.x + 0.2f;
+			float py = worldTransform_.translation_.y;
+
+			if (stageMap_->Collision(px, py) == false)
+			{
+				move.x += 0.2f;
+			}
+
+			if (stageMap_->CollisionHoll(px, py) == true)
+			{
+				deathFlag_ = 1;
+			}
+		}
+
+		// 下方向
+		if (input_->PushKey(DIK_S)) {
+			float px = worldTransform_.translation_.x;
+			float py = worldTransform_.translation_.y - 0.2f;
+
+			if (stageMap_->Collision(px, py) == false)
+			{
+				move.y -= 0.2f;
+			}
+
+			if (stageMap_->CollisionHoll(px, py) == true)
+			{
+				deathFlag_ = 1;
+			}
+		}
+
+		//上方向
+		if (input_->PushKey(DIK_W)) {
+			float px = worldTransform_.translation_.x;
+			float py = worldTransform_.translation_.y + 0.2f;
+
+			if (stageMap_->Collision(px, py) == false)
+			{
+				move.y += 0.2f;
+			}
+
+			if (stageMap_->CollisionHoll(px, py) == true)
+			{
+				deathFlag_ = 1;
+			}
+		}
 	}
 
 	worldTransform_.translation_ += move;
@@ -78,22 +123,16 @@ void Player::Update()
 //描画処理
 void Player::Draw(ViewProjection& viewProjection_)
 {
-	model_->Draw(worldTransform_, viewProjection_);
-
+	if (deathFlag_ == 0)
+	{
+		model_->Draw(worldTransform_, viewProjection_);
+	}
 	// デバックテキスト
 	debugText_->SetPos(20, 80);
 	debugText_->Printf(
-		"leftMoveFlag(%d)", leftMoveFlag);
-	// デバックテキスト
+		"worldTranform.x(%d)", worldTransform_.translation_.x);
 	debugText_->SetPos(20, 100);
 	debugText_->Printf(
-		"rightMoveFlag(%d)", rightMoveFlag);
-	// デバックテキスト
-	debugText_->SetPos(20, 120);
-	debugText_->Printf(
-		"upMoveFlag(%d)", upMoveFlag);
-	// デバックテキスト
-	debugText_->SetPos(20, 140);
-	debugText_->Printf(
-		"downMoveFlag(%d)", downMoveFlag);
+		"worldTranform.y(%d)", worldTransform_.translation_.y);
+
 }
