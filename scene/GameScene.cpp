@@ -5,6 +5,7 @@
 
 MatWorld* matworld_ = nullptr;
 
+using Microsoft::WRL::ComPtr;
 
 GameScene::GameScene() {
 }
@@ -51,7 +52,7 @@ void GameScene::Initialize() {
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-
+	
 
 	//視点移動
 	viewProjection_.UpdateMatrix();
@@ -67,11 +68,11 @@ void GameScene::Update() {
 void GameScene::Draw() {
 
 	// コマンドリストの取得
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+	ComPtr<ID3D12GraphicsCommandList> commandList = dxCommon_->GetCommandList();
 
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
-	Sprite::PreDraw(commandList);
+	Sprite::PreDraw(commandList.Get());
 
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
@@ -88,7 +89,7 @@ void GameScene::Draw() {
 
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
-	Model::PreDraw(commandList);
+	Model::PreDraw(commandList.Get());
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
@@ -104,7 +105,7 @@ void GameScene::Draw() {
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
-	Sprite::PreDraw(commandList);
+	Sprite::PreDraw(commandList.Get());
 
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
@@ -113,7 +114,7 @@ void GameScene::Draw() {
 	
 
 	// デバッグテキストの描画
-	debugText_->DrawAll(commandList);
+	debugText_->DrawAll(commandList.Get());
 	//
 	// スプライト描画後処理
 	Sprite::PostDraw();

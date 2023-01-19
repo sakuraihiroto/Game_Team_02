@@ -69,5 +69,7 @@ class GameScene {
 	//自キャラ
 	Player* player_ = nullptr;
 
-	stageMap* stageMap_ =nullptr;
+	stageMap* stageMap_ = nullptr;
+
+
 };
