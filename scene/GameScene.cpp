@@ -17,18 +17,6 @@ GameScene::~GameScene() {
 
 }
 
-void GameScene::Count()
-{
-	//カウントダウン
-	count_--;
-	//60フレーム毎に1秒減る
-	if (count_ <= 0)
-	{
-		time -= 1;
-		count_ = 60;
-	}
-}
-
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
@@ -36,9 +24,14 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
-	////背景の生成
-	//textureHandle_background = TextureManager::Load("background.png");
-	//sprite_background = Sprite::Create(textureHandle_background, { 0,0 });
+	//カウントダウン2Dスプライト
+	textureHandleNumber_ = TextureManager::Load("bitmapfont.png");
+	for (int i = 0; i < 3; i++)
+	{
+		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 400.f + i * 40,0 });
+	}
+	//時間
+	time = 160;
 
 	//3Dモデルの生成
 	model_ = Model::Create();
@@ -62,9 +55,6 @@ void GameScene::Initialize() {
 
 	//視点移動
 	viewProjection_.UpdateMatrix();
-
-	//時間
-	time = 160;
 }
 
 void GameScene::Update() {
@@ -96,7 +86,7 @@ void GameScene::Update() {
 		break;
 	}
 	//spaceでシーンチェンジ
-	if (input_->TriggerKey(DIK_SPACE) && scene <= gameScene)
+	if (input_->TriggerKey(DIK_SPACE) && scene < gameScene)
 	{
 		scene += 1;
 	}
@@ -122,9 +112,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
-
 	//背景描画
 	//sprite_background->Draw();
+	DrawTime();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -182,4 +172,42 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+void GameScene::Count()
+{
+	//カウントダウン
+	count_--;
+	//60フレーム毎に1秒減る
+	if (count_ <= 0)
+	{
+		time -= 1;
+		count_ = 60;
+	}
+}
+
+void GameScene::DrawTime()
+{
+
+	//各桁の数値を描画
+	for (int i = 0; i < Digit; i++)
+	{
+		spriteNumber[i]->SetSize({ 40,40 });
+		spriteNumber[i]->SetTextureRect({ 0,0 }, { 40,40 });
+		spriteNumber[i]->Draw();
+		//各桁の値を取り出す
+		char eachNumber[Digit] = {};
+		int number = time;
+
+		int CalcDigit = 100;
+		for (int i = 0; i < Digit; i++)
+		{
+			eachNumber[i] = number / CalcDigit;
+			number = number % CalcDigit;
+			CalcDigit = CalcDigit / 10;
+		}
+		spriteNumber[i]->SetSize({ 40,40 });
+		spriteNumber[i]->SetTextureRect({ 40.0f*eachNumber[i],0}, {40,40});
+		spriteNumber[i]->Draw();
+	}
 }

@@ -58,5 +58,5 @@ private:
 	//Šp“x ‘OŒü‚«
 	float playerDir = 0;
 
-	bool deathFlag_ = false;
+	int deathFlag_ = 0;
 };

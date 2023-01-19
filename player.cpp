@@ -39,17 +39,16 @@ Vector3 Player::GetWorldPosition()
 
 void Player::Update()
 {
-
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 
 	if (deathFlag_ == 0)
 	{
 		//左方向
-		if (input_->PushKey(DIK_A)) {playerDir += 0.05f;}
+		if (input_->PushKey(DIK_A)) { playerDir += 0.05f; }
 
 		//右方向
-		if (input_->PushKey(DIK_D)) {playerDir -= 0.05f;}
+		if (input_->PushKey(DIK_D)) { playerDir -= 0.05f; }
 
 		// 下方向
 		if (input_->PushKey(DIK_S)) {
@@ -84,23 +83,32 @@ void Player::Update()
 				deathFlag_ = true;
 			}
 		}
+		if (input_->TriggerKey(DIK_SPACE))
+		{
+			float px = worldTransform_.translation_.x;
+			float pz = worldTransform_.translation_.z;
+
+			stageMap_->PutBlock(px, pz);
+			stageMap_->DeleteBlock(px, pz);
+
+
+		}
+		//回転表示
+		float dir = -playerDir * 180 / 3.14f;
+		dir += 90;
+		worldTransform_.rotation_.x = dir;
+		worldTransform_.rotation_.y = dir;
+		worldTransform_.rotation_.z = dir;
+		worldTransform_.translation_ += move;
+
+		//行列の計算
+		worldTransform_.matWorld_ = playerMatworld->CreateMatWorld(worldTransform_);
+		//行列の転送
+		worldTransform_.TransferMatrix();
 	}
-	//回転表示
-	float dir = -playerDir * 180 / 3.14f;
-	dir += 90;
-	worldTransform_.rotation_.x = dir;
-	worldTransform_.rotation_.y = dir;
-	worldTransform_.rotation_.z = dir;
-
-
-	worldTransform_.translation_ += move;
-
-	//行列の計算
-	worldTransform_.matWorld_ = playerMatworld->CreateMatWorld(worldTransform_);
-	//行列の転送
-	worldTransform_.TransferMatrix();
-
 }
+
+
 
 //描画処理
 void Player::Draw(ViewProjection& viewProjection_)
@@ -112,12 +120,11 @@ void Player::Draw(ViewProjection& viewProjection_)
 	// デバックテキスト
 	debugText_->SetPos(20, 80);
 	debugText_->Printf(
-		"worldTranform.x(%d)", worldTransform_.translation_.x);
+		"worldTransform.x(%lf)", worldTransform_.translation_.x);
 	debugText_->SetPos(20, 100);
 	debugText_->Printf(
-		"worldTranform.y(%d)", worldTransform_.translation_.y);
+		"worldTransform.z(%lf)", worldTransform_.translation_.z);
 	debugText_->SetPos(20, 120);
 	debugText_->Printf(
 		"deathFlag(%d)", deathFlag_);
-
 }

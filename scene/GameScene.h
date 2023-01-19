@@ -45,6 +45,11 @@ public: // メンバ関数
 	void Draw();
 
 	/// <summary>
+	/// 時間描画
+	/// </summary>
+	void DrawTime();
+
+	/// <summary>
 	/// カウントダウン
 	/// </summary>
 	void Count();
@@ -66,19 +71,22 @@ private: // メンバ変数
 	DebugText* debugText_ = nullptr;
 
 	//テクスチャハンドル
-	uint32_t textureHandle_background = 0; //背景
+	uint32_t textureHandle_background = 0;	//背景
 	//シーン
 	uint32_t scene = title;
 	//タイム
 	uint32_t time = 0;
 	uint32_t count_ = 60;
+	uint32_t textureHandleNumber_ = 0;
+	static const uint32_t Digit = 3;		//桁数
 
 	//スプライト
-	Sprite* sprite_background = nullptr; //背景
+	Sprite* sprite_background = nullptr;	//背景
+	Sprite* spriteNumber[Digit] = {};		//時間
 
 	//3Dモデル
 	Model* model_ = nullptr;
-	Model* modelPlayer_ = nullptr; //プレイヤーモデル
+	Model* modelPlayer_ = nullptr;		//プレイヤーモデル
 
 
 	//ワールドトランスフォーム
