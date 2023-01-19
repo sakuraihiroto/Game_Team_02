@@ -1,6 +1,6 @@
-# Blender v3.1.2 OBJ File: 'proto.blend'
+# Blender v3.1.2 OBJ File: 'wall.blend'
 # www.blender.org
-mtllib proto.mtl
+mtllib wall.mtl
 o 立方体
 v -1.000000 -1.000000 1.000000
 v -1.000000 1.000000 1.000000

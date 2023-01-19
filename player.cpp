@@ -110,12 +110,22 @@ void Player::Update()
 			}
 		}
 
+
 		if (input_->TriggerKey(DIK_SPACE))
 		{
 			float px = worldTransform_.translation_.x;
 			float pz = worldTransform_.translation_.z;
 
-				stageMap_->DeleteBlock(px, pz);
+			stageMap_->PutBlock(px, pz);
+			stageMap_->DeleteBlock(px, pz);
+
+
+				
+		}
+
+		if (input_->TriggerKey(DIK_R))
+		{
+			stageMap_->ResetStage();
 		}
 	}
 
@@ -142,6 +152,6 @@ void Player::Draw(ViewProjection& viewProjection_)
 	debugText_->SetPos(20, 100);
 	debugText_->Printf(
 		"worldTransform.z(%lf)", worldTransform_.translation_.z);
-	
+
 	
 }
