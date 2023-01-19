@@ -72,14 +72,22 @@ void GameScene::Update() {
 	case gameScene:
 		player_->Update();
 		//カメラ追従
+		/*viewProjection_.eye.x = player_->GetX();
+		viewProjection_.eye.y = player_->GetY();
+		viewProjection_.eye.z = player_->GetZ();
+
+		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
+		viewProjection_.target.y = player_->GetY() + 2;
+		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;*/
+
+		//FPS視点
 		viewProjection_.eye.x = player_->GetX();
 		viewProjection_.eye.y = player_->GetY();
 		viewProjection_.eye.z = player_->GetZ();
 
-		viewProjection_.target.x = player_->GetX();
-		viewProjection_.target.y = player_->GetY() + 6;
-		viewProjection_.target.z = player_->GetZ() + 2;
-		//viewProjection_.target=matworld_->CreateVector(viewProjection_.target, matworld_->RotationX(viewProjection_.target.x));
+		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
+		viewProjection_.target.y = player_->GetY() + 2;
+		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 		break;
 	case gameOver:
 		break;
@@ -98,8 +106,8 @@ void GameScene::Update() {
 	}
 	if (input_->PushKey(DIK_Q))
 	{
-		
-		x +=0.1f;
+
+		x += 0.1f;
 	}
 	if (input_->PushKey(DIK_E))
 	{

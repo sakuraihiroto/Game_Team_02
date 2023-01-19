@@ -50,66 +50,78 @@ void Player::Update()
 
 			float px = worldTransform_.translation_.x - 0.2f;
 			float py = worldTransform_.translation_.y;
+			playerDir += 0.05f;
 
-			if (stageMap_->Collision(px, py) == false)
-			{
-				move.x -= 0.2f;
-			}
+			//if (stageMap_->Collision(px, py) == false)
+			//{
+			//	//move.x -= 0.2f;
+			//}
 
-			if (stageMap_->CollisionHoll(px, py) == true)
-			{
-				deathFlag_ = 1;
-			}
+			//if (stageMap_->CollisionHoll(px, py) == true)
+			//{
+			//	deathFlag_ = true;
+			//}
 		}
 
 		//‰E•ûŒü
 		if (input_->PushKey(DIK_D)) {
 			float px = worldTransform_.translation_.x + 0.2f;
 			float py = worldTransform_.translation_.y;
+			playerDir -= 0.05f;
 
-			if (stageMap_->Collision(px, py) == false)
-			{
-				move.x += 0.2f;
-			}
+			//if (stageMap_->Collision(px, py) == false)
+			//{
+			//	//move.x += 0.2f;
 
-			if (stageMap_->CollisionHoll(px, py) == true)
-			{
-				deathFlag_ = 1;
-			}
+			//}
+
+			//if (stageMap_->CollisionHoll(px, py) == true)
+			//{
+			//	deathFlag_ = true;
+			//}
 		}
 
 		// ‰º•ûŒü
 		if (input_->PushKey(DIK_S)) {
-			float px = worldTransform_.translation_.x;
-			float py = worldTransform_.translation_.y - 0.2f;
+			float px = worldTransform_.translation_.x + cos(playerDir) / 10;
+			float py = worldTransform_.translation_.z + sin(playerDir) / 10;
 
 			if (stageMap_->Collision(px, py) == false)
 			{
-				move.y -= 0.2f;
+				move.x += cos(playerDir) / 10;
+				move.z += sin(playerDir) / 10;
 			}
 
 			if (stageMap_->CollisionHoll(px, py) == true)
 			{
-				deathFlag_ = 1;
+				deathFlag_ = true;
 			}
 		}
 
 		//ã•ûŒü
 		if (input_->PushKey(DIK_W)) {
-			float px = worldTransform_.translation_.x;
-			float py = worldTransform_.translation_.y + 0.2f;
+			float px = worldTransform_.translation_.x - cos(playerDir) / 10;
+			float py = worldTransform_.translation_.z - sin(playerDir) / 10;
 
 			if (stageMap_->Collision(px, py) == false)
 			{
-				move.y += 0.2f;
+				move.x -= cos(playerDir) / 10;
+				move.z -= sin(playerDir) / 10;
 			}
 
 			if (stageMap_->CollisionHoll(px, py) == true)
 			{
-				deathFlag_ = 1;
+				deathFlag_ = true;
 			}
 		}
 	}
+	//‰ñ“]•\Ž¦
+	float dir = -playerDir * 180 / 3.14f;
+	dir += 90;
+	worldTransform_.rotation_.x = dir;
+	worldTransform_.rotation_.y = dir;
+	worldTransform_.rotation_.z = dir;
+
 
 	worldTransform_.translation_ += move;
 

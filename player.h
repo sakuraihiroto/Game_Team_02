@@ -55,7 +55,7 @@ private:
 	//‘¬“x
 	Vector3 velocity_;
 
-	//Šp“x
+	//Šp“x ‘OŒü‚«
 	float playerDir = 0;
 
 	bool deathFlag_ = false;
