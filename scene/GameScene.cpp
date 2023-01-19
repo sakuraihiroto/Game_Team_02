@@ -1,6 +1,7 @@
 ﻿#include "GameScene.h"
 #include "TextureManager.h"
 #include "matWorld.h"
+#include<math.h>
 #include <cassert>
 
 MatWorld* matworld_ = nullptr;
@@ -50,22 +51,35 @@ void GameScene::Initialize() {
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
+
+
+
 	//視点移動
 	viewProjection_.UpdateMatrix();
 
 }
+float x = 0;
 
 void GameScene::Update() {
 
 	switch (scene)
 	{
 	case title:
-		
+
 		break;
 	case tutorial:
 		break;
 	case gameScene:
 		player_->Update();
+		//カメラ追従
+		viewProjection_.eye.x = player_->GetX();
+		viewProjection_.eye.y = player_->GetY();
+		viewProjection_.eye.z = player_->GetZ();
+
+		viewProjection_.target.x = player_->GetX();
+		viewProjection_.target.y = player_->GetY() + 6;
+		viewProjection_.target.z = player_->GetZ() + 2;
+		//viewProjection_.target=matworld_->CreateVector(viewProjection_.target, matworld_->RotationX(viewProjection_.target.x));
 		break;
 	case gameOver:
 		break;
@@ -73,15 +87,27 @@ void GameScene::Update() {
 		break;
 	}
 	//spaceでシーンチェンジ
-	if (input_->TriggerKey(DIK_SPACE)&&scene<=gameScene)
+	if (input_->TriggerKey(DIK_SPACE) && scene <= gameScene)
 	{
 		scene += 1;
 	}
 	//gameOver&gameClearの時,titleに戻る
-	else if(input_->TriggerKey(DIK_SPACE) && scene >gameScene)
+	else if (input_->TriggerKey(DIK_SPACE) && scene > gameScene)
 	{
 		scene = title;
 	}
+	if (input_->PushKey(DIK_Q))
+	{
+		
+		x +=0.1f;
+	}
+	if (input_->PushKey(DIK_E))
+	{
+		x -= 0.1f;
+	}
+
+	//行列を更新する
+	viewProjection_.UpdateMatrix();
 }
 
 void GameScene::Draw() {

@@ -33,6 +33,8 @@ public:
 	float GetY() { return worldTransform_.translation_.y; }
 	float GetZ() { return worldTransform_.translation_.z; }
 
+	float GetPlayerDir() { return playerDir; }
+
 private:
 
 	// ワールド変換データ
@@ -53,5 +55,8 @@ private:
 	//速度
 	Vector3 velocity_;
 
-	int deathFlag_ = 0;
+	//角度
+	float playerDir = 0;
+
+	bool deathFlag_ = false;
 };

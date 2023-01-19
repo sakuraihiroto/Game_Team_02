@@ -4,13 +4,13 @@
 
 void stageMap::Initialize()
 {
-	modelWall_ = Model::CreateFromOBJ("wall");
+	modelWall_ = Model::CreateFromOBJ("proto");
 
 	for (int y = 0; y < mapMax; y++)
 	{
 		for (int x = 0; x < mapMax; x++)
 		{
-			worldTransform_[y][x].scale_ = { 0.5f,0.5f,0.5f };
+			worldTransform_[y][x].scale_ = { 1.0f,1.0f,1.0f };
 			worldTransform_[y][x].translation_ = { -7 + x * 2.0f, 10 + y * -2.0f,0 };
 			worldTransform_[y][x].Initialize();
 			//行列の計算
@@ -80,8 +80,6 @@ bool stageMap::Collision(float px, float py)
 
 				position.x = worldTransform_[y][x].translation_.x;
 				position.y = worldTransform_[y][x].translation_.y;
-
-				position.y += 1;
 
 				float dx = abs(position.x - px);
 				float dy = abs(position.y - py);
