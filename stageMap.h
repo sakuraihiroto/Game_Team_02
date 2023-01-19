@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
 #include "MatWorld.h"
 #include "ViewProjection.h"
 #include <DirectXMath.h>
-
+#include "DebugText.h"
 
 using namespace DirectX;
 
@@ -21,7 +21,9 @@ public:
 
 	bool CollisionHoll(float px, float py);
 
-	Vector3 GetWorldPosition();
+	void DeleteBlock(float px, float pz);
+
+
 
 public:
 	static const int mapMax = 10;
@@ -29,6 +31,7 @@ public:
 private:
 	WorldTransform worldTransform_[mapMax][mapMax] = {};
 	WorldTransform worldTransformTile_[mapMax][mapMax] = {};
+
 	int mapData[mapMax][mapMax] = {
 		{1,1,1,1,1,1,1,1,1,1},
 		{1,0,0,0,0,0,0,0,0,1},
@@ -58,4 +61,8 @@ private:
 	Model* modelWall_ = nullptr;
 
 	MatWorld* matWorld_ = nullptr;
+
+	// デバックテキスト
+	DebugText* debugText_ = nullptr;
+
 };

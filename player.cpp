@@ -116,5 +116,8 @@ void Player::Draw(ViewProjection& viewProjection_)
 	debugText_->SetPos(20, 100);
 	debugText_->Printf(
 		"worldTranform.y(%d)", worldTransform_.translation_.y);
+	debugText_->SetPos(20, 120);
+	debugText_->Printf(
+		"deathFlag(%d)", deathFlag_);
 
 }

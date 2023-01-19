@@ -71,7 +71,7 @@ void GameScene::Update() {
 		viewProjection_.eye.z = player_->GetZ();
 
 		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
-		viewProjection_.target.y = player_->GetY() + 2;
+		viewProjection_.target.y = player_->GetY();
 		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 
 		break;
