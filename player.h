@@ -8,12 +8,12 @@
 #include<list>
 #include "matWorld.h"
 #include "ViewProjection.h"
-
+#include "stageMap.h"
 
 class Player
 {
 public:
-	void Initialize(Model* model);
+	void Initialize(Model* model, stageMap* stageMap);
 
 	///<summary>
 	///更新
@@ -23,13 +23,19 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(ViewProjection& viewProjection_,WorldTransform worldTransform);
+	void Draw(ViewProjection& viewProjection_);
 
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	void ResetPlayer();
+
 	//プレイヤーの座標
-	WorldTransform* GatWorldPlayer() { return &worldTransform_; }
+	float GetX() { return worldTransform_.translation_.x; }
+	float GetY() { return worldTransform_.translation_.y; }
+	float GetZ() { return worldTransform_.translation_.z; }
+
+	float GetPlayerDir() { return playerDir; }
 
 private:
 
@@ -45,7 +51,14 @@ private:
 	DebugText* debugText_ = nullptr;
 	// 入力処理するため
 	Input* input_ = nullptr;
-	
 
+	stageMap* stageMap_ = nullptr;
+
+	//速度
+	Vector3 velocity_;
+
+	//角度 前向き
+	float playerDir = 0;
+
+	bool deathFlag_ = false;
 };
-

@@ -3,13 +3,14 @@
 // アフィン行列呼び出し
 MatWorld* playerMatworld = nullptr;
 
-void Player::Initialize(Model* model)
+void Player::Initialize(Model* model, stageMap* stageMap)
 {
 	// NULLポインタチェック
 	assert(model);
 
 	// 引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
+	stageMap_ = stageMap;
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
@@ -20,12 +21,6 @@ void Player::Initialize(Model* model)
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-
-	//キャラクターの移動ベクトル
-	Vector3 move = { 0,2,0 };//座標{x,y,z}
-
-	//初期座標をセット
-	worldTransform_.translation_ = move;
 
 }
 
@@ -45,26 +40,92 @@ Vector3 Player::GetWorldPosition()
 void Player::Update()
 {
 
+	//キャラクターの移動ベクトル
+	Vector3 move = { 0, 0, 0 };
+
+	if (deathFlag_ == 0)
+	{
+		//左方向
+		if (input_->PushKey(DIK_A)) { playerDir += 0.05f; }
+
+		//右方向
+		if (input_->PushKey(DIK_D)) { playerDir -= 0.05f; }
+
+		// 下方向
+		if (input_->PushKey(DIK_S)) {
+			float px = worldTransform_.translation_.x + cos(playerDir) / 10;
+			float py = worldTransform_.translation_.z + sin(playerDir) / 10;
+
+			if (stageMap_->Collision(px, py) == false)
+			{
+				move.x += cos(playerDir) / 10;
+				move.z += sin(playerDir) / 10;
+			}
+
+			if (stageMap_->CollisionHoll(px, py) == true)
+			{
+				deathFlag_ = true;
+			}
+		}
+
+		//上方向
+		if (input_->PushKey(DIK_W)) {
+			float px = worldTransform_.translation_.x - cos(playerDir) / 10;
+			float py = worldTransform_.translation_.z - sin(playerDir) / 10;
+
+			if (stageMap_->Collision(px, py) == false)
+			{
+				move.x -= cos(playerDir) / 10;
+				move.z -= sin(playerDir) / 10;
+			}
+
+			if (stageMap_->CollisionHoll(px, py) == true)
+			{
+				deathFlag_ = true;
+			}
+		}
+	}
+	//回転表示
+	float dir = -playerDir * 180 / 3.14f;
+	dir += 90;
+	worldTransform_.rotation_.x = dir;
+	worldTransform_.rotation_.y = dir;
+	worldTransform_.rotation_.z = dir;
+
+
+	worldTransform_.translation_ += move;
+
+	//行列の計算
+	worldTransform_.matWorld_ = playerMatworld->CreateMatWorld(worldTransform_);
+	//行列の転送
+	worldTransform_.TransferMatrix();
+
+}
+
+void Player::ResetPlayer()
+{
+	deathFlag_ = 0;
+	playerDir = 0;
+	worldTransform_.translation_.x = 0;
+	worldTransform_.translation_.z = 0;
 }
 
 //描画処理
-void Player::Draw(ViewProjection& viewProjection_,WorldTransform worldTransform)
+void Player::Draw(ViewProjection& viewProjection_)
 {
-	
-	//// デバックテキスト
-	//debugText_->SetPos(20, 80);
-	//debugText_->Printf(
-	//	"leftMoveFlag(%d)",leftMoveFlag);
-	//// デバックテキスト
-	//debugText_->SetPos(20, 100);
-	//debugText_->Printf(
-	//	"rightMoveFlag(%d)", rightMoveFlag);
-	//// デバックテキスト
-	//debugText_->SetPos(20, 120);
-	//debugText_->Printf(
-	//	"upMoveFlag(%d)", upMoveFlag);
-	//// デバックテキスト
-	//debugText_->SetPos(20, 140);
-	//debugText_->Printf(
-	//	"downMoveFlag(%d)", downMoveFlag);
+	if (deathFlag_ == 0)
+	{
+		model_->Draw(worldTransform_, viewProjection_);
+	}
+	// デバックテキスト
+	debugText_->SetPos(20, 80);
+	debugText_->Printf(
+		"worldTranform.x(%f)", worldTransform_.translation_.x);
+	debugText_->SetPos(20, 100);
+	debugText_->Printf(
+		"worldTranform.z(%f)", worldTransform_.translation_.z);
+	debugText_->SetPos(20, 120);
+	debugText_->Printf(
+		"deathFlag(%d)", deathFlag_);
+
 }

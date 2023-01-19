@@ -1,6 +1,7 @@
 ﻿#include "GameScene.h"
 #include "TextureManager.h"
 #include "matWorld.h"
+#include<math.h>
 #include <cassert>
 
 MatWorld* matworld_ = nullptr;
@@ -12,9 +13,20 @@ GameScene::GameScene() {
 GameScene::~GameScene() {
 	delete model_;
 	delete player_;
-	delete stage_;
-	delete modelStage_;
+	delete stageMap_;
 
+}
+
+void GameScene::Count()
+{
+	//カウントダウン
+	count_--;
+	//60フレーム毎に1秒減る
+	if (count_ <= 0)
+	{
+		time -= 1;
+		count_ = 60;
+	}
 }
 
 void GameScene::Initialize() {
@@ -33,18 +45,14 @@ void GameScene::Initialize() {
 
 	//自キャラの生成
 	player_ = new Player();
+
+	stageMap_ = new stageMap();
 	//自キャラモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("cube", true);
 	//自キャラの初期化
-	player_->Initialize(modelPlayer_);
+	player_->Initialize(modelPlayer_, stageMap_);
 
-	//ステージの生成
-	stage_ = new Stage();
-	//ステージモデルの生成
-	modelStage_ = Model::CreateFromOBJ("stage_collar", true);
-	//ステージの初期化
-	stage_->Initialize(modelStage_);
-
+	stageMap_->Initialize();
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -52,20 +60,64 @@ void GameScene::Initialize() {
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	//視点
-	viewProjection_.eye.z = 40;
-	viewProjection_.eye.y = 100;
-	viewProjection_.fovAngleY = angle;
-
 	//視点移動
 	viewProjection_.UpdateMatrix();
 
+	//時間
+	time = 160;
 }
 
 void GameScene::Update() {
 
-	stage_->Update();
+	switch (scene)
+	{
+	case title:
 
+		break;
+	case tutorial:
+		break;
+	case gameScene:
+		player_->Update();
+		//カウントダウン
+		Count();
+		//カメラ追従
+		viewProjection_.eye.x = player_->GetX();
+		viewProjection_.eye.y = player_->GetY();
+		viewProjection_.eye.z = player_->GetZ();
+
+		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
+		viewProjection_.target.y = player_->GetY();
+		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
+
+		//リセット
+		if (input_->PushKey(DIK_R))
+		{
+			player_->ResetPlayer();
+			stageMap_->ResetMap();
+			time = 160;
+			count_ = 60;
+
+		}
+
+		break;
+	case gameOver:
+		break;
+	default:
+		break;
+	}
+	//spaceでシーンチェンジ
+	if (input_->TriggerKey(DIK_SPACE) && scene <= gameScene)
+	{
+		scene += 1;
+	}
+	//gameOver&gameClearの時,titleに戻る
+	else if (input_->TriggerKey(DIK_SPACE) && scene > gameScene)
+	{
+		scene = title;
+	}
+
+	//行列を更新する
+	viewProjection_.UpdateMatrix();
 }
 
 void GameScene::Draw() {
@@ -80,10 +132,10 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
-	
+
 	//背景描画
 	//sprite_background->Draw();
-	
+
 	// スプライト描画後処理
 	Sprite::PostDraw();
 	// 深度バッファクリア
@@ -93,14 +145,32 @@ void GameScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
-
+	debugText_->SetPos(20, 20);
+	debugText_->Printf("scene:%d", scene);
+	debugText_->SetPos(20, 40);
+	debugText_->Printf("count:%d", count_);
+	debugText_->SetPos(20, 60);
+	debugText_->Printf("time:%d", time);
+	switch (scene)
+	{
+	case title:
+		break;
+	case tutorial:
+		break;
+	case gameScene:
+		//プレイヤーの描画
+		player_->Draw(viewProjection_);
+		stageMap_->Draw(viewProjection_);
+		break;
+	case gameOver:
+		break;
+	default:
+		break;
+	}
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	
-	//ステージの描画
-	stage_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -114,7 +184,6 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
-	
 
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
