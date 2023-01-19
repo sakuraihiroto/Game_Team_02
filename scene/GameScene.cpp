@@ -89,6 +89,12 @@ void GameScene::Update() {
 		viewProjection_.target.y = player_->GetY();
 		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 
+		//下向き
+		if (input_->PushKey(DIK_DOWN))
+		{
+			viewProjection_.target.y = player_->GetY() - 3.5f;
+		}
+
 		//リセット
 		if (input_->PushKey(DIK_R))
 		{

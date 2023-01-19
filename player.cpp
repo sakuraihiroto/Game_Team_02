@@ -84,6 +84,17 @@ void Player::Update()
 				deathFlag_ = true;
 			}
 		}
+
+		//Žæ‚èž‚Ýˆ—
+		if (input_->TriggerKey(DIK_Q))
+		{
+			float px = worldTransform_.translation_.x;
+			float pz = worldTransform_.translation_.z;
+
+			stageMap_->DeleteBlock(px, pz);
+
+			stageMap_->PutBlock(px, pz);
+		}
 	}
 	//‰ñ“]•\Ž¦
 	float dir = -playerDir * 180 / 3.14f;
