@@ -44,6 +44,11 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// カウントダウン
+	/// </summary>
+	void Count();
+
 private: // メンバ変数
 	enum シーン
 	{
@@ -66,6 +71,7 @@ private: // メンバ変数
 	uint32_t scene = title;
 	//タイム
 	uint32_t time = 0;
+	uint32_t count_ = 60;
 
 	//スプライト
 	Sprite* sprite_background = nullptr; //背景

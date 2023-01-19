@@ -17,6 +17,18 @@ GameScene::~GameScene() {
 
 }
 
+void GameScene::Count()
+{
+	//カウントダウン
+	count_--;
+	//60フレーム毎に1秒減る
+	if (count_ <= 0)
+	{
+		time -= 1;
+		count_ = 60;
+	}
+}
+
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
@@ -51,6 +63,8 @@ void GameScene::Initialize() {
 	//視点移動
 	viewProjection_.UpdateMatrix();
 
+	//時間
+	time = 160;
 }
 
 void GameScene::Update() {
@@ -64,7 +78,8 @@ void GameScene::Update() {
 		break;
 	case gameScene:
 		player_->Update();
-
+		//カウントダウン
+		Count();
 		//カメラ追従
 		viewProjection_.eye.x = player_->GetX();
 		viewProjection_.eye.y = player_->GetY();
@@ -122,6 +137,10 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 	debugText_->SetPos(20, 20);
 	debugText_->Printf("scene:%d", scene);
+	debugText_->SetPos(20, 40);
+	debugText_->Printf("count:%d", count_);
+	debugText_->SetPos(20, 60);
+	debugText_->Printf("time:%d", time);
 	switch (scene)
 	{
 	case title:
