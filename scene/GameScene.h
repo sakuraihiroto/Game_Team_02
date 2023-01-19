@@ -83,6 +83,7 @@ private: // メンバ変数
 	//スプライト
 	Sprite* sprite_background = nullptr;	//背景
 	Sprite* spriteNumber[Digit] = {};		//時間
+	
 
 	//3Dモデル
 	Model* model_ = nullptr;

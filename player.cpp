@@ -39,6 +39,7 @@ Vector3 Player::GetWorldPosition()
 
 void Player::Update()
 {
+
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 
@@ -105,10 +106,23 @@ void Player::Update()
 		worldTransform_.matWorld_ = playerMatworld->CreateMatWorld(worldTransform_);
 		//行列の転送
 		worldTransform_.TransferMatrix();
+
 	}
+	if (input_->TriggerKey(DIK_R))
+	{
+		deathFlag_ = 0;
+		worldTransform_.translation_ = { 0,0,0 };
+		stageMap_->ResetStage();
+	}
+
+	worldTransform_.translation_ += move;
+
+	//行列の計算
+	worldTransform_.matWorld_ = playerMatworld->CreateMatWorld(worldTransform_);
+	//行列の転送
+	worldTransform_.TransferMatrix();
+
 }
-
-
 
 //描画処理
 void Player::Draw(ViewProjection& viewProjection_)
@@ -124,7 +138,6 @@ void Player::Draw(ViewProjection& viewProjection_)
 	debugText_->SetPos(20, 100);
 	debugText_->Printf(
 		"worldTransform.z(%lf)", worldTransform_.translation_.z);
-	debugText_->SetPos(20, 120);
-	debugText_->Printf(
-		"deathFlag(%d)", deathFlag_);
+
+
 }

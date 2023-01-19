@@ -28,7 +28,7 @@ void GameScene::Initialize() {
 	textureHandleNumber_ = TextureManager::Load("bitmapfont.png");
 	for (int i = 0; i < 3; i++)
 	{
-		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 400.f + i * 40,0 });
+		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 600.f + i * 40,0 });
 	}
 	//時間
 	time = 160;
@@ -68,8 +68,13 @@ void GameScene::Update() {
 		break;
 	case gameScene:
 		player_->Update();
+
 		//カウントダウン
 		Count();
+
+		//ブロックを置く回数を取得
+		stageMap_->GetCountPoss();
+
 		//カメラ追従
 		viewProjection_.eye.x = player_->GetX();
 		viewProjection_.eye.y = player_->GetY();
@@ -114,6 +119,8 @@ void GameScene::Draw() {
 	/// </summary>
 	//背景描画
 	//sprite_background->Draw();
+	// 
+	//時間を描画
 	DrawTime();
 
 	// スプライト描画後処理
@@ -198,6 +205,7 @@ void GameScene::DrawTime()
 		//各桁の値を取り出す
 		char eachNumber[Digit] = {};
 		int number = time;
+		
 
 		int CalcDigit = 100;
 		for (int i = 0; i < Digit; i++)

@@ -27,12 +27,17 @@ public:
 
 	void PutBlock(float px, float pz);
 
+	void ResetStage();
+
+	int GetCountPoss() { return countPossBlock_; }
+
 public:
 	static const int mapMax = 10;
 
 private:
 	WorldTransform worldTransform_[mapMax][mapMax] = {};
-	WorldTransform worldTransformTile_[mapMax][mapMax] = {};
+	WorldTransform worldTransformCeiling_[mapMax][mapMax] = {};
+	WorldTransform worldTransformFloor_[mapMax][mapMax] = {};
 
 	int mapData[mapMax][mapMax] = {
 		{2,1,1,1,1,1,1,1,1,2},
@@ -47,7 +52,33 @@ private:
 		{2,1,1,1,1,1,1,1,1,2}
 	};
 
-	int TileData[mapMax][mapMax] = {
+	int stage1Wall[mapMax][mapMax] = {
+		{2,1,1,1,1,1,1,1,1,2},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,1,1,1,0,1,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,1,1,1,1,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,1,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,1,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{2,1,1,1,1,1,1,1,1,2}
+	};
+
+	int floorData[mapMax][mapMax] = {
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,2,1,2,1,1,1,1},
+		{1,1,1,2,1,2,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1}
+	};
+
+	int stage1Floor[mapMax][mapMax] = {
 		{1,1,1,1,1,1,1,1,1,1},
 		{1,1,1,1,1,1,1,1,1,1},
 		{1,1,1,1,1,1,1,1,1,1},
@@ -73,7 +104,25 @@ private:
 		{0,0,0,0,0,0,0,0,0,0}
 	};
 
+	int ceilingData[mapMax][mapMax] = {
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,1,1,2,1,2,1,1,1,1},
+		{1,1,1,2,1,2,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1}
+	};
+
+
+
 	Model* modelWall_ = nullptr;
+
+	Model* modelFloor_ = nullptr;
+
 
 	MatWorld* matWorld_ = nullptr;
 

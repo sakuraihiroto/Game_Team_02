@@ -4,16 +4,19 @@
 
 void stageMap::Initialize()
 {
-	modelWall_ = Model::CreateFromOBJ("proto");
+	modelWall_ = Model::CreateFromOBJ("wall");
+	modelFloor_ = Model::CreateFromOBJ("floor");
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
+
 	for (int z = 0; z < mapMax; z++)
 	{
 		for (int x = 0; x < mapMax; x++)
 		{
+
 			worldTransform_[z][x].scale_ = { 1.0f,1.0f,1.0f };
 			worldTransform_[z][x].translation_ = { -7 + x * 2.0f, 0, 10 + z * -2.0f };
 			worldTransform_[z][x].Initialize();
@@ -22,13 +25,13 @@ void stageMap::Initialize()
 			//行列の転送
 			worldTransform_[z][x].TransferMatrix();
 
-			worldTransformTile_[z][x].scale_ = { 1.0f,1.0f,1.0f };
-			worldTransformTile_[z][x].translation_ = { -7 + x * 2.0f, -2, 10 + z * -2.0f };
-			worldTransformTile_[z][x].Initialize();
+			worldTransformFloor_[z][x].scale_ = { 1.0f,1.0f,1.0f };
+			worldTransformFloor_[z][x].translation_ = { -7 + x * 2.0f, -2, 10 + z * -2.0f };
+			worldTransformFloor_[z][x].Initialize();
 			//行列の計算	  
-			worldTransformTile_[z][x].matWorld_ = matWorld_->CreateMatWorld(worldTransformTile_[z][x]);
+			worldTransformFloor_[z][x].matWorld_ = matWorld_->CreateMatWorld(worldTransformFloor_[z][x]);
 			//行列の転送	  
-			worldTransformTile_[z][x].TransferMatrix();
+			worldTransformFloor_[z][x].TransferMatrix();
 		}
 	}
 }
@@ -44,11 +47,10 @@ void stageMap::Draw(ViewProjection viewProjection_)
 				modelWall_->Draw(worldTransform_[z][x], viewProjection_);
 			}
 
-			if (TileData[z][x] == 1)
+			if (floorData[z][x] != 2)
 			{
-				modelWall_->Draw(worldTransformTile_[z][x], viewProjection_);
+				modelFloor_->Draw(worldTransformFloor_[z][x], viewProjection_);
 			}
-
 
 		}
 	}
@@ -59,6 +61,7 @@ void stageMap::Draw(ViewProjection viewProjection_)
 bool stageMap::Collision(float px, float pz)
 {
 	Vector3 position;
+
 	for (int z = 0; z < mapMax; z++)
 	{
 
@@ -67,11 +70,8 @@ bool stageMap::Collision(float px, float pz)
 
 			if (mapData[z][x] == 1 || mapData[z][x] == 2)
 			{
-
 				position.x = worldTransform_[z][x].translation_.x;
 				position.z = worldTransform_[z][x].translation_.z;
-
-
 
 				float dx = abs(position.x - px);
 				float dz = abs(position.z - pz);
@@ -112,7 +112,7 @@ bool stageMap::CollisionHoll(float px, float pz)
 		for (int x = 0; x < mapMax; x++)
 		{
 
-			if (TileData[z][x] == 2)
+			if (floorData[z][x] == 2)
 			{
 
 				position.x = worldTransform_[z][x].translation_.x;
@@ -190,13 +190,53 @@ void stageMap::PutBlock(float px, float pz)
 
 
 
-				if (dx < 3.0f && dz < 3.0f && TileData[z][x] == 2)
+				if (dx < 3.0f && dz < 3.0f && floorData[z][x] == 2)
 				{
-					TileData[z][x] = 1;
+					floorData[z][x] = 3;
 					possFlag_ = 0;
 				}
 
 			}
 		}
 	}
+}
+
+void stageMap::ResetStage()
+{
+	for (int z = 0; z < mapMax; z++)
+	{
+
+		for (int x = 0; x < mapMax; x++)
+		{
+			if (stage1Wall[z][x] == 0)
+			{
+				mapData[z][x] = 0;
+			}
+			else if (stage1Wall[z][x] == 1)
+			{
+				mapData[z][x] = 1;
+			}
+			else if (stage1Wall[z][x] == 2)
+			{
+				mapData[z][x] = 2;
+			}
+
+
+			if (stage1Floor[z][x] == 1)
+			{
+				floorData[z][x] = 1;
+			}
+			else if (stage1Floor[z][x] == 2)
+			{
+				floorData[z][x] = 2;
+			}
+		}
+	}
+
+	//取ったブロックを所持しているか
+	possFlag_ = 0;
+
+	//ブロックを取れる回数
+	countPossBlock_ = 2;
+
 }
