@@ -116,6 +116,9 @@ void Player::Update()
 			float pz = worldTransform_.translation_.z;
 
 				stageMap_->DeleteBlock(px, pz);
+
+
+				stageMap_->PutBlock(px, pz);
 		}
 	}
 
@@ -142,6 +145,6 @@ void Player::Draw(ViewProjection& viewProjection_)
 	debugText_->SetPos(20, 100);
 	debugText_->Printf(
 		"worldTransform.z(%lf)", worldTransform_.translation_.z);
-	
+
 	
 }
