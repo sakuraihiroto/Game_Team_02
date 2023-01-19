@@ -16,10 +16,7 @@ void stageMap::Initialize()
 	{
 		for (int x = 0; x < mapMax; x++)
 		{
-			
-
-					
-			
+		
 			worldTransform_[z][x].scale_ = { 1.0f,1.0f,1.0f };
 			worldTransform_[z][x].translation_ = { -7 + x * 2.0f, 0, 10 + z * -2.0f };
 			worldTransform_[z][x].Initialize();

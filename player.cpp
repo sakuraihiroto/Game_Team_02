@@ -123,10 +123,13 @@ void Player::Update()
 				
 		}
 
-		if (input_->TriggerKey(DIK_R))
-		{
-			stageMap_->ResetStage();
-		}
+		
+	}
+	if (input_->TriggerKey(DIK_R))
+	{
+		deathFlag_ = 0;
+		worldTransform_.translation_ = { 0,0,0 };
+		stageMap_->ResetStage();
 	}
 
 	worldTransform_.translation_ += move;
@@ -145,6 +148,7 @@ void Player::Draw(ViewProjection& viewProjection_)
 	{
 		model_->Draw(worldTransform_, viewProjection_);
 	}
+
 	// デバックテキスト
 	debugText_->SetPos(20, 80);
 	debugText_->Printf(
