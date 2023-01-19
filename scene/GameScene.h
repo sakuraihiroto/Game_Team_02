@@ -64,6 +64,8 @@ private: // メンバ変数
 	uint32_t textureHandle_background = 0; //背景
 	//シーン
 	uint32_t scene = title;
+	//タイム
+	uint32_t time = 0;
 
 	//スプライト
 	Sprite* sprite_background = nullptr; //背景

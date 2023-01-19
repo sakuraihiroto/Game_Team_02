@@ -46,40 +46,10 @@ void Player::Update()
 	if (deathFlag_ == 0)
 	{
 		//¶•ûŒü
-		if (input_->PushKey(DIK_A)) {
-
-			float px = worldTransform_.translation_.x - 0.2f;
-			float py = worldTransform_.translation_.y;
-			playerDir += 0.05f;
-
-			//if (stageMap_->Collision(px, py) == false)
-			//{
-			//	//move.x -= 0.2f;
-			//}
-
-			//if (stageMap_->CollisionHoll(px, py) == true)
-			//{
-			//	deathFlag_ = true;
-			//}
-		}
+		if (input_->PushKey(DIK_A)) {playerDir += 0.05f;}
 
 		//‰E•ûŒü
-		if (input_->PushKey(DIK_D)) {
-			float px = worldTransform_.translation_.x + 0.2f;
-			float py = worldTransform_.translation_.y;
-			playerDir -= 0.05f;
-
-			//if (stageMap_->Collision(px, py) == false)
-			//{
-			//	//move.x += 0.2f;
-
-			//}
-
-			//if (stageMap_->CollisionHoll(px, py) == true)
-			//{
-			//	deathFlag_ = true;
-			//}
-		}
+		if (input_->PushKey(DIK_D)) {playerDir -= 0.05f;}
 
 		// ‰º•ûŒü
 		if (input_->PushKey(DIK_S)) {

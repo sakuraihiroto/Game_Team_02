@@ -42,23 +42,16 @@ void GameScene::Initialize() {
 
 	stageMap_->Initialize();
 
-
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 
-	//viewProjection_.eye.y = -30;
-	//viewProjection_.eye.z = -20;
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-
-
-
 
 	//視点移動
 	viewProjection_.UpdateMatrix();
 
 }
-float x = 0;
 
 void GameScene::Update() {
 
@@ -71,16 +64,8 @@ void GameScene::Update() {
 		break;
 	case gameScene:
 		player_->Update();
+
 		//カメラ追従
-		/*viewProjection_.eye.x = player_->GetX();
-		viewProjection_.eye.y = player_->GetY();
-		viewProjection_.eye.z = player_->GetZ();
-
-		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
-		viewProjection_.target.y = player_->GetY() + 2;
-		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;*/
-
-		//FPS視点
 		viewProjection_.eye.x = player_->GetX();
 		viewProjection_.eye.y = player_->GetY();
 		viewProjection_.eye.z = player_->GetZ();
@@ -88,6 +73,7 @@ void GameScene::Update() {
 		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
 		viewProjection_.target.y = player_->GetY() + 2;
 		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
+
 		break;
 	case gameOver:
 		break;
@@ -103,15 +89,6 @@ void GameScene::Update() {
 	else if (input_->TriggerKey(DIK_SPACE) && scene > gameScene)
 	{
 		scene = title;
-	}
-	if (input_->PushKey(DIK_Q))
-	{
-
-		x += 0.1f;
-	}
-	if (input_->PushKey(DIK_E))
-	{
-		x -= 0.1f;
 	}
 
 	//行列を更新する
