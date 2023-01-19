@@ -114,6 +114,8 @@ private:
 		{1,1,1,1,1,1,1,1,1,1}
 	};
 
+	
+
 	Model* modelWall_ = nullptr;
 
 	Model* modelFloor_ = nullptr;
