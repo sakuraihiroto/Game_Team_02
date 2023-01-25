@@ -39,17 +39,20 @@ Vector3 Player::GetWorldPosition()
 
 void Player::Update()
 {
-
+	float px = worldTransform_.translation_.x;
+	float pz = worldTransform_.translation_.z;
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 
-	if (deathFlag_ == 0)
+	if (deathFlag_ == 0 && stageMap_->CollisionGoal(px, pz) == false)
 	{
+		
+
 		//左方向
 		if (input_->PushKey(DIK_A)) {
 
-			float px = worldTransform_.translation_.x - 0.2f;
-			float pz = worldTransform_.translation_.z;
+			px = worldTransform_.translation_.x - 0.2f;
+			pz = worldTransform_.translation_.z;
 
 			if (stageMap_->Collision(px, pz) == false)
 			{
@@ -64,8 +67,8 @@ void Player::Update()
 
 		//右方向
 		if (input_->PushKey(DIK_D)) {
-			float px = worldTransform_.translation_.x + 0.2f;
-			float pz = worldTransform_.translation_.z;
+			px = worldTransform_.translation_.x + 0.2f;
+			pz = worldTransform_.translation_.z;
 
 			if (stageMap_->Collision(px, pz) == false)
 			{
@@ -80,8 +83,8 @@ void Player::Update()
 
 		// 下方向
 		if (input_->PushKey(DIK_S)) {
-			float px = worldTransform_.translation_.x;
-			float pz = worldTransform_.translation_.z - 0.2f;
+			px = worldTransform_.translation_.x;
+			pz = worldTransform_.translation_.z - 0.2f;
 
 			if (stageMap_->Collision(px, pz) == false)
 			{
@@ -96,8 +99,8 @@ void Player::Update()
 
 		//上方向
 		if (input_->PushKey(DIK_W)) {
-			float px = worldTransform_.translation_.x;
-			float pz = worldTransform_.translation_.z + 0.2f;
+			px = worldTransform_.translation_.x;
+			pz = worldTransform_.translation_.z + 0.2f;
 
 			if (stageMap_->Collision(px, pz) == false)
 			{
@@ -113,8 +116,8 @@ void Player::Update()
 
 		if (input_->TriggerKey(DIK_SPACE))
 		{
-			float px = worldTransform_.translation_.x;
-			float pz = worldTransform_.translation_.z;
+			px = worldTransform_.translation_.x;
+			pz = worldTransform_.translation_.z;
 
 			stageMap_->PutBlock(px, pz);
 			stageMap_->DeleteBlock(px, pz);
@@ -124,7 +127,10 @@ void Player::Update()
 		}
 
 		
+		
+		
 	}
+
 	if (input_->TriggerKey(DIK_R))
 	{
 		deathFlag_ = 0;
@@ -132,6 +138,25 @@ void Player::Update()
 		stageMap_->ResetStage();
 	}
 
+	if (stageMap_->CollisionGoal(px, pz) == true)
+	{
+		if (input_->TriggerKey(DIK_SPACE))
+		{
+			switch (stageMap_->iswhereStage_)
+			{
+			case 1:
+				worldTransform_.translation_ = { 0,0,0 };
+				break;
+
+			case 2:
+				worldTransform_.translation_ = { 0,0,0 };
+				break;
+			}
+
+			stageMap_->SetPauseFlag_();
+
+		}
+	}
 	worldTransform_.translation_ += move;
 
 	//行列の計算

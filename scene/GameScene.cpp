@@ -62,7 +62,7 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	player_->Update();
-
+	stageMap_->Update();
 }
 
 void GameScene::Draw() {
