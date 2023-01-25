@@ -88,6 +88,7 @@ private: // メンバ変数
 	//3Dモデル
 	Model* model_ = nullptr;
 	Model* modelPlayer_ = nullptr;		//プレイヤーモデル
+	Model* modelHand = nullptr;
 
 
 	//ワールドトランスフォーム

@@ -4,6 +4,7 @@
 #include<math.h>
 #include <cassert>
 
+using Microsoft::WRL::ComPtr;
 MatWorld* matworld_ = nullptr;
 
 
@@ -42,6 +43,7 @@ void GameScene::Initialize() {
 	stageMap_ = new stageMap();
 	//自キャラモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("cube", true);
+	//modelHand = Model::CreateFromOBJ("hand", true);
 	//自キャラの初期化
 	player_->Initialize(modelPlayer_, stageMap_);
 
@@ -71,9 +73,6 @@ void GameScene::Update() {
 
 		//カウントダウン
 		Count();
-
-		//ブロックを置く回数を取得
-		stageMap_->GetCountPoss();
 
 		//カメラ追従
 		viewProjection_.eye.x = player_->GetX();
@@ -108,11 +107,11 @@ void GameScene::Update() {
 void GameScene::Draw() {
 
 	// コマンドリストの取得
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+	ComPtr<ID3D12GraphicsCommandList> commandList = dxCommon_->GetCommandList();
 
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
-	Sprite::PreDraw(commandList);
+	Sprite::PreDraw(commandList.Get());
 
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
@@ -120,8 +119,6 @@ void GameScene::Draw() {
 	//背景描画
 	//sprite_background->Draw();
 	// 
-	//時間を描画
-	DrawTime();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -131,7 +128,7 @@ void GameScene::Draw() {
 
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
-	Model::PreDraw(commandList);
+	Model::PreDraw(commandList.Get());
 	debugText_->SetPos(20, 20);
 	debugText_->Printf("scene:%d", scene);
 	debugText_->SetPos(20, 40);
@@ -148,6 +145,7 @@ void GameScene::Draw() {
 		//プレイヤーの描画
 		player_->Draw(viewProjection_);
 		stageMap_->Draw(viewProjection_);
+		
 		break;
 	case gameOver:
 		break;
@@ -165,15 +163,17 @@ void GameScene::Draw() {
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
-	Sprite::PreDraw(commandList);
+	Sprite::PreDraw(commandList.Get());
 
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
 
+	//時間を描画
+	DrawTime();
 	// デバッグテキストの描画
-	debugText_->DrawAll(commandList);
+	debugText_->DrawAll(commandList.Get());
 	//
 	// スプライト描画後処理
 	Sprite::PostDraw();

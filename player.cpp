@@ -16,7 +16,8 @@ void Player::Initialize(Model* model, stageMap* stageMap)
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
-	// ワールド変換の初期化
+	// ワールド変換の初期化	{0,0,0}
+	
 	worldTransform_.Initialize();
 
 	//ビュープロジェクションの初期化
