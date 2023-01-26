@@ -260,7 +260,7 @@ void stageMap::DeleteBlock(float px, float pz)
 void stageMap::PutBlock(float px, float pz)
 {
 	Vector3 position;
-
+ 
 	for (int z = 0; z < mapMax; z++)
 	{
 
@@ -278,7 +278,7 @@ void stageMap::PutBlock(float px, float pz)
 
 
 
-				if (dx < 3.0f && dz < 3.0f && floorData[z][x] == Holl)
+				if (dx < 2.5f && dz < 2.5f && floorData[z][x] == Holl)
 				{
 					floorData[z][x] = FilledFloor;
 					possFlag_ = 0;
