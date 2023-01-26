@@ -19,8 +19,7 @@ void Player::Initialize(Model* model, stageMap* stageMap)
 
 	worldTransform_.translation_ = {};
 	// ワールド変換の初期化	{0,0,0}
-	int x = 1;
-	int y = 10;
+	
 	worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
 	worldTransform_.Initialize();
 	//ビュープロジェクションの初期化
@@ -115,7 +114,7 @@ void Player::Update()
 	if (input_->TriggerKey(DIK_R))
 	{
 		deathFlag_ = 0;
-		worldTransform_.translation_ = { -7 + 1 * 2.0f, 0, 10 + 10 * -2.0f };
+		worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y* -2.0f };
 		stageMap_->ResetStage();
 	}
 

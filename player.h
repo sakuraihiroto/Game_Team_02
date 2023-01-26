@@ -59,4 +59,8 @@ private:
 	float playerDir = 0;
 
 	int deathFlag_ = 0;
+
+	//プレイヤー初期位置
+	uint32_t x = 1;
+	uint32_t y = 10;
 };

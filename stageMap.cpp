@@ -68,6 +68,7 @@ void stageMap::Draw(ViewProjection viewProjection_)
 			{
 				modelWall_->Draw(worldTransform_[z][x], viewProjection_);
 			}
+
 			//移動不可ブロック
 			if (mapData[z][x] == BlockObj)
 			{
@@ -81,7 +82,7 @@ void stageMap::Draw(ViewProjection viewProjection_)
 			}
 
 			//壁
-			if (wallData[z][x] == 1)
+			if (wallData[z][x] == Block)
 			{
 				modelWall_->Draw(worldTransformWall_[z][x], viewProjection_);
 			}
