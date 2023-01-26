@@ -5,6 +5,7 @@
 void stageMap::Initialize()
 {
 	modelWall_ = Model::CreateFromOBJ("wall");
+	modelChain_ = Model::CreateFromOBJ("chain");
 	modelFloor_ = Model::CreateFromOBJ("floor");
 
 	// シングルトンインスタンスを取得する
@@ -63,9 +64,14 @@ void stageMap::Draw(ViewProjection viewProjection_)
 		for (int x = 0; x < mapMax; x++)
 		{
 			//ステージ
-			if (mapData[z][x] == Block || mapData[z][x] == BlockObj)
+			if (mapData[z][x] == Block )
 			{
 				modelWall_->Draw(worldTransform_[z][x], viewProjection_);
+			}
+			//移動不可ブロック
+			if (mapData[z][x] == BlockObj)
+			{
+				modelChain_->Draw(worldTransform_[z][x], viewProjection_);
 			}
 
 			//床
@@ -158,7 +164,7 @@ bool stageMap::CollisionHoll(float px, float pz)
 				float dz = abs(position.z - pz);
 
 				//プレイヤーが来たら反応
-				if (dx < 1.8f && dz < 1.8f)
+				if (dx < 1.6f && dz < 1.6f)
 				{
 					return true;
 				}
