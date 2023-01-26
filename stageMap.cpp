@@ -6,6 +6,7 @@ void stageMap::Initialize()
 {
 	modelWall_ = Model::CreateFromOBJ("wall");
 	modelChain_ = Model::CreateFromOBJ("chain");
+	modelHoll_ = Model::CreateFromOBJ("holl");
 	modelFloor_ = Model::CreateFromOBJ("floor");
 
 	// シングルトンインスタンスを取得する
@@ -76,9 +77,20 @@ void stageMap::Draw(ViewProjection viewProjection_)
 			}
 
 			//床
-			if (floorData[z][x] != Holl)
+			if (floorData[z][x] == Floor)
 			{
 				modelFloor_->Draw(worldTransformFloor_[z][x], viewProjection_);
+			}
+
+			//落とし穴
+			if (floorData[z][x] == Holl)
+			{
+				modelHoll_->Draw(worldTransformFloor_[z][x], viewProjection_);
+			}
+			//埋められた床
+			if (floorData[z][x] == FilledFloor)
+			{
+				modelWall_->Draw(worldTransformFloor_[z][x], viewProjection_);
 			}
 
 			//壁
