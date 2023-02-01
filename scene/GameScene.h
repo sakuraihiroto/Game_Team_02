@@ -44,6 +44,8 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void DrawTime();
+
 	/// <summary>
 	/// カウントダウン
 	/// </summary>
@@ -66,15 +68,28 @@ private: // メンバ変数
 	DebugText* debugText_ = nullptr;
 
 	//テクスチャハンドル
-	uint32_t textureHandle_background = 0; //背景
+	uint32_t textureHandleNumber_ = 0;
+	uint32_t textureHandle_hand_ = 0; //プレイヤーの手
+	uint32_t textureHandle_reticle_ = 0; //レティクル
+	//uint32_t textureHandle_title_ = 0; //タイトル画像
+	//uint32_t textureHandle_gameclear_ = 0; //ゲームクリア画像
+	//uint32_t textureHandle_gameover_ = 0; //ゲームオーバー画像
+
 	//シーン
 	uint32_t scene = title;
 	//タイム
 	uint32_t time = 0;
 	uint32_t count_ = 60;
+	
+	static const uint32_t Digit = 3;		//桁数
 
 	//スプライト
-	Sprite* sprite_background = nullptr; //背景
+	Sprite* spriteNumber[Digit] = {};		//時間
+	Sprite* sprite_hand = nullptr; //プレイヤーの手
+	Sprite* sprite_reticle = nullptr; //レティクル
+	//Sprite* sprite_title = nullptr; //タイトル画像
+	//Sprite* sprite_gameclear = nullptr; //ゲームクリア画像
+	//Sprite* sprite_gameover = nullptr; //ゲームオーバー画像
 
 	//3Dモデル
 	Model* model_ = nullptr;

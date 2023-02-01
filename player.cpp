@@ -16,9 +16,12 @@ void Player::Initialize(Model* model, stageMap* stageMap)
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
-	// ワールド変換の初期化
-	worldTransform_.Initialize();
 
+	worldTransform_.translation_ = {};
+	// ワールド変換の初期化	{0,0,0}
+
+	worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
+	worldTransform_.Initialize();
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
@@ -40,8 +43,12 @@ Vector3 Player::GetWorldPosition()
 void Player::Update()
 {
 
+
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
+	float px = 0;
+	float py = 0;
+	float pz = 0;
 
 	if (deathFlag_ == 0)
 	{
@@ -53,9 +60,8 @@ void Player::Update()
 
 		// 下方向
 		if (input_->PushKey(DIK_S)) {
-			float px = worldTransform_.translation_.x + cos(playerDir) / 10;
-			float py = worldTransform_.translation_.z + sin(playerDir) / 10;
-
+			px = worldTransform_.translation_.x + cos(playerDir) / 10;
+			py = worldTransform_.translation_.z + sin(playerDir) / 10;
 			if (stageMap_->Collision(px, py) == false)
 			{
 				move.x += cos(playerDir) / 10;
@@ -70,8 +76,8 @@ void Player::Update()
 
 		//上方向
 		if (input_->PushKey(DIK_W)) {
-			float px = worldTransform_.translation_.x - cos(playerDir) / 10;
-			float py = worldTransform_.translation_.z - sin(playerDir) / 10;
+			px = worldTransform_.translation_.x - cos(playerDir) / 10;
+			py = worldTransform_.translation_.z - sin(playerDir) / 10;
 
 			if (stageMap_->Collision(px, py) == false)
 			{
@@ -84,25 +90,36 @@ void Player::Update()
 				deathFlag_ = true;
 			}
 		}
-
-		//取り込み処理
-		if (input_->TriggerKey(DIK_Q))
+		if (input_->TriggerKey(DIK_SPACE))
 		{
-			float px = worldTransform_.translation_.x;
-			float pz = worldTransform_.translation_.z;
-
-			stageMap_->DeleteBlock(px, pz);
+			px = worldTransform_.translation_.x;
+			pz = worldTransform_.translation_.z;
 
 			stageMap_->PutBlock(px, pz);
-		}
-	}
-	//回転表示
-	float dir = -playerDir * 180 / 3.14f;
-	dir += 90;
-	worldTransform_.rotation_.x = dir;
-	worldTransform_.rotation_.y = dir;
-	worldTransform_.rotation_.z = dir;
+			stageMap_->DeleteBlock(px, pz);
 
+
+		}
+		//回転表示
+		float dir = -playerDir * 180 / 3.14f;
+		dir += 90;
+		worldTransform_.rotation_.x = dir;
+		worldTransform_.rotation_.y = dir;
+		worldTransform_.rotation_.z = dir;
+		worldTransform_.translation_ += move;
+
+		//行列の計算
+		worldTransform_.matWorld_ = playerMatworld->CreateMatWorld(worldTransform_);
+		//行列の転送
+		worldTransform_.TransferMatrix();
+
+	}
+	if (input_->TriggerKey(DIK_R))
+	{
+		deathFlag_ = 0;
+		worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
+		stageMap_->ResetStage();
+	}
 
 	worldTransform_.translation_ += move;
 
@@ -111,14 +128,6 @@ void Player::Update()
 	//行列の転送
 	worldTransform_.TransferMatrix();
 
-}
-
-void Player::ResetPlayer()
-{
-	deathFlag_ = 0;
-	playerDir = 0;
-	worldTransform_.translation_.x = 0;
-	worldTransform_.translation_.z = 0;
 }
 
 //描画処理
@@ -131,12 +140,10 @@ void Player::Draw(ViewProjection& viewProjection_)
 	// デバックテキスト
 	debugText_->SetPos(20, 80);
 	debugText_->Printf(
-		"worldTranform.x(%f)", worldTransform_.translation_.x);
+		"worldTransform.x(%lf)", worldTransform_.translation_.x);
 	debugText_->SetPos(20, 100);
 	debugText_->Printf(
-		"worldTranform.z(%f)", worldTransform_.translation_.z);
-	debugText_->SetPos(20, 120);
-	debugText_->Printf(
-		"deathFlag(%d)", deathFlag_);
+		"worldTransform.z(%lf)", worldTransform_.translation_.z);
+
 
 }

@@ -28,8 +28,6 @@ public:
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
-	void ResetPlayer();
-
 	//プレイヤーの座標
 	float GetX() { return worldTransform_.translation_.x; }
 	float GetY() { return worldTransform_.translation_.y; }
@@ -60,5 +58,9 @@ private:
 	//角度 前向き
 	float playerDir = 0;
 
-	bool deathFlag_ = false;
+	int deathFlag_ = 0;
+
+	//プレイヤー初期位置
+	uint32_t x = 1;
+	uint32_t y = 10;
 };
