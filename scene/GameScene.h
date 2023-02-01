@@ -54,6 +54,8 @@ public: // メンバ関数
 	/// </summary>
 	void Count();
 
+
+
 private: // メンバ変数
 	enum シーン
 	{
@@ -72,6 +74,7 @@ private: // メンバ変数
 
 	//テクスチャハンドル
 	uint32_t textureHandle_background = 0;	//背景
+	uint32_t HaveBlockHandle = 0;
 	//シーン
 	uint32_t scene = title;
 	//タイム
@@ -82,6 +85,7 @@ private: // メンバ変数
 
 	//スプライト
 	Sprite* sprite_background = nullptr;	//背景
+	Sprite* sprite_THEBLOCK = nullptr;
 	Sprite* spriteNumber[Digit] = {};		//時間
 	
 

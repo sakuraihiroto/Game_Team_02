@@ -8,6 +8,7 @@ void stageMap::Initialize()
 	modelChain_ = Model::CreateFromOBJ("chain");
 	modelHoll_ = Model::CreateFromOBJ("holl");
 	modelFloor_ = Model::CreateFromOBJ("floor");
+	modelGoal_ = Model::CreateFromOBJ("door");
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
@@ -69,19 +70,21 @@ void stageMap::Draw(ViewProjection viewProjection_)
 			{
 				modelWall_->Draw(worldTransform_[z][x], viewProjection_);
 			}
-
 			//移動不可ブロック
 			if (mapData[z][x] == BlockObj)
 			{
 				modelChain_->Draw(worldTransform_[z][x], viewProjection_);
 			}
-
+			//ゴール
+			if (mapData[z][x] ==Goal)
+			{
+				modelGoal_->Draw(worldTransform_[z][x], viewProjection_);
+			}
 			//床
 			if (floorData[z][x] == Floor)
 			{
 				modelFloor_->Draw(worldTransformFloor_[z][x], viewProjection_);
 			}
-
 			//落とし穴
 			if (floorData[z][x] == Holl)
 			{
@@ -92,13 +95,12 @@ void stageMap::Draw(ViewProjection viewProjection_)
 			{
 				modelWall_->Draw(worldTransformFloor_[z][x], viewProjection_);
 			}
-
 			//天井
 			if (wallData[z][x] == Block)
 			{
 				modelWall_->Draw(worldTransformWall_[z][x], viewProjection_);
 			}
-
+			
 			/*modelWall_->Draw(worldTransformCeiling_[z][x], viewProjection_);*/
 		}
 	}

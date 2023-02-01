@@ -27,9 +27,13 @@ void GameScene::Initialize() {
 
 	//カウントダウン2Dスプライト
 	textureHandleNumber_ = TextureManager::Load("bitmapfont.png");
+	HaveBlockHandle = TextureManager::Load("THEBLOCK.png");
+
+	sprite_THEBLOCK = Sprite::Create(HaveBlockHandle, { +625.0f,+200.0f });//x,y
+
 	for (int i = 0; i < 3; i++)
 	{
-		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 600.f + i * 40,0 });
+		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 600.0f + i * 40,0.0f });
 	}
 	//時間
 	time = 160;
@@ -145,7 +149,6 @@ void GameScene::Draw() {
 		//プレイヤーの描画
 		player_->Draw(viewProjection_);
 		stageMap_->Draw(viewProjection_);
-		
 		break;
 	case gameOver:
 		break;
@@ -165,13 +168,14 @@ void GameScene::Draw() {
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList.Get());
 
+	sprite_THEBLOCK->Draw();
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
-
 	//時間を描画
 	DrawTime();
+
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList.Get());
 	//
@@ -191,6 +195,11 @@ void GameScene::Count()
 		time -= 1;
 		count_ = 60;
 	}
+	//リセット
+	if (input_->TriggerKey(DIK_R))
+	{
+		time = 160;
+	}
 }
 
 void GameScene::DrawTime()
@@ -201,7 +210,7 @@ void GameScene::DrawTime()
 	{
 		//各桁の値を取り出す
 		int number = time;
-		
+
 		int CalcDigit = 100;
 		for (int i = 0; i < Digit; i++)
 		{
@@ -210,7 +219,7 @@ void GameScene::DrawTime()
 			CalcDigit = CalcDigit / 10;
 		}
 		spriteNumber[i]->SetSize({ 40,40 });
-		spriteNumber[i]->SetTextureRect({ 40.0f*eachNumber[i],0}, {40,40});
+		spriteNumber[i]->SetTextureRect({ 40.0f * eachNumber[i],0 }, { 40,40 });
 		spriteNumber[i]->Draw();
 	}
 }

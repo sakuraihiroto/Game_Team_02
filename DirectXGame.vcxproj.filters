@@ -46,7 +46,7 @@
     <Filter Include="ソース ファイル\math">
       <UniqueIdentifier>{4c21a99e-f783-4367-bdcb-0ebd1d434719}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\math">
+    <Filter Include="ヘッダー ファイル\scene\math">
       <UniqueIdentifier>{647f4977-924a-4954-923f-5619e5afc9a3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -141,19 +141,19 @@
       <Filter>ヘッダー ファイル\input</Filter>
     </ClInclude>
     <ClInclude Include="math\Matrix4.h">
-      <Filter>ヘッダー ファイル\math</Filter>
+      <Filter>ヘッダー ファイル\scene\math</Filter>
     </ClInclude>
     <ClInclude Include="math\Vector3.h">
-      <Filter>ヘッダー ファイル\math</Filter>
+      <Filter>ヘッダー ファイル\scene\math</Filter>
     </ClInclude>
     <ClInclude Include="math\MathUtility.h">
-      <Filter>ヘッダー ファイル\math</Filter>
+      <Filter>ヘッダー ファイル\scene\math</Filter>
     </ClInclude>
     <ClInclude Include="math\Vector2.h">
-      <Filter>ヘッダー ファイル\math</Filter>
+      <Filter>ヘッダー ファイル\scene\math</Filter>
     </ClInclude>
     <ClInclude Include="math\Vector4.h">
-      <Filter>ヘッダー ファイル\math</Filter>
+      <Filter>ヘッダー ファイル\scene\math</Filter>
     </ClInclude>
     <ClInclude Include="3d\AxisIndicator.h">
       <Filter>ヘッダー ファイル\3d</Filter>

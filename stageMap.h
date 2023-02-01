@@ -246,6 +246,7 @@ private:
 	Model* modelChain_ = nullptr;
 	Model* modelHoll_ = nullptr;
 	Model* modelFloor_ = nullptr;
+	Model* modelGoal_ = nullptr;
 
 
 	MatWorld* matWorld_ = nullptr;
