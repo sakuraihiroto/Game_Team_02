@@ -71,9 +71,9 @@ private: // メンバ変数
 	uint32_t textureHandleNumber_ = 0;
 	uint32_t textureHandle_hand_ = 0; //プレイヤーの手
 	uint32_t textureHandle_reticle_ = 0; //レティクル
-	//uint32_t textureHandle_title_ = 0; //タイトル画像
-	//uint32_t textureHandle_gameclear_ = 0; //ゲームクリア画像
-	//uint32_t textureHandle_gameover_ = 0; //ゲームオーバー画像
+	uint32_t textureHandle_title_ = 0; //タイトル画像
+	uint32_t textureHandle_gameclear_ = 0; //ゲームクリア画像
+	uint32_t textureHandle_gameover_ = 0; //ゲームオーバー画像
 
 	//シーン
 	uint32_t scene = title;
@@ -87,9 +87,9 @@ private: // メンバ変数
 	Sprite* spriteNumber[Digit] = {};		//時間
 	Sprite* sprite_hand = nullptr; //プレイヤーの手
 	Sprite* sprite_reticle = nullptr; //レティクル
-	//Sprite* sprite_title = nullptr; //タイトル画像
-	//Sprite* sprite_gameclear = nullptr; //ゲームクリア画像
-	//Sprite* sprite_gameover = nullptr; //ゲームオーバー画像
+	Sprite* sprite_title = nullptr; //タイトル画像
+	Sprite* sprite_gameclear = nullptr; //ゲームクリア画像
+	Sprite* sprite_gameover = nullptr; //ゲームオーバー画像
 
 	//3Dモデル
 	Model* model_ = nullptr;

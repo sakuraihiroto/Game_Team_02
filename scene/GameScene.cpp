@@ -41,15 +41,15 @@ void GameScene::Initialize() {
 	//カウントダウン2Dスプライト
 	textureHandleNumber_ = TextureManager::Load("bitmapfont.png");
 
-	////タイトル画像
-	//textureHandle_title_ = TextureManager::Load("title.png");
-	//sprite_title = Sprite::Create(textureHandle_title_, { 0,0 });
-	////ゲームクリア画像
-	//textureHandle_gameclear_ = TextureManager::Load("gameclear.png");
-	//sprite_gameclear = Sprite::Create(textureHandle_gameclear_, { 0,0 });
-	////ゲームオーバー画像
-	//textureHandle_gameover_ = TextureManager::Load("gameover.png");
-	//sprite_gameover = Sprite::Create(textureHandle_gameover_, { 0,0 });
+	//タイトル画像
+	textureHandle_title_ = TextureManager::Load("title.png");
+	sprite_title = Sprite::Create(textureHandle_title_, { 0,0 });
+	//ゲームクリア画像
+	textureHandle_gameclear_ = TextureManager::Load("gameclear.png");
+	sprite_gameclear = Sprite::Create(textureHandle_gameclear_, { 0,0 });
+	//ゲームオーバー画像
+	textureHandle_gameover_ = TextureManager::Load("gameover.png");
+	sprite_gameover = Sprite::Create(textureHandle_gameover_, { 0,0 });
 
 	
 
@@ -240,31 +240,31 @@ void GameScene::Draw() {
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList.Get());
 
-	////タイトル
-	//if (scene == title)
-	//{
-	//	sprite_title->Draw();
-	//}
-	////ゲーム画面
-	//if (scene == gameScene)
-	//{
-	//	//時間を描画
-	//	DrawTime();
-	//	//プレイヤーの手
-	//	sprite_hand->Draw();
-	//	//レティクル
-	//	sprite_reticle->Draw();
-	//}
-	////ゲームクリア
-	//if (scene == gameClear)
-	//{
-	//	sprite_gameclear->Draw();
-	//}
-	////ゲームオーバー
-	//if (scene == gameOver)
-	//{
-	//	sprite_gameover->Draw();
-	//}
+	//タイトル
+	if (scene == title)
+	{
+		sprite_title->Draw();
+	}
+	//ゲーム画面
+	if (scene == gameScene)
+	{
+		//時間を描画
+		DrawTime();
+		//プレイヤーの手
+		sprite_hand->Draw();
+		//レティクル
+		sprite_reticle->Draw();
+	}
+	//ゲームクリア
+	if (scene == gameClear)
+	{
+		sprite_gameclear->Draw();
+	}
+	//ゲームオーバー
+	if (scene == gameOver)
+	{
+		sprite_gameover->Draw();
+	}
 
 
 	/// <summary>
