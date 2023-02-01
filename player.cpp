@@ -19,7 +19,7 @@ void Player::Initialize(Model* model, stageMap* stageMap)
 
 	worldTransform_.translation_ = {};
 	// ワールド変換の初期化	{0,0,0}
-	
+
 	worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
 	worldTransform_.Initialize();
 	//ビュープロジェクションの初期化
@@ -43,9 +43,13 @@ Vector3 Player::GetWorldPosition()
 void Player::Update()
 {
 
+
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
-
+	float px = 0;
+	float py = 0;
+	float pz = 0;
+	
 	if (deathFlag_ == 0)
 	{
 		//左方向
@@ -56,9 +60,8 @@ void Player::Update()
 
 		// 下方向
 		if (input_->PushKey(DIK_S)) {
-			float px = worldTransform_.translation_.x + cos(playerDir) / 10;
-			float py = worldTransform_.translation_.z + sin(playerDir) / 10;
-
+			px = worldTransform_.translation_.x + cos(playerDir) / 10;
+			py = worldTransform_.translation_.z + sin(playerDir) / 10;
 			if (stageMap_->Collision(px, py) == false)
 			{
 				move.x += cos(playerDir) / 10;
@@ -73,8 +76,8 @@ void Player::Update()
 
 		//上方向
 		if (input_->PushKey(DIK_W)) {
-			float px = worldTransform_.translation_.x - cos(playerDir) / 10;
-			float py = worldTransform_.translation_.z - sin(playerDir) / 10;
+			px = worldTransform_.translation_.x - cos(playerDir) / 10;
+			py = worldTransform_.translation_.z - sin(playerDir) / 10;
 
 			if (stageMap_->Collision(px, py) == false)
 			{
@@ -89,10 +92,10 @@ void Player::Update()
 		}
 		if (input_->TriggerKey(DIK_SPACE))
 		{
-			float px = worldTransform_.translation_.x;
-			float pz = worldTransform_.translation_.z;
+			px = worldTransform_.translation_.x;
+			pz = worldTransform_.translation_.z;
 
-			stageMap_->PutBlock(px, pz);
+			stageMap_->PutBlock(px, pz);             
 			stageMap_->DeleteBlock(px, pz);
 
 
@@ -114,7 +117,7 @@ void Player::Update()
 	if (input_->TriggerKey(DIK_R))
 	{
 		deathFlag_ = 0;
-		worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y* -2.0f };
+		worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
 		stageMap_->ResetStage();
 	}
 

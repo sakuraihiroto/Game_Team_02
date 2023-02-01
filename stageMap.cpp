@@ -135,7 +135,7 @@ bool stageMap::Collision(float px, float pz)
 
 
 				//壁を消す際の当たり判定
-				if (tx1 < 1.15f && tz1 < 1.15f || tx2 < 1.15f && tz2 < 1.15f) {
+				if (tx1 < 1.5f && tz1 < 1.5f || tx2 < 1.5f && tz2 < 1.5f) {
 
 					touchData[z][x] = 1;
 
@@ -145,7 +145,7 @@ bool stageMap::Collision(float px, float pz)
 				}
 
 				//プレイヤーとの当たり判定
-				if (dx < 1.8f && dz < 1.8f)
+				if (dx < 1.5f && dz < 1.5f)
 				{
 					return true;
 				}
