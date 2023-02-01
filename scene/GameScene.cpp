@@ -58,9 +58,7 @@ void GameScene::Initialize() {
 		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 600.f + i * 40,0 });
 	}
 
-	//プレイヤーの手(2D)
-	textureHandle_hand_ = TextureManager::Load("hand.png");
-	sprite_hand = Sprite::Create(textureHandle_hand_, { 700,350 });
+	
 	//レティクル(2D)
 	textureHandle_reticle_ = TextureManager::Load("reticle.png");
 	sprite_reticle = Sprite::Create(textureHandle_reticle_, { 300,200 });
@@ -248,10 +246,10 @@ void GameScene::Draw() {
 	//ゲーム画面
 	if (scene == gameScene)
 	{
+		//プレイヤーの手
+		stageMap_->DrawHand();
 		//時間を描画
 		DrawTime();
-		//プレイヤーの手
-		sprite_hand->Draw();
 		//レティクル
 		sprite_reticle->Draw();
 	}

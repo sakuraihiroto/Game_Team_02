@@ -6,6 +6,8 @@
 #include <DirectXMath.h>
 #include "DebugText.h"
 #include "Input.h"
+#include "Sprite.h"
+#include "TextureManager.h"
 
 
 using namespace DirectX;
@@ -18,6 +20,8 @@ public:
 	void Initialize();
 
 	void Draw(ViewProjection viewProjection_);
+
+	void DrawHand();
 
 	bool Collision(float px, float pz);
 
@@ -242,11 +246,19 @@ private:
 		{1,1,1,1,1,1,1,1,1,1}
 	};
 
+	//モデル
 	Model* modelWall_ = nullptr;
 	Model* modelChain_ = nullptr;
 	Model* modelHoll_ = nullptr;
 	Model* modelFloor_ = nullptr;
 
+	//テクスチャハンドル
+	uint32_t textureHandle_hand_ = 0;
+	uint32_t textureHandle_handBox_ = 0;
+
+	//スプライト
+	Sprite* sprite_hand = nullptr;
+	Sprite* sprite_handBox = nullptr;
 
 	MatWorld* matWorld_ = nullptr;
 

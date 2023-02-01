@@ -53,10 +53,10 @@ void Player::Update()
 	if (deathFlag_ == 0)
 	{
 		//¶•ûŒü
-		if (input_->PushKey(DIK_A)) { playerDir += 0.06f; }
+		if (input_->PushKey(DIK_A)) { playerDir += 0.05f; }
 
 		//‰E•ûŒü
-		if (input_->PushKey(DIK_D)) { playerDir -= 0.06f; }
+		if (input_->PushKey(DIK_D)) { playerDir -= 0.05f; }
 
 		// ‰º•ûŒü
 		if (input_->PushKey(DIK_S)) {

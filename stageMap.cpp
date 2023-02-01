@@ -9,6 +9,14 @@ void stageMap::Initialize()
 	modelHoll_ = Model::CreateFromOBJ("holl");
 	modelFloor_ = Model::CreateFromOBJ("floor");
 
+	//プレイヤーの手(ブロック持ってないとき)
+	textureHandle_hand_ = TextureManager::Load("hand.png");
+	sprite_hand = Sprite::Create(textureHandle_hand_, { 700,350 });
+
+	//プレイヤーの手(ブロック持ってるとき)
+	textureHandle_handBox_ = TextureManager::Load("handbox.png");
+	sprite_handBox = Sprite::Create(textureHandle_handBox_, { 700,350 });
+
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
@@ -93,17 +101,33 @@ void stageMap::Draw(ViewProjection viewProjection_)
 				modelWall_->Draw(worldTransformFloor_[z][x], viewProjection_);
 			}
 
-			//壁
+			//天井
 			if (wallData[z][x] == Block)
 			{
 				modelWall_->Draw(worldTransformWall_[z][x], viewProjection_);
 			}
 
-			/*modelWall_->Draw(worldTransformCeiling_[z][x], viewProjection_);*/
+			debugText_->SetPos(20, 140);
+			debugText_->Printf(
+				"possFlag(%d)", possFlag_);
 		}
 	}
 }
 
+//プレイヤーの手(スプライト描画)
+void stageMap::DrawHand()
+{
+	//ブロック持ってないとき
+	if (possFlag_ == 0)
+	{
+		sprite_hand->Draw();
+	}
+	//ブロック持ってるとき
+	if (possFlag_ == 1)
+	{
+		sprite_handBox->Draw();
+	}
+}
 
 
 bool stageMap::Collision(float px, float pz)
@@ -127,11 +151,11 @@ bool stageMap::Collision(float px, float pz)
 				float dx = abs(position.x - px);
 				float dz = abs(position.z - pz);
 
-				float tx1 = abs(position.x - px + 1);
-				float tz1 = abs(position.z - pz + 1);
+				float tx1 = abs(position.x - px);
+				float tz1 = abs(position.z - pz);
 
-				float tx2 = abs(position.x - px - 1);
-				float tz2 = abs(position.z - pz - 1);
+				float tx2 = abs(position.x - px);
+				float tz2 = abs(position.z - pz);
 
 
 				//壁を消す際の当たり判定
@@ -177,7 +201,7 @@ bool stageMap::CollisionHoll(float px, float pz)
 				float dz = abs(position.z - pz);
 
 				//プレイヤーが来たら反応
-				if (dx < 1.0f && dz < 1.0f)
+				if (dx < 1.3f && dz < 1.3f)
 				{
 					return true;
 				}
@@ -244,7 +268,7 @@ void stageMap::PutBlock(float px, float pz)
 
 
 
-				if (dx < 2.5f && dz < 2.5f && floorData[z][x] == Holl)
+				if (dx < 3.0f && dz < 3.0f && floorData[z][x] == Holl)
 				{
 					floorData[z][x] = FilledFloor;
 					possFlag_ = 0;

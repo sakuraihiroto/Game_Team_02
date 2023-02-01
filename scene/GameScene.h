@@ -85,7 +85,6 @@ private: // メンバ変数
 
 	//スプライト
 	Sprite* spriteNumber[Digit] = {};		//時間
-	Sprite* sprite_hand = nullptr; //プレイヤーの手
 	Sprite* sprite_reticle = nullptr; //レティクル
 	Sprite* sprite_title = nullptr; //タイトル画像
 	Sprite* sprite_gameclear = nullptr; //ゲームクリア画像
@@ -105,4 +104,7 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 
 	stageMap* stageMap_ = nullptr;
+
+	char eachNumber[Digit] = {};
+
 };
