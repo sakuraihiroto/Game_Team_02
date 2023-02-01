@@ -63,7 +63,7 @@ void GameScene::Initialize() {
 	sprite_hand = Sprite::Create(textureHandle_hand_, { 700,350 });
 	//レティクル(2D)
 	textureHandle_reticle_ = TextureManager::Load("reticle.png");
-	sprite_reticle = Sprite::Create(textureHandle_reticle_, { 330,220 });
+	sprite_reticle = Sprite::Create(textureHandle_reticle_, { 300,200 });
 
 	//時間
 	time = 160;

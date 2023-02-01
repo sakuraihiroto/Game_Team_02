@@ -53,10 +53,10 @@ void Player::Update()
 	if (deathFlag_ == 0)
 	{
 		//¶•ûŒü
-		if (input_->PushKey(DIK_A)) { playerDir += 0.05f; }
+		if (input_->PushKey(DIK_A)) { playerDir += 0.06f; }
 
 		//‰E•ûŒü
-		if (input_->PushKey(DIK_D)) { playerDir -= 0.05f; }
+		if (input_->PushKey(DIK_D)) { playerDir -= 0.06f; }
 
 		// ‰º•ûŒü
 		if (input_->PushKey(DIK_S)) {
@@ -90,7 +90,7 @@ void Player::Update()
 				deathFlag_ = true;
 			}
 		}
-		if (input_->TriggerKey(DIK_SPACE))
+		if (input_->TriggerKey(DIK_Q))
 		{
 			px = worldTransform_.translation_.x;
 			pz = worldTransform_.translation_.z;

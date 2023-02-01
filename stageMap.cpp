@@ -177,7 +177,7 @@ bool stageMap::CollisionHoll(float px, float pz)
 				float dz = abs(position.z - pz);
 
 				//ƒvƒŒƒCƒ„[‚ª—ˆ‚½‚ç”½‰
-				if (dx < 1.6f && dz < 1.6f)
+				if (dx < 1.0f && dz < 1.0f)
 				{
 					return true;
 				}
@@ -244,7 +244,7 @@ void stageMap::PutBlock(float px, float pz)
 
 
 
-				if (dx < 3.0f && dz < 3.0f && floorData[z][x] == Holl)
+				if (dx < 2.5f && dz < 2.5f && floorData[z][x] == Holl)
 				{
 					floorData[z][x] = FilledFloor;
 					possFlag_ = 0;
