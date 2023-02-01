@@ -100,4 +100,7 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 
 	stageMap* stageMap_ = nullptr;
+
+	char eachNumber[Digit] = {};
+
 };

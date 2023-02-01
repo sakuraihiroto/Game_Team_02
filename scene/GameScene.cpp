@@ -199,14 +199,9 @@ void GameScene::DrawTime()
 	//各桁の数値を描画
 	for (int i = 0; i < Digit; i++)
 	{
-		spriteNumber[i]->SetSize({ 40,40 });
-		spriteNumber[i]->SetTextureRect({ 0,0 }, { 40,40 });
-		spriteNumber[i]->Draw();
 		//各桁の値を取り出す
-		char eachNumber[Digit] = {};
 		int number = time;
 		
-
 		int CalcDigit = 100;
 		for (int i = 0; i < Digit; i++)
 		{

@@ -93,7 +93,7 @@ void stageMap::Draw(ViewProjection viewProjection_)
 				modelWall_->Draw(worldTransformFloor_[z][x], viewProjection_);
 			}
 
-			//壁
+			//天井
 			if (wallData[z][x] == Block)
 			{
 				modelWall_->Draw(worldTransformWall_[z][x], viewProjection_);
@@ -127,11 +127,11 @@ bool stageMap::Collision(float px, float pz)
 				float dx = abs(position.x - px);
 				float dz = abs(position.z - pz);
 
-				float tx1 = abs(position.x - px + 1);
-				float tz1 = abs(position.z - pz + 1);
+				float tx1 = abs(position.x - px );
+				float tz1 = abs(position.z - pz );
 
-				float tx2 = abs(position.x - px - 1);
-				float tz2 = abs(position.z - pz - 1);
+				float tx2 = abs(position.x - px );
+				float tz2 = abs(position.z - pz );
 
 
 				//壁を消す際の当たり判定
@@ -177,7 +177,7 @@ bool stageMap::CollisionHoll(float px, float pz)
 				float dz = abs(position.z - pz);
 
 				//プレイヤーが来たら反応
-				if (dx < 1.6f && dz < 1.6f)
+				if (dx < 1.3f && dz < 1.3f)
 				{
 					return true;
 				}
