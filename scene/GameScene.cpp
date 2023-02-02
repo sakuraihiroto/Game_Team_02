@@ -201,6 +201,11 @@ void GameScene::Draw() {
 		player_->Draw(viewProjection_);
 		stageMap_->Draw(viewProjection_);
 		break;
+	case stage2:
+		//プレイヤーの描画
+		player_->Draw(viewProjection_);
+		stageMap_->Draw(viewProjection_);
+		break;
 	case gameOver:
 		break;
 	default:
