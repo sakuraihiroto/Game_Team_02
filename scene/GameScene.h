@@ -81,7 +81,7 @@ private: // メンバ変数
 	uint32_t time = 0;
 	uint32_t count_ = 60;
 	
-	static const uint32_t Digit = 3;		//桁数
+	static const uint32_t Digit = 2;		//桁数
 
 	//スプライト
 	Sprite* spriteNumber[Digit] = {};		//時間

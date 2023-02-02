@@ -50,7 +50,7 @@ void Player::Update()
 	float py = 0;
 	float pz = 0;
 
-	if (deathFlag_ == 0)
+	if (deathFlag_ == 0 && stageMap_->CollisionGoal(px, pz) == false)
 	{
 		//¶•ûŒü
 		if (input_->PushKey(DIK_A)) { playerDir += 0.05f; }
@@ -119,6 +119,26 @@ void Player::Update()
 		deathFlag_ = 0;
 		worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
 		stageMap_->ResetStage();
+	}
+
+	if (stageMap_->CollisionGoal(px, pz) == true)
+	{
+		if (input_->TriggerKey(DIK_SPACE))
+		{
+			switch (stageMap_->iswhereStage_)
+			{
+			case 1:
+				worldTransform_.translation_ = { 0,0,0 };
+				break;
+
+			case 2:
+				worldTransform_.translation_ = { 0,0,0 };
+				break;
+			}
+
+			stageMap_->SetPauseFlag_();
+
+		}
 	}
 
 	worldTransform_.translation_ += move;

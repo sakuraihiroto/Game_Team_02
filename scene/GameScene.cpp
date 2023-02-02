@@ -53,7 +53,7 @@ void GameScene::Initialize() {
 
 	
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 600.f + i * 40,0 });
 	}
@@ -64,7 +64,7 @@ void GameScene::Initialize() {
 	sprite_reticle = Sprite::Create(textureHandle_reticle_, { 300,200 });
 
 	//時間
-	time = 160;
+	time = 60;
 
 	//3Dモデルの生成
 	model_ = Model::Create();
@@ -104,6 +104,7 @@ void GameScene::Update() {
 		break;
 	case gameScene:
 		player_->Update();
+		stageMap_->Update();
 		//カウントダウン
 		Count();
 
@@ -158,15 +159,12 @@ void GameScene::DrawTime()
 	//各桁の数値を描画
 	for (int i = 0; i < Digit; i++)
 	{
-		spriteNumber[i]->SetSize({ 40,40 });
-		spriteNumber[i]->SetTextureRect({ 0,0 }, { 40,40 });
-		spriteNumber[i]->Draw();
 		//各桁の値を取り出す
 		char eachNumber[Digit] = {};
 		int number = time;
 
 
-		int CalcDigit = 100;
+		int CalcDigit = 10;
 		for (int i = 0; i < Digit; i++)
 		{
 			eachNumber[i] = number / CalcDigit;

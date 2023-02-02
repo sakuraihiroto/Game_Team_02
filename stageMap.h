@@ -19,22 +19,37 @@ class stageMap
 public:
 	void Initialize();
 
+	void Update();
+
 	void Draw(ViewProjection viewProjection_);
 
 	void DrawHand();
 
 	bool Collision(float px, float pz);
 
+	//落とし穴の判定する関数
 	bool CollisionHoll(float px, float pz);
 
+	//ゴールを判定する関数
+	bool CollisionGoal(float px, float pz);
+
+	//ブロックを取る判定をする関数
 	void DeleteBlock(float px, float pz);
 
+	//ブロックを置く判定をする関数
 	void PutBlock(float px, float pz);
 
 	void ResetStage();
+
+	void SetPauseFlag_()
+	{
+		pauseFlag_ = 0;
+	}
+
 public:
 	static const int mapMax = 12;
 
+	static int iswhereStage_;
 private:
 
 	//壁のブロック対応表
@@ -57,6 +72,13 @@ private:
 		Floor,			//ブロック
 		Holl,			//落とし穴
 		FilledFloor		//埋めたフロア(生成には関係なし)
+	};
+
+	enum Stage
+	{
+		Stage1 = 1,
+		Stage2,
+		Stage3
 	};
 
 	/*int mapData[mapMax][mapMax] = {
@@ -103,6 +125,21 @@ private:
 	};*/
 
 	int stage1Wall[mapMax][mapMax] = {//[10][1]
+	{ 2, 2, 2, 2, 2, 2, 2, 2, 2 },
+	{ 2, 0, 0, 0, 1, 0, 1, 0, 2 },
+	{ 2, 0, 1, 0, 1, 0, 1, 0, 2 },
+	{ 2, 0, 1, 0, 1, 0, 0, 0, 2 },
+	{ 2, 0, 0, 0, 1, 0, 1, 0, 2 },
+	{ 2, 0, 1, 0, 0, 0, 1, 0, 2 },
+	{ 2, 0, 1, 0, 1, 0, 1, 3, 2 },
+	{ 2, 0, 1, 0, 1, 1, 1, 1, 2 },
+	{ 2, 0, 1, 0, 1, 0, 0, 0, 2 },
+	{ 2, 0, 0, 0, 1, 1, 1, 0, 2 },
+	{ 2, 0, 0, 0, 1, 0, 0, 0, 2 },
+	{ 2, 2, 2, 2, 2, 2, 2, 2, 2 }
+	};
+
+	int stage2Wall[mapMax][mapMax] = {
 	{ 2, 2, 2, 2, 2, 2, 2, 2, 2 },
 	{ 2, 0, 0, 0, 1, 0, 1, 0, 2 },
 	{ 2, 0, 1, 0, 1, 0, 1, 0, 2 },
@@ -203,6 +240,21 @@ private:
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 	};
 
+	int stage2Floor[mapMax][mapMax] = {
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 1, 0, 0, 1, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 1, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 1, 0, 0, 1, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 1, 0, 1, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 1, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+	};
+
 	int touchData[mapMax][mapMax] = {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -273,4 +325,12 @@ private:
 
 	//ブロックを取れる回数
 	int countPossBlock_ = 2;
+
+	//ゴールに触れたかのフラグ
+	int isTouchedGoal = 0;
+
+	//ステージを更新するかのフラグ
+	int isCreateStage_ = 0;
+
+	int pauseFlag_ = 1;
 };

@@ -1,6 +1,7 @@
 #include "stageMap.h"
 
 
+int stageMap::iswhereStage_ = 1;
 
 void stageMap::Initialize()
 {
@@ -63,6 +64,60 @@ void stageMap::Initialize()
 
 			worldTransformCeiling_[z][x].TransferMatrix();
 		}
+	}
+}
+
+void stageMap::Update() {
+
+	if (pauseFlag_ == 0)
+	{
+		//ゴールしたらステージのフラグを進めてステージ更新
+		if (isTouchedGoal == 1)
+		{
+			iswhereStage_++;
+			isCreateStage_ = 1;
+			isTouchedGoal = 0;
+		}
+
+		for (int z = 0; z < mapMax; z++)
+		{
+
+			for (int x = 0; x < mapMax; x++)
+			{
+
+				if (isCreateStage_ == 1 && iswhereStage_ == 2)
+				{
+					if (stage1Wall[z][x] == none)
+					{
+						mapData[z][x] = none;
+					}
+					else if (stage1Wall[z][x] == Block)
+					{
+						mapData[z][x] = Block;
+					}
+					else if (stage1Wall[z][x] == BlockObj)
+					{
+						mapData[z][x] = BlockObj;
+					}
+					else if (stage1Wall[z][x] == Goal)
+					{
+						mapData[z][x] = Goal;
+					}
+
+					if (stage1Floor[z][x] == Floor)
+					{
+						floorData[z][x] = Floor;
+					}
+					else if (stage1Floor[z][x] == Holl)
+					{
+						floorData[z][x] = Holl;
+					}
+				}
+
+
+			}
+		}
+		isCreateStage_ = 0;
 	}
 }
 
@@ -281,34 +336,78 @@ void stageMap::PutBlock(float px, float pz)
 
 void stageMap::ResetStage()
 {
-	for (int z = 0; z < mapMax; z++)
+
+	switch (iswhereStage_)
 	{
-
-		for (int x = 0; x < mapMax; x++)
+	case Stage1:
+		for (int z = 0; z < mapMax; z++)
 		{
-			if (stage1Wall[z][x] == none)
-			{
-				mapData[z][x] = none;
-			}
-			else if (stage1Wall[z][x] == Block)
-			{
-				mapData[z][x] = Block;
-			}
-			else if (stage1Wall[z][x] == BlockObj)
-			{
-				mapData[z][x] = BlockObj;
-			}
 
+			for (int x = 0; x < mapMax; x++)
+			{
+				if (stage1Wall[z][x] == none)
+				{
+					mapData[z][x] = none;
+				}
+				else if (stage1Wall[z][x] == Block)
+				{
+					mapData[z][x] = Block;
+				}
+				else if (stage1Wall[z][x] == BlockObj)
+				{
+					mapData[z][x] = BlockObj;
+				}
+				else if (stage1Wall[z][x] == Goal)
+				{
+					mapData[z][x] = Goal;
+				}
 
-			if (stage1Floor[z][x] == Floor)
-			{
-				floorData[z][x] = Floor;
-			}
-			else if (stage1Floor[z][x] == Holl)
-			{
-				floorData[z][x] = Holl;
+				if (stage1Floor[z][x] == Floor)
+				{
+					floorData[z][x] = Floor;
+				}
+				else if (stage1Floor[z][x] == Holl)
+				{
+					floorData[z][x] = Holl;
+				}
 			}
 		}
+		break;
+
+	case Stage2:
+		for (int z = 0; z < mapMax; z++)
+		{
+
+			for (int x = 0; x < mapMax; x++)
+			{
+				if (stage2Wall[z][x] == none)
+				{
+					mapData[z][x] = none;
+				}
+				else if (stage2Wall[z][x] == Block)
+				{
+					mapData[z][x] = Block;
+				}
+				else if (stage2Wall[z][x] == BlockObj)
+				{
+					mapData[z][x] = BlockObj;
+				}
+				else if (stage2Wall[z][x] == Goal)
+				{
+					mapData[z][x] = Goal;
+				}
+
+				if (stage2Floor[z][x] == Floor)
+				{
+					floorData[z][x] = Floor;
+				}
+				else if (stage2Floor[z][x] == Holl)
+				{
+					floorData[z][x] = Holl;
+				}
+			}
+		}
+		break;
 	}
 
 	//取ったブロックを所持しているか
@@ -317,4 +416,38 @@ void stageMap::ResetStage()
 	//ブロックを取れる回数
 	countPossBlock_ = 2;
 
+}
+
+bool stageMap::CollisionGoal(float px, float pz)
+{
+	Vector3 position;
+
+	for (int z = 0; z < mapMax; z++)
+	{
+
+		for (int x = 0; x < mapMax; x++)
+		{
+
+			if (mapData[z][x] == Goal)
+			{
+
+				position.x = worldTransform_[z][x].translation_.x;
+				position.z = worldTransform_[z][x].translation_.z;
+
+
+
+				float dx = abs(position.x - px);
+				float dz = abs(position.z - pz);
+
+				//プレイヤーとの当たり判定
+				if (dx < 1.8f && dz < 1.8f)
+				{
+					isTouchedGoal = 1;
+					return true;
+				}
+
+			}
+		}
+	}
+	return false;
 }
