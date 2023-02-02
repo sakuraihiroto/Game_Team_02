@@ -15,14 +15,10 @@ class Player
 public:
 	void Initialize(Model* model, stageMap* stageMap);
 
-	///<summary>
-	///更新
-	/// </summary>
 	void Update();
 
-	/// <summary>
-	/// 描画
-	/// </summary>
+	void ResetPlayer();
+
 	void Draw(ViewProjection& viewProjection_);
 
 	//ワールド座標を取得
@@ -55,8 +51,8 @@ private:
 	//速度
 	Vector3 velocity_;
 
-	//角度 前向き
-	float playerDir = 0;
+	//プレイヤーの向き
+	float playerDir = 4;
 
 	int deathFlag_ = 0;
 

@@ -114,12 +114,6 @@ void Player::Update()
 		worldTransform_.TransferMatrix();
 
 	}
-	if (input_->TriggerKey(DIK_R))
-	{
-		deathFlag_ = 0;
-		worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
-		stageMap_->ResetStage();
-	}
 
 	if (stageMap_->CollisionGoal(px, pz) == true)
 	{
@@ -148,6 +142,14 @@ void Player::Update()
 	//s—ñ‚Ì“]‘—
 	worldTransform_.TransferMatrix();
 
+}
+
+//‰Šú‰»ŠÖ”
+void Player::ResetPlayer()
+{
+	deathFlag_ = 0;
+	playerDir = 4;
+	worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
 }
 
 //•`‰æˆ—

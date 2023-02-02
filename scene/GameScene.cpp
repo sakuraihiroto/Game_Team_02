@@ -117,25 +117,45 @@ void GameScene::Update() {
 		viewProjection_.target.y = player_->GetY();
 		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 
-		//下向き
-		if (input_->PushKey(DIK_DOWN))
-		{
-			viewProjection_.target.y = player_->GetY() - 3.5f;
-		}
+		////下向き
+		//if (input_->PushKey(DIK_DOWN))
+		//{
+		//	viewProjection_.target.y = player_->GetY() - 3.5f;
+		//}
 
 		//リセット
 		if (input_->PushKey(DIK_R))
 		{
 			stageMap_->ResetStage();
-			time = 160;
+			player_->ResetPlayer();
+			time = 60;
 			count_ = 60;
 
 		}
 
 		break;
 	case gameOver:
+
+		//初期化処理
+		stageMap_->ResetStage();
+		player_->ResetPlayer();
+		time = 60;
+		count_ = 60;
+
+		//Rキーでリスタート
+		if (input_->PushKey(DIK_R))
+		{
+			scene = gameScene;
+		}
+
 		break;
 	default:
+
+		//初期化処理
+		stageMap_->ResetStage();
+		player_->ResetPlayer();
+		time = 60;
+		count_ = 60;
 		break;
 	}
 	//spaceでシーンチェンジ
