@@ -10,6 +10,8 @@ void stageMap::Initialize()
 	modelFloor_ = Model::CreateFromOBJ("floor");
 	modelGoal_ = Model::CreateFromOBJ("door");
 
+
+
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
@@ -66,7 +68,7 @@ void stageMap::Draw(ViewProjection viewProjection_)
 		for (int x = 0; x < mapMax; x++)
 		{
 			//ステージ
-			if (mapData[z][x] == Block )
+			if (mapData[z][x] == Block)
 			{
 				modelWall_->Draw(worldTransform_[z][x], viewProjection_);
 			}
@@ -76,7 +78,7 @@ void stageMap::Draw(ViewProjection viewProjection_)
 				modelChain_->Draw(worldTransform_[z][x], viewProjection_);
 			}
 			//ゴール
-			if (mapData[z][x] ==Goal)
+			if (mapData[z][x] == Goal)
 			{
 				modelGoal_->Draw(worldTransform_[z][x], viewProjection_);
 			}
@@ -100,10 +102,27 @@ void stageMap::Draw(ViewProjection viewProjection_)
 			{
 				modelWall_->Draw(worldTransformWall_[z][x], viewProjection_);
 			}
-			
+
 			/*modelWall_->Draw(worldTransformCeiling_[z][x], viewProjection_);*/
 		}
 	}
+}
+
+//プレイヤーの手(スプライト描画)
+void stageMap::DrawHand()
+{
+	//////エラーがありました//////
+
+	////ブロック持ってないとき
+	//if (possFlag_ == 0)
+	//{
+	//	sprite_hand->Draw();
+	//}
+	////ブロック持ってるとき
+	//if (possFlag_ == 1)
+	//{
+	//	sprite_handBox->Draw();
+	//}
 }
 
 
@@ -129,11 +148,11 @@ bool stageMap::Collision(float px, float pz)
 				float dx = abs(position.x - px);
 				float dz = abs(position.z - pz);
 
-				float tx1 = abs(position.x - px );
-				float tz1 = abs(position.z - pz );
+				float tx1 = abs(position.x - px);
+				float tz1 = abs(position.z - pz);
 
-				float tx2 = abs(position.x - px );
-				float tz2 = abs(position.z - pz );
+				float tx2 = abs(position.x - px);
+				float tz2 = abs(position.z - pz);
 
 
 				//壁を消す際の当たり判定
@@ -257,6 +276,103 @@ void stageMap::PutBlock(float px, float pz)
 	}
 }
 
+void stageMap::ChangeMap()
+{
+	switch (scene_)
+	{
+	case tutorial:
+		for (int z = 0; z < mapMax; z++)
+		{
+			for (int x = 0; x < mapMax; x++)
+			{
+				if (tutoStageData[z][x] == none)
+				{
+					mapData[z][x] = none;
+				}
+				else if (tutoStageData[z][x] == Block)
+				{
+					mapData[z][x] = Block;
+				}
+				else if (tutoStageData[z][x] == BlockObj)
+				{
+					mapData[z][x] = BlockObj;
+				}
+
+
+				if (tutoFloorData[z][x] == Floor)
+				{
+					floorData[z][x] = Floor;
+				}
+				else if (tutoFloorData[z][x] == Holl)
+				{
+					floorData[z][x] = Holl;
+				}
+			}
+		}
+		break;
+	case stage1:
+		for (int z = 0; z < mapMax; z++)
+		{
+			for (int x = 0; x < mapMax; x++)
+			{
+				if (stage1WallData[z][x] == none)
+				{
+					mapData[z][x] = none;
+				}
+				else if (stage1WallData[z][x] == Block)
+				{
+					mapData[z][x] = Block;
+				}
+				else if (stage1WallData[z][x] == BlockObj)
+				{
+					mapData[z][x] = BlockObj;
+				}
+
+
+				if (stage1FloorData[z][x] == Floor)
+				{
+					floorData[z][x] = Floor;
+				}
+				else if (stage1FloorData[z][x] == Holl)
+				{
+					floorData[z][x] = Holl;
+				}
+			}
+		}
+		break;
+	case stage2:
+		for (int z = 0; z < mapMax; z++)
+		{
+			for (int x = 0; x < mapMax; x++)
+			{
+				if (stage2Wall[z][x] == none)
+				{
+					mapData[z][x] = none;
+				}
+				else if (stage2Wall[z][x] == Block)
+				{
+					mapData[z][x] = Block;
+				}
+				else if (stage2Wall[z][x] == BlockObj)
+				{
+					mapData[z][x] = BlockObj;
+				}
+
+
+				if (stage2Floor[z][x] == Floor)
+				{
+					floorData[z][x] = Floor;
+				}
+				else if (stage2Floor[z][x] == Holl)
+				{
+					floorData[z][x] = Holl;
+				}
+			}
+		}
+		break;
+	}
+}
+
 void stageMap::ResetStage()
 {
 	for (int z = 0; z < mapMax; z++)
@@ -264,25 +380,25 @@ void stageMap::ResetStage()
 
 		for (int x = 0; x < mapMax; x++)
 		{
-			if (stage1Wall[z][x] == none)
+			if (stage2Wall[z][x] == none)
 			{
 				mapData[z][x] = none;
 			}
-			else if (stage1Wall[z][x] == Block)
+			else if (stage2Wall[z][x] == Block)
 			{
 				mapData[z][x] = Block;
 			}
-			else if (stage1Wall[z][x] == BlockObj)
+			else if (stage2Wall[z][x] == BlockObj)
 			{
 				mapData[z][x] = BlockObj;
 			}
 
 
-			if (stage1Floor[z][x] == Floor)
+			if (stage2Floor[z][x] == Floor)
 			{
 				floorData[z][x] = Floor;
 			}
-			else if (stage1Floor[z][x] == Holl)
+			else if (stage2Floor[z][x] == Holl)
 			{
 				floorData[z][x] = Holl;
 			}

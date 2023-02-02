@@ -61,9 +61,10 @@ private: // メンバ変数
 	{
 		title,				//0
 		tutorial,			//1
-		gameScene,			//2
-		gameOver,			//3
-		gameClear			//4
+		stage1,				//2
+		stage2,				//3
+		gameOver,			//4
+		gameClear			//5
 	};
 
 
@@ -80,10 +81,16 @@ private: // メンバ変数
 	//タイム
 	uint32_t time = 0;
 	uint32_t count_ = 60;
-	uint32_t textureHandleNumber_ = 0;
 	static const uint32_t Digit = 3;		//桁数
 
+	//テクスチャハンドル
+	uint32_t textureHandle_reticle_ = 0; //レティクル
+	uint32_t textureHandle_title_ = 0; //タイトル画像
+	uint32_t textureHandle_gameclear_ = 0; //ゲームクリア画像
+	uint32_t textureHandle_gameover_ = 0; //ゲームオーバー画像
+	uint32_t textureHandleNumber_ = 0;
 	//スプライト
+	Sprite* sprite_reticle = nullptr; //レティクル
 	Sprite* sprite_background = nullptr;	//背景
 	Sprite* sprite_THEBLOCK = nullptr;
 	Sprite* spriteNumber[Digit] = {};		//時間
@@ -93,6 +100,10 @@ private: // メンバ変数
 	Model* model_ = nullptr;
 	Model* modelPlayer_ = nullptr;		//プレイヤーモデル
 	Model* modelHand = nullptr;
+	Sprite* sprite_title = nullptr; //タイトル画像
+	Sprite* sprite_gameclear = nullptr; //ゲームクリア画像
+	Sprite* sprite_gameover = nullptr; //ゲームオーバー画像
+
 
 
 	//ワールドトランスフォーム

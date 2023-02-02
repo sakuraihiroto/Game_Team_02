@@ -27,9 +27,20 @@ void GameScene::Initialize() {
 
 	//カウントダウン2Dスプライト
 	textureHandleNumber_ = TextureManager::Load("bitmapfont.png");
-	HaveBlockHandle = TextureManager::Load("THEBLOCK.png");
 
-	sprite_THEBLOCK = Sprite::Create(HaveBlockHandle, { +625.0f,+200.0f });//x,y
+	//タイトル画像
+	textureHandle_title_ = TextureManager::Load("title.png");
+	sprite_title = Sprite::Create(textureHandle_title_, { 0,0 });
+	//ゲームクリア画像
+	textureHandle_gameclear_ = TextureManager::Load("gameclear.png");
+	sprite_gameclear = Sprite::Create(textureHandle_gameclear_, { 0,0 });
+	//ゲームオーバー画像
+	textureHandle_gameover_ = TextureManager::Load("gameover.png");
+	sprite_gameover = Sprite::Create(textureHandle_gameover_, { 0,0 });
+
+	//レティクル(2D)
+	textureHandle_reticle_ = TextureManager::Load("reticle.png");
+	sprite_reticle = Sprite::Create(textureHandle_reticle_, { 300,200 });
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -47,10 +58,11 @@ void GameScene::Initialize() {
 	stageMap_ = new stageMap();
 	//自キャラモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("cube", true);
-	//modelHand = Model::CreateFromOBJ("hand", true);
+	
 	//自キャラの初期化
 	player_->Initialize(modelPlayer_, stageMap_);
 
+	//マップの初期化
 	stageMap_->Initialize();
 
 	//ワールドトランスフォームの初期化
@@ -71,8 +83,36 @@ void GameScene::Update() {
 
 		break;
 	case tutorial:
+		player_->Update();
+
+		//カウントダウン
+		Count();
+
+		//カメラ追従
+		viewProjection_.eye.x = player_->GetX();
+		viewProjection_.eye.y = player_->GetY();
+		viewProjection_.eye.z = player_->GetZ();
+
+		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
+		viewProjection_.target.y = player_->GetY();
+		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 		break;
-	case gameScene:
+	case stage1:
+		player_->Update();
+
+		//カウントダウン
+		Count();
+
+		//カメラ追従
+		viewProjection_.eye.x = player_->GetX();
+		viewProjection_.eye.y = player_->GetY();
+		viewProjection_.eye.z = player_->GetZ();
+
+		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
+		viewProjection_.target.y = player_->GetY();
+		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
+		break;
+	case stage2:
 		player_->Update();
 
 		//カウントダウン
@@ -94,12 +134,16 @@ void GameScene::Update() {
 		break;
 	}
 	//spaceでシーンチェンジ
-	if (input_->TriggerKey(DIK_SPACE) && scene < gameScene)
+	if (input_->TriggerKey(DIK_SPACE) && scene < stage2)
 	{
 		scene += 1;
+		//シーンを取得
+		stageMap_->GetScene(scene);
+		//stageを変える
+		stageMap_->ChangeMap();
 	}
 	//gameOver&gameClearの時,titleに戻る
-	else if (input_->TriggerKey(DIK_SPACE) && scene > gameScene)
+	else if (input_->TriggerKey(DIK_SPACE) && scene > stage2)
 	{
 		scene = title;
 	}
@@ -121,8 +165,7 @@ void GameScene::Draw() {
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
 	//背景描画
-	//sprite_background->Draw();
-	// 
+	
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -144,8 +187,16 @@ void GameScene::Draw() {
 	case title:
 		break;
 	case tutorial:
+		//プレイヤーの描画
+		player_->Draw(viewProjection_);
+		stageMap_->Draw(viewProjection_);
 		break;
-	case gameScene:
+	case stage1:
+		//プレイヤーの描画
+		player_->Draw(viewProjection_);
+		stageMap_->Draw(viewProjection_);
+		break;
+	case stage2:
 		//プレイヤーの描画
 		player_->Draw(viewProjection_);
 		stageMap_->Draw(viewProjection_);
@@ -168,11 +219,36 @@ void GameScene::Draw() {
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList.Get());
 
-	sprite_THEBLOCK->Draw();
+	
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-
+//sprite_THEBLOCK->Draw();
+//タイトル
+if (scene == title)
+{
+	sprite_title->Draw();
+}
+//ゲーム画面
+if (scene == stage2)
+{
+	//プレイヤーの手
+	stageMap_->DrawHand();
+	//時間を描画
+	DrawTime();
+	//レティクル
+	sprite_reticle->Draw();
+}
+//ゲームクリア
+if (scene == gameClear)
+{
+	sprite_gameclear->Draw();
+}
+//ゲームオーバー
+if (scene == gameOver)
+{
+	sprite_gameover->Draw();
+}
 	//時間を描画
 	DrawTime();
 
