@@ -165,6 +165,9 @@ void stageMap::Draw(ViewProjection viewProjection_)
 			debugText_->SetPos(20, 140);
 			debugText_->Printf(
 				"possFlag(%d)", possFlag_);
+			debugText_->SetPos(20, 180);
+			debugText_->Printf(
+				"hollFlag(%d)", hollFlag_);
 		}
 	}
 }
@@ -258,7 +261,11 @@ bool stageMap::CollisionHoll(float px, float pz)
 				//プレイヤーが来たら反応
 				if (dx < 1.3f && dz < 1.3f)
 				{
-					return true;
+					hollFlag_ = 1;
+					if (hollFlag_ == 1)
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -415,6 +422,9 @@ void stageMap::ResetStage()
 
 	//ブロックを取れる回数
 	countPossBlock_ = 2;
+
+	//落とし穴に触れてるかのフラグ
+	hollFlag_ = 0;
 
 }
 

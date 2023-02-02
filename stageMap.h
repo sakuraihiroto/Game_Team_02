@@ -46,6 +46,8 @@ public:
 		pauseFlag_ = 0;
 	}
 
+	int GethollFlag() { return hollFlag_; }
+
 public:
 	static const int mapMax = 12;
 
@@ -333,4 +335,8 @@ private:
 	int isCreateStage_ = 0;
 
 	int pauseFlag_ = 1;
+
+	//—‚Æ‚µŒŠ‚ÉG‚ê‚½‚©‚Ìƒtƒ‰ƒO
+	int hollFlag_ = 0;
+
 };

@@ -27,7 +27,7 @@ void GameScene::Count()
 	if (count_ <= 0)
 	{
 		time -= 1;
-		count_ = 60;
+		count_ = 50;
 	}
 }
 
@@ -129,8 +129,20 @@ void GameScene::Update() {
 			stageMap_->ResetStage();
 			player_->ResetPlayer();
 			time = 60;
-			count_ = 60;
+			count_ = 50;
 
+		}
+
+		//タイマーが0になったらゲームオーバー
+		if (time == 0)
+		{
+			scene=gameOver;
+		}
+
+		//落とし穴に落ちたらゲームオーバー
+		if (stageMap_->GethollFlag() == 1)
+		{
+			scene = gameOver;
 		}
 
 		break;
@@ -140,7 +152,7 @@ void GameScene::Update() {
 		stageMap_->ResetStage();
 		player_->ResetPlayer();
 		time = 60;
-		count_ = 60;
+		count_ = 50;
 
 		//Rキーでリスタート
 		if (input_->PushKey(DIK_R))
@@ -155,7 +167,7 @@ void GameScene::Update() {
 		stageMap_->ResetStage();
 		player_->ResetPlayer();
 		time = 60;
-		count_ = 60;
+		count_ = 50;
 		break;
 	}
 	//spaceでシーンチェンジ
