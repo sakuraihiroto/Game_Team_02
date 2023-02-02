@@ -3,6 +3,7 @@
 // アフィン行列呼び出し
 MatWorld* playerMatworld = nullptr;
 
+
 void Player::Initialize(Model* model, stageMap* stageMap)
 {
 	// NULLポインタチェック
@@ -16,7 +17,6 @@ void Player::Initialize(Model* model, stageMap* stageMap)
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
-
 	worldTransform_.translation_ = {};
 	// ワールド変換の初期化	{0,0,0}
 
@@ -24,6 +24,9 @@ void Player::Initialize(Model* model, stageMap* stageMap)
 	worldTransform_.Initialize();
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+
+	
+	
 
 }
 
@@ -36,13 +39,14 @@ Vector3 Player::GetWorldPosition()
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
 	worldPos.y = worldTransform_.matWorld_.m[3][1];
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
-
+	
 	return worldPos;
 }
 
 void Player::Update()
 {
-
+	
+	
 
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
@@ -50,13 +54,51 @@ void Player::Update()
 	float py = 0;
 	float pz = 0;
 	
+	//追加分-------------------------
+
+	mousePrePos_ = mousePos_;
+
+	GetCursorPos(&mousePos_);
+
+	float mouseMoveX = mousePos_.x - mousePrePos_.x;
+	float mouseMoveY = mousePos_.y - mousePrePos_.y;
+
+	
 	if (deathFlag_ == 0)
 	{
+
+		
+		//左方向
+		if (mouseMoveX > 0) { playerDir -= 0.08f; }
+
+		
+		if (mouseMoveY  > 0) { playerDirY += 0.08f; }
+
+		//右方向
+		if (mouseMoveX < 0) { playerDir += 0.08f; }
+
+
+		if (mouseMoveY < 0) { playerDirY -= 0.08f; }
+
+		if (playerDirY > 1.2f)
+		{
+			playerDirY -= 0.08f;
+		}
+
+		if (playerDirY < -1.2f)
+		{
+			playerDirY += 0.08f;
+		}
+
+		//追加終わり-------------------------
+		 
+		
 		//左方向
 		if (input_->PushKey(DIK_A)) { playerDir += 0.05f; }
 
 		//右方向
 		if (input_->PushKey(DIK_D)) { playerDir -= 0.05f; }
+
 
 		// 下方向
 		if (input_->PushKey(DIK_S)) {
@@ -103,6 +145,7 @@ void Player::Update()
 		//回転表示
 		float dir = -playerDir * 180 / 3.14f;
 		dir += 90;
+
 		worldTransform_.rotation_.x = dir;
 		worldTransform_.rotation_.y = dir;
 		worldTransform_.rotation_.z = dir;
@@ -122,6 +165,7 @@ void Player::Update()
 	}
 
 	worldTransform_.translation_ += move;
+
 
 	//行列の計算
 	worldTransform_.matWorld_ = playerMatworld->CreateMatWorld(worldTransform_);
@@ -147,6 +191,9 @@ void Player::Draw(ViewProjection& viewProjection_)
 	debugText_->SetPos(20, 120);
 	debugText_->Printf(
 		"deathFlag(%d)", deathFlag_);
-
+	debugText_->SetPos(20, 140);
+	debugText_->Printf(
+		"dirY[%f]", playerDirY
+	);
 
 }

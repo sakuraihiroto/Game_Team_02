@@ -10,6 +10,9 @@
 #include "ViewProjection.h"
 #include "stageMap.h"
 
+//追加分-------------------------
+#include <Windows.h>
+
 class Player
 {
 public:
@@ -35,6 +38,12 @@ public:
 
 	float GetPlayerDir() { return playerDir; }
 
+	//追加分-------------------------
+
+	float GetPlayerDirY() { return playerDirY; }
+
+	//追加終わり-------------------------
+
 private:
 
 	// ワールド変換データ
@@ -58,9 +67,22 @@ private:
 	//角度 前向き
 	float playerDir = 0;
 
+	//追加分-------------------------
+
+	float playerDirY = 0;
 	int deathFlag_ = 0;
 
+	//追加終わり-------------------------
+	
 	//プレイヤー初期位置
 	uint32_t x = 1;
 	uint32_t y = 10;
+
+
+	//追加分-------------------------
+
+	POINT mousePos_ = { 0,0 };
+	POINT mousePrePos_ = {0,0};
+
+	//追加終わり-------------------------
 };

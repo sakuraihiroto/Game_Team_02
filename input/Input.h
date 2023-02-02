@@ -172,6 +172,7 @@ class Input {
 	void SetupJoysticks();
 
   private: // メンバ変数
+
 	Microsoft::WRL::ComPtr<IDirectInput8> dInput_;
 	Microsoft::WRL::ComPtr<IDirectInputDevice8> devKeyboard_;
 	Microsoft::WRL::ComPtr<IDirectInputDevice8> devMouse_;

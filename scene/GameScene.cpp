@@ -84,7 +84,13 @@ void GameScene::Update() {
 		viewProjection_.eye.z = player_->GetZ();
 
 		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
-		viewProjection_.target.y = player_->GetY();
+
+		//変更部分-------------------------
+
+		viewProjection_.target.y = viewProjection_.eye.y - tan(player_->GetPlayerDirY()) * 8;
+
+		//変更部分-------------------------
+
 		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 
 		break;
@@ -138,7 +144,8 @@ void GameScene::Draw() {
 	debugText_->SetPos(20, 40);
 	debugText_->Printf("count:%d", count_);
 	debugText_->SetPos(20, 60);
-	debugText_->Printf("time:%d", time);
+	debugText_->Printf("time:%d", time);	debugText_->SetPos(900, 80);
+
 	switch (scene)
 	{
 	case title:
