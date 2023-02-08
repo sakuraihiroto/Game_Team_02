@@ -45,9 +45,9 @@ void Player::Update()
 
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
-	float px = 0;
-	float py = 0;
-	float pz = 0;
+	float px = worldTransform_.translation_.x;
+	float py = worldTransform_.translation_.y;
+	float pz = worldTransform_.translation_.z;
 
 	mousePrePos_ = mousePos_;
 
@@ -138,6 +138,35 @@ void Player::Update()
 		worldTransform_.rotation_.x = dir;
 		worldTransform_.rotation_.y = dir;
 		worldTransform_.rotation_.z = dir;
+
+		if (stageMap_->CollisionGoal(px, pz) == true)
+		{
+			//停止
+
+
+			if (input_->TriggerKey(DIK_SPACE))
+			{
+				switch (stageMap_->iswhereStage_)
+				{
+				case tutorial:
+					worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
+
+					break;
+
+				case stage1:
+					worldTransform_.translation_ = { -7 + x1 * 2.0f, 0, 10 + y1 * -2.0f };
+
+					break;
+
+				case stage2:
+					worldTransform_.translation_ = { -14 + x2 * 2.0f, 0, 10 + y2 * -2.0f };
+
+					break;
+				}
+			}
+		}
+
+
 		worldTransform_.translation_ += move;
 
 		//行列の計算
@@ -182,6 +211,12 @@ void Player::ResetPlayer()
 	deathFlag_ = 0;
 	playerDir = 4;
 	worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
+	x = 2;
+	y = 7;
+	x1 = 1;
+	y1 = 6;
+	x2 = 1;
+	y2 = 10;
 }
 
 //描画処理

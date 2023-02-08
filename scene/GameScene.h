@@ -58,9 +58,10 @@ private: // メンバ変数
 	{
 		title,				//0
 		tutorial,			//1
-		gameScene,			//2
-		gameOver,			//3
-		gameClear			//4
+		stage1,				//2
+		stage2,				//3
+		gameOver,			//4
+		gameClear			//5
 	};
 
 
@@ -77,6 +78,7 @@ private: // メンバ変数
 	uint32_t textureHandle_title_ = 0; //タイトル画像
 	uint32_t textureHandle_gameclear_ = 0; //ゲームクリア画像
 	uint32_t textureHandle_gameover_ = 0; //ゲームオーバー画像
+	uint32_t textureHandle_tutorial_ = 0; //チュートリアル画像
 
 	//シーン
 	uint32_t scene = title;
@@ -94,6 +96,7 @@ private: // メンバ変数
 	Sprite* sprite_title = nullptr; //タイトル画像
 	Sprite* sprite_gameclear = nullptr; //ゲームクリア画像
 	Sprite* sprite_gameover = nullptr; //ゲームオーバー画像
+	Sprite* sprite_tutorial = nullptr; //チュートリアル画像
 
 	//3Dモデル
 	Model* model_ = nullptr;
@@ -111,5 +114,12 @@ private: // メンバ変数
 
 	char eachNumber[Digit] = {};
 	char eachRemoveNum[Digit_num] = {};
+
+	bool goalFlag = 0;
+
+	bool pauseFlag = 0;
+
+	//どこのステージで落ちたか記録する
+	int downStageflag = 0;
 
 };

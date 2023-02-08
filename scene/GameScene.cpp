@@ -51,6 +51,9 @@ void GameScene::Initialize() {
 	//ゲームオーバー画像
 	textureHandle_gameover_ = TextureManager::Load("gameover.png");
 	sprite_gameover = Sprite::Create(textureHandle_gameover_, { 0,0 });
+	//チュートリアル画像
+	textureHandle_tutorial_ = TextureManager::Load("tutorial.png");
+	sprite_tutorial = Sprite::Create(textureHandle_tutorial_, { 0,0 });
 
 	
 
@@ -101,15 +104,103 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	switch (scene)
+	switch (stageMap_->iswhereStage_)
 	{
 	case title://////////タイトル//////////
+
+		if (input_->PushKey(DIK_SPACE))
+		{
+			stageMap_->iswhereStage_++;
+		}
 
 		break;
 	case tutorial://////////チュートリアル//////////
 
+		player_->Update();
+		stageMap_->Update();
+	
+		//カメラ追従
+		viewProjection_.eye.x = player_->GetX();
+		viewProjection_.eye.y = player_->GetY();
+		viewProjection_.eye.z = player_->GetZ();
+
+		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
+		viewProjection_.target.y = player_->GetY();
+		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
+
+		//リセット
+		if (input_->PushKey(DIK_R))
+		{
+			stageMap_->ResetStage();
+			player_->ResetPlayer();
+			time = 60;
+			count_ = 50;
+			goalFlag = 0;
+			pauseFlag = 0;
+		}
+
+		//落とし穴に落ちたらゲームオーバー
+		if (stageMap_->GethollFlag() == 1)
+		{
+			stageMap_->iswhereStage_ = gameOver;
+			downStageflag = 1;
+		}
+
 		break;
-	case gameScene://////////ゲームシーン//////////
+
+
+	case stage1://////////ステージ１//////////
+		player_->Update();
+		stageMap_->Update();
+		//カウントダウン
+		Count();
+
+		//カメラ追従
+		viewProjection_.eye.x = player_->GetX();
+		viewProjection_.eye.y = player_->GetY();
+		viewProjection_.eye.z = player_->GetZ();
+
+		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
+		viewProjection_.target.y = viewProjection_.eye.y - tan(player_->GetPlayerDirY()) * 8;
+		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
+
+
+
+		////下向き
+		//if (input_->PushKey(DIK_DOWN))
+		//{
+		//	viewProjection_.target.y = player_->GetY() - 3.5f;
+		//}
+
+		//リセット
+		if (input_->PushKey(DIK_R))
+		{
+			stageMap_->ResetStage();
+			player_->ResetPlayer();
+			time = 60;
+			count_ = 50;
+			goalFlag = 0;
+			pauseFlag = 0;
+		}
+
+		//タイマーが0になったらゲームオーバー
+		if (time == 0)
+		{
+			stageMap_->iswhereStage_ = gameOver;
+			downStageflag = 2;
+		}
+
+		//落とし穴に落ちたらゲームオーバー
+		if (stageMap_->GethollFlag() == 1)
+		{
+			stageMap_->iswhereStage_ = gameOver;
+			downStageflag = 2;
+		}
+
+		break;
+
+	case stage2: //////////ステージ2//////////
+
 		player_->Update();
 		stageMap_->Update();
 		//カウントダウン
@@ -137,22 +228,24 @@ void GameScene::Update() {
 			player_->ResetPlayer();
 			time = 60;
 			count_ = 50;
-
+			goalFlag = 0;
+			pauseFlag = 0;
 		}
 
 		//タイマーが0になったらゲームオーバー
 		if (time == 0)
 		{
-			scene=gameOver;
+			stageMap_->iswhereStage_ = gameOver;
+			downStageflag = 3;
 		}
 
 		//落とし穴に落ちたらゲームオーバー
 		if (stageMap_->GethollFlag() == 1)
 		{
-			scene = gameOver;
+			stageMap_->iswhereStage_ = gameOver;
+			downStageflag = 3;
 		}
 
-		break;
 	case gameOver://////////ゲームオーバー//////////
 
 		//初期化処理
@@ -160,11 +253,26 @@ void GameScene::Update() {
 		player_->ResetPlayer();
 		time = 60;
 		count_ = 50;
+		goalFlag = 0;
+		pauseFlag = 0;
 
-		//Rキーでリスタート
-		if (input_->PushKey(DIK_R))
+		//チュートリアルで死んだら
+		if (input_->TriggerKey(DIK_R) && downStageflag == 1)
 		{
-			scene = gameScene;
+			stageMap_->iswhereStage_ = tutorial;
+			downStageflag = 0;
+		}
+		//ステージ1で死んだら
+		if (input_->TriggerKey(DIK_R) && downStageflag == 2)
+		{
+			stageMap_->iswhereStage_ = stage1;
+			downStageflag = 0;
+		}
+		//ステージ2で死んだら
+		if (input_->TriggerKey(DIK_R) && downStageflag == 3)
+		{
+			stageMap_->iswhereStage_ = stage2;
+			downStageflag = 0;
 		}
 
 		break;
@@ -175,17 +283,15 @@ void GameScene::Update() {
 		player_->ResetPlayer();
 		time = 60;
 		count_ = 50;
+		goalFlag = 0;
+		pauseFlag = 0;
+		downStageflag = 0;
 		break;
 	}
-	//spaceでシーンチェンジ
-	if (input_->TriggerKey(DIK_SPACE) && scene <= gameScene)
+
+	if (input_->TriggerKey(DIK_SPACE) && (stageMap_->iswhereStage_ == gameOver || stageMap_->iswhereStage_ == gameClear))
 	{
-		scene += 1;
-	}
-	//gameOver&gameClearの時,titleに戻る
-	else if (input_->TriggerKey(DIK_SPACE) && scene > gameScene)
-	{
-		scene = title;
+		stageMap_->iswhereStage_ = title;
 	}
 
 	//行列を更新する
@@ -267,17 +373,30 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	switch (scene)
+	switch (stageMap_->iswhereStage_)
 	{
 	case title:
 		break;
 	case tutorial:
+
+		//プレイヤーの描画
+		player_->Draw(viewProjection_);
+		stageMap_->Draw(viewProjection_);
+
 		break;
-	case gameScene:
+	case stage1:
+
 		//プレイヤーの描画
 		player_->Draw(viewProjection_);
 		stageMap_->Draw(viewProjection_);
 		
+		break;
+	case stage2:
+
+		//プレイヤーの描画
+		player_->Draw(viewProjection_);
+		stageMap_->Draw(viewProjection_);
+
 		break;
 	case gameOver:
 		break;
@@ -296,12 +415,35 @@ void GameScene::Draw() {
 	Sprite::PreDraw(commandList.Get());
 
 	//タイトル
-	if (scene == title)
+	if (stageMap_->iswhereStage_ == title)
 	{
 		sprite_title->Draw();
 	}
-	//ゲーム画面
-	if (scene == gameScene)
+	//チュートリアル
+	if (stageMap_->iswhereStage_ == tutorial)
+	{
+		sprite_tutorial->Draw();
+		//プレイヤーの手
+		stageMap_->DrawHand();
+		//取り外しUI
+		DrawRemoveNum();
+		//レティクル
+		sprite_reticle->Draw();
+	}
+	//ゲーム画面(ステージ1)
+	if (stageMap_->iswhereStage_ == stage1)
+	{
+		//プレイヤーの手
+		stageMap_->DrawHand();
+		//時間を描画
+		DrawTime();
+		//取り外しUI
+		DrawRemoveNum();
+		//レティクル
+		sprite_reticle->Draw();
+	}
+	//ゲーム画面(ステージ2)
+	if (stageMap_->iswhereStage_ == stage2)
 	{
 		//プレイヤーの手
 		stageMap_->DrawHand();
@@ -313,12 +455,12 @@ void GameScene::Draw() {
 		sprite_reticle->Draw();
 	}
 	//ゲームクリア
-	if (scene == gameClear)
+	if (stageMap_->iswhereStage_ == gameClear)
 	{
 		sprite_gameclear->Draw();
 	}
 	//ゲームオーバー
-	if (scene == gameOver)
+	if (stageMap_->iswhereStage_ == gameOver)
 	{
 		sprite_gameover->Draw();
 	}
@@ -334,11 +476,13 @@ void GameScene::Draw() {
 	debugText_->DrawAll(commandList.Get());
 	
 	debugText_->SetPos(20, 20);
-	debugText_->Printf("scene:%d", scene);
+	debugText_->Printf("scene:%d", stageMap_->iswhereStage_);
 	debugText_->SetPos(20, 40);
 	debugText_->Printf("count:%d", count_);
 	debugText_->SetPos(20, 60);
 	debugText_->Printf("time:%d", time);
+	debugText_->SetPos(20, 200);
+	debugText_->Printf("downStageflag:%d", downStageflag);
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
