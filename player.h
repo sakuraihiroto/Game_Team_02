@@ -41,7 +41,6 @@ public:
 	float GetPlayerDir() { return playerDir; }
 
 	int GetScene(uint32_t& scene) { return scene_ = scene; }
-
 	static bool nextStageFlag;
 
 private:
@@ -87,6 +86,7 @@ private:
 	uint32_t y2 = 10;
 
 	uint32_t scene_ = 0;
+	uint32_t time_ = 0;
 	uint32_t isWhereStage = 0;
 	uint32_t isCreateStage = 0;
 

@@ -53,6 +53,7 @@ public:
 	int ResetCountPossBlock(){return countPossBlock_ = 2;}
 	int ResetPossFlag() { return possFlag_ = 0; }
 
+	int countPossBlock_ = 2;
 public:
 	static const int mapMax = 12;
 
@@ -291,7 +292,7 @@ private:
 	int possFlag_ = 0;
 
 	//ブロックを取れる回数
-	int countPossBlock_ = 2;
+	//int countPossBlock_ = 2;
 
 	//ゴールに触れたかのフラグ
 	int isTouchedGoal = 0;

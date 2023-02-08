@@ -28,6 +28,8 @@ void GameScene::Initialize() {
 
 	//カウントダウン2Dスプライト
 	textureHandleNumber_ = TextureManager::Load("bitmapfont.png");
+	//取り外し回数のUI
+	textureHundle_removeNum_ = TextureManager::Load("bitmapfont.png");
 
 	//タイトル画像
 	textureHandle_title_ = TextureManager::Load("title.png");
@@ -44,13 +46,30 @@ void GameScene::Initialize() {
 	//レティクル(2D)
 	textureHandle_reticle_ = TextureManager::Load("reticle.png");
 	sprite_reticle = Sprite::Create(textureHandle_reticle_, { 320,200 });
+	//チュートリアル画像
+	textureHandle_tutorial_ = TextureManager::Load("tutorial.png");
+	sprite_tutorial = Sprite::Create(textureHandle_tutorial_, { 0,0 });
 
-	for (int i = 0; i < 3; i++)
+	//サウンドデータの読み込み
+	soundTitleBGM = audio_->LoadWave("Audio/title.mp3"); //タイトルBGM
+	soundTutorialBGM = audio_->LoadWave("Audio/tutorial.mp3"); //チュートリアルBGM
+	soundPlayBGM_1 = audio_->LoadWave("Audio/play_1.mp3"); //プレイBGM st1
+	soundPlayBGM_2 = audio_->LoadWave("Audio/play_2.mp3"); //プレイBGM st2
+	soundGameOverBGM = audio_->LoadWave("Audio/game_over.mp3"); //ゲームオーバーBGM
+	soundClearBGM = audio_->LoadWave("Audio/game_clear.mp3"); //クリアBGM
+
+	for (int i = 0; i < 2; i++)
 	{
-		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 600.0f + i * 40,0.0f });
+		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 850.0f + i * 40,0.0f });
 	}
+
+	for (int i = 0; i < 1; i++)
+	{
+		sprite_removeNum[i] = Sprite::Create(textureHundle_removeNum_, { 1500.0f,i * 10.0f });
+	}
+
 	//時間
-	time = 160;
+	time = 60;
 
 	//3Dモデルの生成
 	model_ = Model::Create();
@@ -83,6 +102,22 @@ void GameScene::Update() {
 	switch (stageMap_->iswhereStage_)
 	{
 	case title:
+		//ゲームオーバーBGM停止
+		soundFlag_gameover = 0;
+		audio_->StopWave(voiceGameOverBGM);
+
+		//ゲームクリアBGM停止
+		soundFlag_gameclear = 0;
+		audio_->StopWave(voiceClearBGM);
+
+		//タイトルBGM再生
+		if (soundFlag_title == 0)
+		{
+			voiceTitleBGM = audio_->PlayWave(soundTitleBGM, true);
+
+			soundFlag_title = 1;
+		}
+
 		if (input_->TriggerKey(DIK_SPACE))
 		{
 			stageMap_->iswhereStage_ = 0;
@@ -101,12 +136,27 @@ void GameScene::Update() {
 		}
 		break;
 	case tutorial:
+		//タイトルBGM停止
+		soundFlag_title = 0;
+		audio_->StopWave(voiceTitleBGM);
+
+		//ゲームオーバーBGM停止
+		soundFlag_gameover = 0;
+		audio_->StopWave(voiceGameOverBGM);
+
+		//チュートリアルBGM再生
+		if (soundFlag_tutorial == 0)
+		{
+			voiceTutorialBGM = audio_->PlayWave(soundTutorialBGM, true);
+
+			soundFlag_tutorial = 1;
+		}
+
 		//シーンを記録
 		stageBox = 1;
+		time = 60;
 		player_->Update();
 		stageMap_->Update();
-		//カウントダウン
-		Count();
 
 		//カメラ追従
 		viewProjection_.eye.x = player_->GetX();
@@ -118,13 +168,34 @@ void GameScene::Update() {
 		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 		break;
 	case stage1:
+		
+		//チュートリアルBGM停止
+		soundFlag_tutorial = 0;
+		audio_->StopWave(voiceTutorialBGM);
+
+		//ゲームオーバーBGM停止
+		soundFlag_gameover = 0;
+		audio_->StopWave(voiceGameOverBGM);
+
+		//プレイ１BGM再生
+		if (soundFlag_play_1 == 0)
+		{
+			voicePlayBGM_1 = audio_->PlayWave(soundPlayBGM_1, true);
+
+			soundFlag_play_1 = 1;
+		}
+
 		//シーンを記録
 		stageBox = 2;
 		player_->Update();
 		stageMap_->Update();
 		//カウントダウン
 		Count();
-
+		//タイマーが0になったらゲームオーバー
+		if (time == 0)
+		{
+			stageMap_->iswhereStage_ = gameOver; 
+		}
 		//カメラ追従
 		viewProjection_.eye.x = player_->GetX();
 		viewProjection_.eye.y = player_->GetY();
@@ -135,13 +206,34 @@ void GameScene::Update() {
 		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 		break;
 	case stage2:
+
+		//プレイ１BGM停止
+		soundFlag_play_1 = 0;
+		audio_->StopWave(voicePlayBGM_1);
+
+		//ゲームオーバーBGM停止
+		soundFlag_gameover = 0;
+		audio_->StopWave(voiceGameOverBGM);
+
+		//プレイ2BGM再生
+		if (soundFlag_play_2 == 0)
+		{
+			voicePlayBGM_2 = audio_->PlayWave(soundPlayBGM_2, true);
+
+			soundFlag_play_2 = 1;
+		}
+
 		//シーンを記録
 		stageBox = 3;
 		player_->Update();
 		stageMap_->Update();
 		//カウントダウン
 		Count();
-
+		//タイマーが0になったらゲームオーバー
+		if (time == 0)
+		{
+			stageMap_->iswhereStage_ = gameOver;
+		}
 		//カメラ追従
 		viewProjection_.eye.x = player_->GetX();
 		viewProjection_.eye.y = player_->GetY();
@@ -153,6 +245,19 @@ void GameScene::Update() {
 
 		break;
 	case gameClear:
+
+		//プレイ2BGM停止
+		soundFlag_play_2 = 0;
+		audio_->StopWave(voicePlayBGM_2);
+
+		//ゲームクリアBGM再生
+		if (soundFlag_gameclear == 0)
+		{
+			voiceClearBGM = audio_->PlayWave(soundClearBGM, true);
+
+			soundFlag_gameclear = 1;
+		}
+
 		if (input_->TriggerKey(DIK_SPACE))
 		{
 			stageBox = 0;
@@ -162,9 +267,30 @@ void GameScene::Update() {
 		}
 		break;
 	case gameOver:
+		//チュートリアルBGM停止
+		soundFlag_tutorial = 0;
+		audio_->StopWave(voiceTutorialBGM);
+
+		//プレイ１BGM停止
+		soundFlag_play_1 = 0;
+		audio_->StopWave(voicePlayBGM_1);
+
+		//プレイ2BGM停止
+		soundFlag_play_2 = 0;
+		audio_->StopWave(voicePlayBGM_2);
+
+		//ゲームオーバーBGM再生
+		if (soundFlag_gameover == 0)
+		{
+			voiceGameOverBGM = audio_->PlayWave(soundGameOverBGM, true);
+
+			soundFlag_gameover = 1;
+		}
+
 		if (input_->TriggerKey(DIK_R))
 		{
 			//記録したステージボックスをシーンに代入
+
 			stageMap_->iswhereStage_ = stageBox;
 			stageMap_->ResetStage();
 			stageMap_->ResetCountPossBlock();
@@ -187,34 +313,32 @@ void GameScene::Update() {
 		break;
 	}
 
-	//stageMap_->SetPauseFlag(pauseFlag);
-	////spaceでシーンチェンジ
-	//if (input_->TriggerKey(DIK_SPACE) && scene==title||pauseFlag==0)
-	//{
-	//	//scene += 1;
-	//	//シーンを取得
-	//	stageMap_->GetScene(scene);
-	//	player_->GetScene(scene);
-	//	//stageを変える
-	//	stageMap_->ChangeMap();
-	//	pauseFlag == true;
-	//}
-
-	//ゴール処理
-
-
-	/*if (stageMap_->SetGoal(goalFlag))
-	{
-		scene += 1;
-		goalFlag = 0;
-	}*/
-
-
-	//gameOver&gameClearの時,titleに戻る
 	
 
 	//行列を更新する
 	viewProjection_.UpdateMatrix();
+}
+
+//取り外し回数の関数
+void GameScene::DrawRemoveNum()
+{
+	//各桁の数値を描画
+	for (int i = 0; i < Digit_num; i++)
+	{
+		//各桁の値を取り出す
+		int number = stageMap_->countPossBlock_;
+
+		int CalcDigit = 1;
+		for (int i = 0; i < Digit_num; i++)
+		{
+			eachRemoveNum[i] = number / CalcDigit;
+			number = number % CalcDigit;
+			CalcDigit = CalcDigit / 1;
+		}
+		sprite_removeNum[i]->SetSize({ 40,40 });
+		sprite_removeNum[i]->SetTextureRect({ 40.0f * eachRemoveNum[i],0 }, { 40,40 });
+		sprite_removeNum[i]->Draw();
+	}
 }
 
 void GameScene::Draw() {
@@ -297,8 +421,12 @@ if (stageMap_->iswhereStage_ == title)
 //ゲーム画面
 if (stageMap_->iswhereStage_ == tutorial)
 {
-	//時間を描画
-	DrawTime();
+	//操作説明
+	sprite_tutorial->Draw();
+	//ブロック回数
+	DrawRemoveNum();
+	//プレイヤーの手
+	stageMap_->DrawHand();
 	//レティクル
 	sprite_reticle->Draw();
 }
@@ -306,6 +434,10 @@ if (stageMap_->iswhereStage_ == stage1)
 {
 	//時間を描画
 	DrawTime();
+	DrawRemoveNum();
+
+	//プレイヤーの手
+	stageMap_->DrawHand();
 	//レティクル
 	sprite_reticle->Draw();
 }
@@ -314,6 +446,11 @@ if (stageMap_->iswhereStage_ == stage2)
 	//プレイヤーの手
 	//時間を描画
 	DrawTime();
+
+	DrawRemoveNum();
+
+	//プレイヤーの手
+	stageMap_->DrawHand();
 	//レティクル
 	sprite_reticle->Draw();
 }
@@ -332,9 +469,6 @@ if (player_->nextStageFlag)
 {
 	sprite_nextStage->Draw();
 }
-
-	//時間を描画
-	DrawTime();
 
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList.Get());
@@ -358,7 +492,7 @@ void GameScene::Count()
 	//リセット
 	if (input_->TriggerKey(DIK_R))
 	{
-		time = 160;
+		time = 60;
 	}
 }
 
@@ -371,7 +505,7 @@ void GameScene::DrawTime()
 		//各桁の値を取り出す
 		int number = time;
 
-		int CalcDigit = 100;
+		int CalcDigit = 10;
 		for (int i = 0; i < Digit; i++)
 		{
 			eachNumber[i] = number / CalcDigit;

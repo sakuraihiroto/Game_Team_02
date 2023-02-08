@@ -136,10 +136,12 @@ void Player::Update()
 		if (input_->TriggerKey(DIK_SPACE))
 		{
 			nextStageFlag = false;
+			
 			//ステージを変える
 			if (stageMap_->iswhereStage_ != title)
 			{
 				stageMap_->iswhereStage_++;
+
 			}
 			stageMap_->GetIsCreateStage(isCreateStage);
 			switch (stageMap_->iswhereStage_)
@@ -147,6 +149,7 @@ void Player::Update()
 			case title:
 				break;
 			case tutorial:
+				
 				worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
 				stageMap_->ResetCountPossBlock();
 				stageMap_->ResetPossFlag();
@@ -154,6 +157,7 @@ void Player::Update()
 
 			case stage1:
 				worldTransform_.translation_ = { -7 + x1 * 2.0f, 0, 10 + y1 * -2.0f };
+				
 				stageMap_->ResetCountPossBlock();
 				stageMap_->ResetPossFlag();
 
@@ -161,6 +165,7 @@ void Player::Update()
 
 			case stage2:
 				worldTransform_.translation_ = { -7 + x2 * 2.0f, 0, 10 + y2 * -2.0f };
+				
 				stageMap_->ResetCountPossBlock();
 				stageMap_->ResetPossFlag();
 

@@ -11,13 +11,17 @@ void stageMap::Initialize()
 	modelFloor_ = Model::CreateFromOBJ("floor");
 	modelGoal_ = Model::CreateFromOBJ("door");
 
+	//プレイヤーの手(ブロック持ってないとき)
+	textureHandle_hand_ = TextureManager::Load("hand.png");
+	sprite_hand = Sprite::Create(textureHandle_hand_, { 700,350 });
 
+	//プレイヤーの手(ブロック持ってるとき)
+	textureHandle_handBox_ = TextureManager::Load("handbox.png");
+	sprite_handBox = Sprite::Create(textureHandle_handBox_, { 700,350 });
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
-
-	
 
 	for (int z = 0; z < mapMax; z++)
 	{
@@ -236,20 +240,17 @@ void stageMap::Draw(ViewProjection viewProjection_)
 //プレイヤーの手(スプライト描画)
 void stageMap::DrawHand()
 {
-	//////エラーがありました//////
-
-	////ブロック持ってないとき
-	//if (possFlag_ == 0)
-	//{
-	//	sprite_hand->Draw();
-	//}
-	////ブロック持ってるとき
-	//if (possFlag_ == 1)
-	//{
-	//	sprite_handBox->Draw();
-	//}
+	//ブロック持ってないとき
+	if (possFlag_ == 0)
+	{
+		sprite_hand->Draw();
+	}
+	//ブロック持ってるとき
+	if (possFlag_ == 1)
+	{
+		sprite_handBox->Draw();
+	}
 }
-
 
 
 bool stageMap::Collision(float px, float pz)
