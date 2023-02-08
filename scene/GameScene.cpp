@@ -40,7 +40,8 @@ void GameScene::Initialize() {
 
 	//カウントダウン2Dスプライト
 	textureHandleNumber_ = TextureManager::Load("bitmapfont.png");
-
+	//取り外し回数のUI
+	textureHundle_removeNum_ = TextureManager::Load("bitmapfont.png");
 	//タイトル画像
 	textureHandle_title_ = TextureManager::Load("title.png");
 	sprite_title = Sprite::Create(textureHandle_title_, { 0,0 });
@@ -56,6 +57,11 @@ void GameScene::Initialize() {
 	for (int i = 0; i < 2; i++)
 	{
 		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 900.f + i * 80,0 });
+	}
+
+	for (int i = 0; i < 1; i++)
+	{
+		sprite_removeNum[i] = Sprite::Create(textureHundle_removeNum_, { 1500.0f,i * 10.0f });
 	}
 
 	
@@ -193,9 +199,7 @@ void GameScene::DrawTime()
 	for (int i = 0; i < Digit; i++)
 	{
 		//各桁の値を取り出す
-		char eachNumber[Digit] = {};
 		int number = time;
-
 
 		int CalcDigit = 10;
 		for (int i = 0; i < Digit; i++)
@@ -207,6 +211,28 @@ void GameScene::DrawTime()
 		spriteNumber[i]->SetSize({ 80,80 });
 		spriteNumber[i]->SetTextureRect({ 80.0f * eachNumber[i],0 }, { 80,80 });
 		spriteNumber[i]->Draw();
+	}
+}
+
+//取り外し回数の関数
+void GameScene::DrawRemoveNum()
+{
+	//各桁の数値を描画
+	for (int i = 0; i < Digit_num; i++)
+	{
+		//各桁の値を取り出す
+		int number = stageMap_->countPossBlock_;
+
+		int CalcDigit = 1;
+		for (int i = 0; i < Digit_num; i++)
+		{
+			eachRemoveNum[i] = number / CalcDigit;
+			number = number % CalcDigit;
+			CalcDigit = CalcDigit / 1;
+		}
+		sprite_removeNum[i]->SetSize({ 80,80 });
+		sprite_removeNum[i]->SetTextureRect({ 80.0f * eachRemoveNum[i],0 }, { 80,80 });
+		sprite_removeNum[i]->Draw();
 	}
 }
 
@@ -281,6 +307,8 @@ void GameScene::Draw() {
 		stageMap_->DrawHand();
 		//時間を描画
 		DrawTime();
+		//取り外しUI
+		DrawRemoveNum();
 		//レティクル
 		sprite_reticle->Draw();
 	}

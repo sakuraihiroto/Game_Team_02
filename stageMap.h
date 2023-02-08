@@ -48,6 +48,9 @@ public:
 
 	int GethollFlag() { return hollFlag_; }
 
+	//ブロックを取れる回数
+	int countPossBlock_ = 2;
+
 public:
 	static const int mapMax = 12;
 
@@ -325,8 +328,7 @@ private:
 	//取ったブロックを所持しているか
 	int possFlag_ = 0;
 
-	//ブロックを取れる回数
-	int countPossBlock_ = 2;
+	
 
 	//ゴールに触れたかのフラグ
 	int isTouchedGoal = 0;

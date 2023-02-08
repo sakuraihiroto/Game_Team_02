@@ -46,6 +46,8 @@ public: // メンバ関数
 
 	void DrawTime();
 
+	void DrawRemoveNum();
+
 	/// <summary>
 	/// カウントダウン
 	/// </summary>
@@ -69,6 +71,7 @@ private: // メンバ変数
 
 	//テクスチャハンドル
 	uint32_t textureHandleNumber_ = 0;
+	uint32_t textureHundle_removeNum_ = 0;
 	uint32_t textureHandle_hand_ = 0; //プレイヤーの手
 	uint32_t textureHandle_reticle_ = 0; //レティクル
 	uint32_t textureHandle_title_ = 0; //タイトル画像
@@ -81,10 +84,12 @@ private: // メンバ変数
 	uint32_t time = 0;
 	uint32_t count_ = 60;
 	
-	static const uint32_t Digit = 2;		//桁数
+	static const uint32_t Digit = 2;		//桁数(タイム)
+	static const uint32_t Digit_num = 1;    //桁数(取り外し回数)
 
 	//スプライト
 	Sprite* spriteNumber[Digit] = {};		//時間
+	Sprite* sprite_removeNum[Digit_num] = {}; //取り外し回数
 	Sprite* sprite_reticle = nullptr; //レティクル
 	Sprite* sprite_title = nullptr; //タイトル画像
 	Sprite* sprite_gameclear = nullptr; //ゲームクリア画像
@@ -93,7 +98,6 @@ private: // メンバ変数
 	//3Dモデル
 	Model* model_ = nullptr;
 	Model* modelPlayer_ = nullptr; //プレイヤーモデル
-
 
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
@@ -106,5 +110,6 @@ private: // メンバ変数
 	stageMap* stageMap_ = nullptr;
 
 	char eachNumber[Digit] = {};
+	char eachRemoveNum[Digit_num] = {};
 
 };
