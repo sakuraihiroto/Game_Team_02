@@ -221,18 +221,6 @@ void stageMap::Draw(ViewProjection viewProjection_)
 			{
 				modelWall_->Draw(worldTransformWall_[z][x], viewProjection_);
 			}
-
-			/*modelWall_->Draw(worldTransformCeiling_[z][x], viewProjection_);*/
-
-			debugText_->SetPos(20, 140);
-			debugText_->Printf(
-				"stage(%d)", iswhereStage_);
-			debugText_->SetPos(20, 160);
-			debugText_->Printf(
-				"pause(%d)", pauseFlag_);
-			debugText_->SetPos(20, 180);
-			debugText_->Printf(
-				"countPossBlock_(%d)", countPossBlock_);
 		}
 	}
 }

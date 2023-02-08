@@ -365,12 +365,6 @@ void GameScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList.Get());
-	debugText_->SetPos(20, 20);
-	debugText_->Printf("scene:%d", scene);
-	debugText_->SetPos(20, 40);
-	debugText_->Printf("count:%d", count_);
-	debugText_->SetPos(20, 60);
-	debugText_->Printf("time:%d", time);
 	switch (stageMap_->iswhereStage_)
 	{
 	case title:
