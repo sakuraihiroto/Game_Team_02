@@ -325,6 +325,7 @@ bool stageMap::CollisionHoll(float px, float pz)
 				//プレイヤーが来たら反応
 				if (dx < 1.3f && dz < 1.3f)
 				{
+					iswhereStage_ = gameOver;
 					return true;
 				}
 			}
@@ -383,12 +384,8 @@ void stageMap::PutBlock(float px, float pz)
 				position.x = worldTransform_[z][x].translation_.x;
 				position.z = worldTransform_[z][x].translation_.z;
 
-
-
 				float dx = abs(position.x - px);
 				float dz = abs(position.z - pz);
-
-
 
 				if (dx < 3.0f && dz < 3.0f && floorData[z][x] == Holl)
 				{

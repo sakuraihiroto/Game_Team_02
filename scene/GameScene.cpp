@@ -83,7 +83,7 @@ void GameScene::Update() {
 	switch (stageMap_->iswhereStage_)
 	{
 	case title:
-		if (input_->PushKey(DIK_SPACE))
+		if (input_->TriggerKey(DIK_SPACE))
 		{
 			stageMap_->iswhereStage_ = 0;
 			stageMap_->iswhereStage_++;
@@ -101,7 +101,8 @@ void GameScene::Update() {
 		}
 		break;
 	case tutorial:
-		
+		//シーンを記録
+		stageBox = 1;
 		player_->Update();
 		stageMap_->Update();
 		//カウントダウン
@@ -117,7 +118,8 @@ void GameScene::Update() {
 		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 		break;
 	case stage1:
-		
+		//シーンを記録
+		stageBox = 2;
 		player_->Update();
 		stageMap_->Update();
 		//カウントダウン
@@ -133,7 +135,8 @@ void GameScene::Update() {
 		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 		break;
 	case stage2:
-		
+		//シーンを記録
+		stageBox = 3;
 		player_->Update();
 		stageMap_->Update();
 		//カウントダウン
@@ -150,8 +153,35 @@ void GameScene::Update() {
 
 		break;
 	case gameClear:
+		if (input_->TriggerKey(DIK_SPACE))
+		{
+			stageBox = 0;
+			stageMap_->ResetCountPossBlock();
+			stageMap_->ResetPossFlag();
+			stageMap_->iswhereStage_ = title;
+		}
 		break;
 	case gameOver:
+		if (input_->TriggerKey(DIK_R))
+		{
+			//記録したステージボックスをシーンに代入
+			stageMap_->iswhereStage_ = stageBox;
+			stageMap_->ResetStage();
+			stageMap_->ResetCountPossBlock();
+			stageMap_->ResetPossFlag();
+			player_->ResetTranform();
+		}
+		if (input_->TriggerKey(DIK_SPACE))
+		{
+			//死者蘇生!
+			player_->ResetDeathFlag();
+			//能力復帰!
+			stageMap_->ResetCountPossBlock();
+			//能力復帰!・その二!
+			stageMap_->ResetPossFlag();
+			//タイトルに戻る
+			stageMap_->iswhereStage_ = title;
+		}
 		break;
 	default:
 		break;
@@ -265,10 +295,23 @@ if (stageMap_->iswhereStage_ == title)
 	sprite_title->Draw();
 }
 //ゲーム画面
+if (stageMap_->iswhereStage_ == tutorial)
+{
+	//時間を描画
+	DrawTime();
+	//レティクル
+	sprite_reticle->Draw();
+}
+if (stageMap_->iswhereStage_ == stage1)
+{
+	//時間を描画
+	DrawTime();
+	//レティクル
+	sprite_reticle->Draw();
+}
 if (stageMap_->iswhereStage_ == stage2)
 {
 	//プレイヤーの手
-	//stageMap_->DrawHand();
 	//時間を描画
 	DrawTime();
 	//レティクル
@@ -295,7 +338,7 @@ if (player_->nextStageFlag)
 
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList.Get());
-	//
+	
 	// スプライト描画後処理
 	Sprite::PostDraw();
 

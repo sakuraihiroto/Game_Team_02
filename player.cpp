@@ -3,7 +3,6 @@
 // アフィン行列呼び出し
 MatWorld* playerMatworld = nullptr;
 
-
 void Player::Initialize(Model* model, stageMap* stageMap)
 {
 	// NULLポインタチェック
@@ -60,8 +59,6 @@ Vector3 Player::GetWorldPosition()
 
 void Player::Update()
 {
-
-
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 	float px = worldTransform_.translation_.x;
@@ -117,7 +114,6 @@ void Player::Update()
 
 			stageMap_->DeleteBlock(px, pz);
 
-
 		}
 		//回転表示
 		float dir = -playerDir * 180 / 3.14f;
@@ -137,18 +133,19 @@ void Player::Update()
 			nextStageFlag = true;
 		}
 		//停止
-		if (input_->PushKey(DIK_SPACE))
+		if (input_->TriggerKey(DIK_SPACE))
 		{
 			nextStageFlag = false;
 			//ステージを変える
 			if (stageMap_->iswhereStage_ != title)
 			{
-				//stageMap_->GetIsWhereStage(isWhereStage);
 				stageMap_->iswhereStage_++;
 			}
 			stageMap_->GetIsCreateStage(isCreateStage);
 			switch (stageMap_->iswhereStage_)
 			{
+			case title:
+				break;
 			case tutorial:
 				worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
 				stageMap_->ResetCountPossBlock();
@@ -169,16 +166,16 @@ void Player::Update()
 
 				break;
 			case gameClear:
-				stageMap_->iswhereStage_ = title;
 				stageMap_->ResetCountPossBlock();
 				stageMap_->ResetPossFlag();
 
 				break;
 			case gameOver:
-				stageMap_->iswhereStage_ = title;
+				
 				stageMap_->ResetCountPossBlock();
 				stageMap_->ResetPossFlag();
-
+				break;
+			default:
 				break;
 			}
 		}
@@ -191,6 +188,19 @@ void Player::Update()
 		worldTransform_.TransferMatrix();
 	}
 
+	ResetTranform();
+
+	worldTransform_.translation_ += move;
+
+	//行列の計算
+	worldTransform_.matWorld_ = playerMatworld->CreateMatWorld(worldTransform_);
+	//行列の転送
+	worldTransform_.TransferMatrix();
+
+}
+
+void Player::ResetTranform()
+{
 	if (input_->PushKey(DIK_R))
 	{
 		deathFlag_ = 0;
@@ -212,14 +222,6 @@ void Player::Update()
 			break;
 		}
 	}
-
-	worldTransform_.translation_ += move;
-
-	//行列の計算
-	worldTransform_.matWorld_ = playerMatworld->CreateMatWorld(worldTransform_);
-	//行列の転送
-	worldTransform_.TransferMatrix();
-
 }
 
 //描画処理
@@ -239,6 +241,5 @@ void Player::Draw(ViewProjection& viewProjection_)
 	debugText_->SetPos(20, 120);
 	debugText_->Printf(
 		"deathFlag(%d)", deathFlag_);
-
 
 }

@@ -124,4 +124,6 @@ private: // メンバ変数
 	bool pauseFlag = 0;
 
 	Vector3 initializeWorldTransform_ = {};
+
+	uint32_t stageBox = 0;
 };

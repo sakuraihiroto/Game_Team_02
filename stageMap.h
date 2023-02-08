@@ -89,8 +89,8 @@ private:
 		tutorial,			//1
 		stage1,				//2
 		stage2,				//3
-		gameOver,			//4
-		gameClear			//5
+		gameClear,			//4
+		gameOver			//5
 	};
 
 	/*int mapData[mapMax][mapMax] = {

@@ -25,6 +25,9 @@ public:
 	/// </summary>
 	void Draw(ViewProjection& viewProjection_);
 
+	void ResetTranform();
+	void ResetDeathFlag() { deathFlag_ = 0; }
+
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
@@ -48,8 +51,8 @@ private:
 		tutorial,			//1
 		stage1,				//2
 		stage2,				//3
-		gameOver,			//4
-		gameClear			//5
+		gameClear,			//5
+		gameOver			//4
 	};
 
 	// ワールド変換データ
