@@ -102,6 +102,28 @@ private: // メンバ変数
 	Model* model_ = nullptr;
 	Model* modelPlayer_ = nullptr; //プレイヤーモデル
 
+	//サウンド
+	uint32_t soundTitleBGM = 0; //タイトルBGM
+	uint32_t soundTutorialBGM = 0; //チュートリアルBGM
+	uint32_t soundPlayBGM_1 = 0; //プレイBGM(ステージ１)
+	uint32_t soundPlayBGM_2 = 0; //プレイBGM(ステージ２)
+	uint32_t soundGameOverBGM = 0; //ゲームオーバーBGM
+	uint32_t soundClearBGM = 0; //クリアBGM
+	//音声再生ハンドル
+	uint32_t voiceTitleBGM = 0; 
+	uint32_t voiceTutorialBGM = 0;
+	uint32_t voicePlayBGM_1 = 0;
+	uint32_t voicePlayBGM_2 = 0;
+	uint32_t voiceGameOverBGM = 0;
+	uint32_t voiceClearBGM = 0;
+	//サウンドフラグ 
+	int soundFlag_title = 0;
+	int soundFlag_tutorial = 0;
+	int soundFlag_play_1 = 0;
+	int soundFlag_play_2 = 0;
+	int soundFlag_gameover = 0;
+	int soundFlag_gameclear = 0;
+
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
 	//ビュープロジェクション

@@ -55,6 +55,13 @@ void GameScene::Initialize() {
 	textureHandle_tutorial_ = TextureManager::Load("tutorial.png");
 	sprite_tutorial = Sprite::Create(textureHandle_tutorial_, { 0,0 });
 
+	//サウンドデータの読み込み
+	soundTitleBGM = audio_->LoadWave("Audio/title.mp3"); //タイトルBGM
+	soundTutorialBGM = audio_->LoadWave("Audio/tutorial.mp3"); //チュートリアルBGM
+	soundPlayBGM_1 = audio_->LoadWave("Audio/play_1.mp3"); //プレイBGM st1
+	soundPlayBGM_2 = audio_->LoadWave("Audio/play_2.mp3"); //プレイBGM st2
+	soundGameOverBGM = audio_->LoadWave("Audio/game_over.mp3"); //ゲームオーバーBGM
+	soundClearBGM = audio_->LoadWave("Audio/game_clear.mp3"); //クリアBGM
 	
 
 	for (int i = 0; i < 2; i++)
@@ -108,13 +115,49 @@ void GameScene::Update() {
 	{
 	case title://////////タイトル//////////
 
+		
+		////ゲームオーバーBGM停止
+		//soundFlag_gameover = 0;
+		//audio_->StopWave(voiceGameOverBGM);
+
+		////ゲームクリアBGM停止
+		//soundFlag_gameclear = 0;
+		//audio_->StopWave(voiceClearBGM);
+
+		//タイトルBGM再生
+		if (soundFlag_title == 0)
+		{
+			voiceTitleBGM = audio_->PlayWave(soundTitleBGM, true);
+
+			soundFlag_title = 1;
+		}
+
 		if (input_->PushKey(DIK_SPACE))
 		{
 			stageMap_->iswhereStage_++;
 		}
 
+		
+
+
 		break;
 	case tutorial://////////チュートリアル//////////
+
+		//タイトルBGM停止
+		soundFlag_title = 0;
+		audio_->StopWave(voiceTitleBGM);
+
+		//ゲームオーバーBGM停止
+		soundFlag_gameover = 0;
+		audio_->StopWave(voiceGameOverBGM);
+
+		//チュートリアルBGM再生
+		if (soundFlag_tutorial == 0)
+		{
+			voiceTutorialBGM = audio_->PlayWave(soundTutorialBGM, true);
+
+			soundFlag_tutorial = 1;
+		}
 
 		player_->Update();
 		stageMap_->Update();
@@ -150,6 +193,23 @@ void GameScene::Update() {
 
 
 	case stage1://////////ステージ１//////////
+
+		//チュートリアルBGM停止
+		soundFlag_tutorial = 0;
+		audio_->StopWave(voiceTutorialBGM);
+
+		//ゲームオーバーBGM停止
+		soundFlag_gameover = 0;
+		audio_->StopWave(voiceGameOverBGM);
+
+		//プレイ１BGM再生
+		if (soundFlag_play_1 == 0)
+		{
+			voicePlayBGM_1 = audio_->PlayWave(soundPlayBGM_1, true);
+
+			soundFlag_play_1 = 1;
+		}
+
 		player_->Update();
 		stageMap_->Update();
 		//カウントダウン
@@ -201,6 +261,22 @@ void GameScene::Update() {
 
 	case stage2: //////////ステージ2//////////
 
+		//プレイ１BGM停止
+		soundFlag_play_1 = 0;
+		audio_->StopWave(voicePlayBGM_1);
+
+		//ゲームオーバーBGM停止
+		soundFlag_gameover = 0;
+		audio_->StopWave(voiceGameOverBGM);
+
+		//プレイ2BGM再生
+		if (soundFlag_play_2 == 0)
+		{
+			voicePlayBGM_2 = audio_->PlayWave(soundPlayBGM_2, true);
+
+			soundFlag_play_2 = 1;
+		}
+
 		player_->Update();
 		stageMap_->Update();
 		//カウントダウン
@@ -248,6 +324,26 @@ void GameScene::Update() {
 
 	case gameOver://////////ゲームオーバー//////////
 
+		//チュートリアルBGM停止
+		soundFlag_tutorial = 0;
+		audio_->StopWave(voiceTutorialBGM);
+
+		//プレイ１BGM停止
+		soundFlag_play_1 = 0;
+		audio_->StopWave(voicePlayBGM_1);
+
+		//プレイ2BGM停止
+		soundFlag_play_2 = 0;
+		audio_->StopWave(voicePlayBGM_2);
+
+		//ゲームオーバーBGM再生
+		if (soundFlag_gameover == 0)
+		{
+			voiceGameOverBGM = audio_->PlayWave(soundGameOverBGM, true);
+
+			soundFlag_gameover = 1;
+		}
+
 		//初期化処理
 		stageMap_->ResetStage();
 		player_->ResetPlayer();
@@ -277,6 +373,18 @@ void GameScene::Update() {
 
 		break;
 	case gameClear://////////ゲームクリア//////////
+
+		//プレイ2BGM停止
+		soundFlag_play_2 = 0;
+		audio_->StopWave(voicePlayBGM_2);
+
+		//プレイ2BGM再生
+		if (soundFlag_gameclear == 0)
+		{
+			voiceClearBGM = audio_->PlayWave(soundClearBGM, true);
+
+			soundFlag_gameclear = 1;
+		}
 
 		//初期化処理
 		stageMap_->ResetStage();
@@ -479,10 +587,10 @@ void GameScene::Draw() {
 	debugText_->Printf("scene:%d", stageMap_->iswhereStage_);
 	debugText_->SetPos(20, 40);
 	debugText_->Printf("count:%d", count_);
-	debugText_->SetPos(20, 60);
-	debugText_->Printf("time:%d", time);
+	debugText_->SetPos(20, 0);
+	debugText_->Printf("scene:%d", stageMap_->iswhereStage_);
 	debugText_->SetPos(20, 200);
-	debugText_->Printf("downStageflag:%d", downStageflag);
+	debugText_->Printf("soundFlag_title:%d", soundFlag_title);
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
