@@ -9,6 +9,8 @@
 #include "matWorld.h"
 #include "ViewProjection.h"
 #include "stageMap.h"
+#include "WinApp.h"
+
 
 class Player
 {
@@ -30,6 +32,8 @@ public:
 	float GetZ() { return worldTransform_.translation_.z; }
 
 	float GetPlayerDir() { return playerDir; }
+
+	float GetPlayerDirY() { return playerDirY; }
 
 private:
 
@@ -54,9 +58,14 @@ private:
 	//プレイヤーの向き
 	float playerDir = 4;
 
+	float playerDirY = 0;
 	int deathFlag_ = 0;
 
 	//プレイヤー初期位置
 	uint32_t x = 1;
 	uint32_t y = 10;
+
+	POINT mousePos_ = { 0,0 };
+	POINT mousePrePos_ = { 0,0 };
+
 };

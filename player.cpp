@@ -43,12 +43,19 @@ Vector3 Player::GetWorldPosition()
 void Player::Update()
 {
 
-
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 	float px = 0;
 	float py = 0;
 	float pz = 0;
+
+	mousePrePos_ = mousePos_;
+
+	GetCursorPos(&mousePos_);
+
+	float mouseMoveX = mousePos_.x - mousePrePos_.x;
+	float mouseMoveY = mousePos_.y - mousePrePos_.y;
+
 
 	if (deathFlag_ == 0 && stageMap_->CollisionGoal(px, pz) == false)
 	{
@@ -90,6 +97,31 @@ void Player::Update()
 				deathFlag_ = true;
 			}
 		}
+
+		//右方向(マウス視点)
+		if (mouseMoveX < 0) { playerDir += 0.03f; }
+
+		//左方向(マウス視点)
+		if (mouseMoveX > 0) { playerDir -= 0.03f; }
+
+		//上方向(マウス視点)
+		if (mouseMoveY > 0) { playerDirY += 0.03f; }
+
+		//下方向(マウス視点)
+		if (mouseMoveY < 0) { playerDirY -= 0.03f; }
+
+		//視点上限
+		if (playerDirY > 1.2f)
+		{
+			playerDirY -= 0.03f;
+		}
+
+		if (playerDirY < -1.2f)
+		{
+			playerDirY += 0.03f;
+		}
+
+
 		if (input_->TriggerKey(DIK_Q))
 		{
 			px = worldTransform_.translation_.x;

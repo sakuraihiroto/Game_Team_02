@@ -55,7 +55,7 @@ void GameScene::Initialize() {
 
 	for (int i = 0; i < 2; i++)
 	{
-		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 600.f + i * 40,0 });
+		spriteNumber[i] = Sprite::Create(textureHandleNumber_, { 900.f + i * 80,0 });
 	}
 
 	
@@ -97,12 +97,13 @@ void GameScene::Update() {
 
 	switch (scene)
 	{
-	case title:
+	case title://////////タイトル//////////
 
 		break;
-	case tutorial:
+	case tutorial://////////チュートリアル//////////
+
 		break;
-	case gameScene:
+	case gameScene://////////ゲームシーン//////////
 		player_->Update();
 		stageMap_->Update();
 		//カウントダウン
@@ -114,7 +115,7 @@ void GameScene::Update() {
 		viewProjection_.eye.z = player_->GetZ();
 
 		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
-		viewProjection_.target.y = player_->GetY();
+		viewProjection_.target.y = viewProjection_.eye.y - tan(player_->GetPlayerDirY()) * 8;
 		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 
 		////下向き
@@ -146,7 +147,7 @@ void GameScene::Update() {
 		}
 
 		break;
-	case gameOver:
+	case gameOver://////////ゲームオーバー//////////
 
 		//初期化処理
 		stageMap_->ResetStage();
@@ -161,7 +162,7 @@ void GameScene::Update() {
 		}
 
 		break;
-	default:
+	case gameClear://////////ゲームクリア//////////
 
 		//初期化処理
 		stageMap_->ResetStage();
@@ -203,8 +204,8 @@ void GameScene::DrawTime()
 			number = number % CalcDigit;
 			CalcDigit = CalcDigit / 10;
 		}
-		spriteNumber[i]->SetSize({ 40,40 });
-		spriteNumber[i]->SetTextureRect({ 40.0f * eachNumber[i],0 }, { 40,40 });
+		spriteNumber[i]->SetSize({ 80,80 });
+		spriteNumber[i]->SetTextureRect({ 80.0f * eachNumber[i],0 }, { 80,80 });
 		spriteNumber[i]->Draw();
 	}
 }

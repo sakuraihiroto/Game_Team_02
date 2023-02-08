@@ -254,7 +254,6 @@ bool stageMap::CollisionHoll(float px, float pz)
 				position.z = worldTransform_[z][x].translation_.z;
 
 
-
 				float dx = abs(position.x - px);
 				float dz = abs(position.z - pz);
 
