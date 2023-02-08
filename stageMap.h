@@ -35,10 +35,11 @@ public:
 
 	void ResetStage();
 
-	int GetScene(uint32_t& scene) { return scene_ = scene; }
 	int SetScene() { return scene_; }
 
 	//void ChangeMap();
+	int GetIsWhereStage(uint32_t& iswhereStage) {return iswhereStage =iswhereStage_++; }
+	int GetIsCreateStage(uint32_t& isCreateStage) { return isCreateStage_ = 1;  }
 
 
 	bool SetGoal(bool& goalFlag) { return goalFlag = isTouchedGoal; }
@@ -49,11 +50,15 @@ public:
 	}
 
 	bool SetPauseFlag(bool& pauseFlag) { return pauseFlag = pauseFlag_; }
+	int ResetCountPossBlock(){return countPossBlock_ = 2;}
+	int ResetPossFlag() { return possFlag_ = 0; }
 
 public:
 	static const int mapMax = 12;
 
 	static int iswhereStage_;
+	
+	static int pauseFlag_;
 private:
 
 	//壁のブロック対応表
@@ -295,5 +300,5 @@ private:
 	int isCreateStage_ = 0;
 
 	//
-	int pauseFlag_ = 1;
+	
 };

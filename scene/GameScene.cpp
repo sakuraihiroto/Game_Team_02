@@ -7,6 +7,7 @@
 using Microsoft::WRL::ComPtr;
 MatWorld* matworld_ = nullptr;
 
+ bool Player::nextStageFlag ;
 
 GameScene::GameScene() {
 }
@@ -37,10 +38,12 @@ void GameScene::Initialize() {
 	//ゲームオーバー画像
 	textureHandle_gameover_ = TextureManager::Load("gameover.png");
 	sprite_gameover = Sprite::Create(textureHandle_gameover_, { 0,0 });
-
+	//nextstage画像
+	textureHandle_nextStage = TextureManager::Load("nextstage.png");
+	sprite_nextStage= Sprite::Create(textureHandle_nextStage, { 0,0 });
 	//レティクル(2D)
 	textureHandle_reticle_ = TextureManager::Load("reticle.png");
-	sprite_reticle = Sprite::Create(textureHandle_reticle_, { 300,200 });
+	sprite_reticle = Sprite::Create(textureHandle_reticle_, { 320,200 });
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -82,7 +85,19 @@ void GameScene::Update() {
 	case title:
 		if (input_->PushKey(DIK_SPACE))
 		{
+			stageMap_->iswhereStage_ = 0;
 			stageMap_->iswhereStage_++;
+			stageMap_->pauseFlag_ = 0;
+
+			initializeWorldTransform_.x = player_->GetX();
+			initializeWorldTransform_.z = player_->GetZ();
+
+			initializeWorldTransform_.x = -3;
+			initializeWorldTransform_.z = -4;
+
+			player_->SetX(initializeWorldTransform_.x);
+			player_->SetZ(initializeWorldTransform_.z);
+
 		}
 		break;
 	case tutorial:
@@ -134,6 +149,8 @@ void GameScene::Update() {
 		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 
 		break;
+	case gameClear:
+		break;
 	case gameOver:
 		break;
 	default:
@@ -164,10 +181,7 @@ void GameScene::Update() {
 
 
 	//gameOver&gameClearの時,titleに戻る
-	if (input_->TriggerKey(DIK_SPACE) && (stageMap_->iswhereStage_ ==gameOver|| stageMap_->iswhereStage_ ==gameClear))
-	{
-		stageMap_->iswhereStage_ = title;
-	}
+	
 
 	//行列を更新する
 	viewProjection_.UpdateMatrix();
@@ -254,7 +268,7 @@ if (stageMap_->iswhereStage_ == title)
 if (stageMap_->iswhereStage_ == stage2)
 {
 	//プレイヤーの手
-	stageMap_->DrawHand();
+	//stageMap_->DrawHand();
 	//時間を描画
 	DrawTime();
 	//レティクル
@@ -270,6 +284,12 @@ if (stageMap_->iswhereStage_ == gameOver)
 {
 	sprite_gameover->Draw();
 }
+
+if (player_->nextStageFlag)
+{
+	sprite_nextStage->Draw();
+}
+
 	//時間を描画
 	DrawTime();
 

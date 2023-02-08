@@ -33,11 +33,13 @@ public:
 	float GetY() { return worldTransform_.translation_.y; }
 	float GetZ() { return worldTransform_.translation_.z; }
 
+	void SetX(float x) { this->worldTransform_.translation_.x = x; }
+	void SetZ(float z) { this->worldTransform_.translation_.z = z; }
 	float GetPlayerDir() { return playerDir; }
 
 	int GetScene(uint32_t& scene) { return scene_ = scene; }
 
-	
+	static bool nextStageFlag;
 
 private:
 	enum ƒV[ƒ“
@@ -77,10 +79,12 @@ private:
 	uint32_t x = 2;
 	uint32_t y = 7;
 	uint32_t x1 = 1;
-	uint32_t y1 = 6;
+	uint32_t y1 = 7;
 	uint32_t x2 = 1;
 	uint32_t y2 = 10;
 
 	uint32_t scene_ = 0;
+	uint32_t isWhereStage = 0;
+	uint32_t isCreateStage = 0;
 
 };

@@ -3,6 +3,7 @@
 // アフィン行列呼び出し
 MatWorld* playerMatworld = nullptr;
 
+
 void Player::Initialize(Model* model, stageMap* stageMap)
 {
 	// NULLポインタチェック
@@ -113,6 +114,7 @@ void Player::Update()
 			pz = worldTransform_.translation_.z;
 
 			stageMap_->PutBlock(px, pz);
+
 			stageMap_->DeleteBlock(px, pz);
 
 
@@ -125,30 +127,59 @@ void Player::Update()
 		worldTransform_.rotation_.z = dir;
 		worldTransform_.translation_ += move;
 
-		if (stageMap_->CollisionGoal(px, pz) == true)
+	}
+	else if (stageMap_->CollisionGoal(px, pz) == true)
+	{
+		if (stageMap_->iswhereStage_ == tutorial ||
+			stageMap_->iswhereStage_ == stage1 ||
+			stageMap_->iswhereStage_ == stage2)
 		{
-			//停止
-			
-
-			if (input_->TriggerKey(DIK_SPACE))
+			nextStageFlag = true;
+		}
+		//停止
+		if (input_->PushKey(DIK_SPACE))
+		{
+			nextStageFlag = false;
+			//ステージを変える
+			if (stageMap_->iswhereStage_ != title)
 			{
-				switch (stageMap_->iswhereStage_)
-				{
-				case tutorial:
-					worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
-					
-					break;
+				//stageMap_->GetIsWhereStage(isWhereStage);
+				stageMap_->iswhereStage_++;
+			}
+			stageMap_->GetIsCreateStage(isCreateStage);
+			switch (stageMap_->iswhereStage_)
+			{
+			case tutorial:
+				worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
+				stageMap_->ResetCountPossBlock();
+				stageMap_->ResetPossFlag();
+				break;
 
-				case stage1:
-					worldTransform_.translation_ = { -7 + x1 * 2.0f, 0, 10 + y1 * -2.0f };
-					
-					break;
+			case stage1:
+				worldTransform_.translation_ = { -7 + x1 * 2.0f, 0, 10 + y1 * -2.0f };
+				stageMap_->ResetCountPossBlock();
+				stageMap_->ResetPossFlag();
 
-				case stage2:
-					worldTransform_.translation_ = { -14 + x2 * 2.0f, 0, 10 + y2 * -2.0f };
-					
-					break;
-				}
+				break;
+
+			case stage2:
+				worldTransform_.translation_ = { -7 + x2 * 2.0f, 0, 10 + y2 * -2.0f };
+				stageMap_->ResetCountPossBlock();
+				stageMap_->ResetPossFlag();
+
+				break;
+			case gameClear:
+				stageMap_->iswhereStage_ = title;
+				stageMap_->ResetCountPossBlock();
+				stageMap_->ResetPossFlag();
+
+				break;
+			case gameOver:
+				stageMap_->iswhereStage_ = title;
+				stageMap_->ResetCountPossBlock();
+				stageMap_->ResetPossFlag();
+
+				break;
 			}
 		}
 
@@ -160,11 +191,26 @@ void Player::Update()
 		worldTransform_.TransferMatrix();
 	}
 
-	if (input_->TriggerKey(DIK_R))
+	if (input_->PushKey(DIK_R))
 	{
 		deathFlag_ = 0;
-		worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
-		stageMap_->ResetStage();
+		switch (stageMap_->iswhereStage_)
+		{
+		case tutorial:
+			worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
+			stageMap_->ResetStage();
+			break;
+
+		case stage1:
+			worldTransform_.translation_ = { -7 + x1 * 2.0f, 0, 10 + y1 * -2.0f };
+			stageMap_->ResetStage();
+			break;
+
+		case stage2:
+			worldTransform_.translation_ = { -7 + x2 * 2.0f, 0, 10 + y2 * -2.0f };
+			stageMap_->ResetStage();
+			break;
+		}
 	}
 
 	worldTransform_.translation_ += move;

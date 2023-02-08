@@ -63,8 +63,8 @@ private: // メンバ変数
 		tutorial,			//1
 		stage1,				//2
 		stage2,				//3
-		gameOver,			//4
-		gameClear			//5
+		gameClear,			//4
+		gameOver			//5
 	};
 
 
@@ -89,6 +89,7 @@ private: // メンバ変数
 	uint32_t textureHandle_gameclear_ = 0; //ゲームクリア画像
 	uint32_t textureHandle_gameover_ = 0; //ゲームオーバー画像
 	uint32_t textureHandleNumber_ = 0;
+	uint32_t textureHandle_nextStage = 0;
 	//スプライト
 	Sprite* sprite_reticle = nullptr; //レティクル
 	Sprite* sprite_background = nullptr;	//背景
@@ -103,7 +104,7 @@ private: // メンバ変数
 	Sprite* sprite_title = nullptr; //タイトル画像
 	Sprite* sprite_gameclear = nullptr; //ゲームクリア画像
 	Sprite* sprite_gameover = nullptr; //ゲームオーバー画像
-
+	Sprite* sprite_nextStage = nullptr;
 
 
 	//ワールドトランスフォーム
@@ -122,4 +123,5 @@ private: // メンバ変数
 
 	bool pauseFlag = 0;
 
+	Vector3 initializeWorldTransform_ = {};
 };

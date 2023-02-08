@@ -2,6 +2,7 @@
 
 int stageMap::iswhereStage_ = 0;
 
+int stageMap::pauseFlag_ = 1;
 void stageMap::Initialize()
 {
 	modelWall_ = Model::CreateFromOBJ("wall");
@@ -67,12 +68,13 @@ void stageMap::Update() {
 	if (pauseFlag_ == 0)
 	{
 		//ゴールしたらステージのフラグを進めてステージ更新
-		if (isTouchedGoal == 1)
+		/*if (isTouchedGoal == 1)
 		{
 			iswhereStage_++;
 			isCreateStage_ = 1;
 			isTouchedGoal = 0;
-		}
+		}*/
+		isCreateStage_ = 1;
 
 		for (int z = 0; z < mapMax; z++)
 		{
@@ -224,6 +226,9 @@ void stageMap::Draw(ViewProjection viewProjection_)
 			debugText_->SetPos(20, 160);
 			debugText_->Printf(
 				"pause(%d)", pauseFlag_);
+			debugText_->SetPos(20, 180);
+			debugText_->Printf(
+				"countPossBlock_(%d)", countPossBlock_);
 		}
 	}
 }
@@ -396,114 +401,6 @@ void stageMap::PutBlock(float px, float pz)
 	}
 }
 
-//void stageMap::ChangeMap()
-//{
-//	switch (scene_)
-//	{
-//	case tutorial:
-//		for (int z = 0; z < mapMax; z++)
-//		{
-//			for (int x = 0; x < mapMax; x++)
-//			{
-//				if (tutoStageData[z][x] == none)
-//				{
-//					mapData[z][x] = none;
-//				}
-//				else if (tutoStageData[z][x] == Block)
-//				{
-//					mapData[z][x] = Block;
-//				}
-//				else if (tutoStageData[z][x] == BlockObj)
-//				{
-//					mapData[z][x] = BlockObj;
-//				}
-//				else if (tutoStageData[z][x] == Goal)
-//				{
-//					mapData[z][x] = Goal;
-//
-//				}
-//
-//				if (tutoFloorData[z][x] == Floor)
-//				{
-//					floorData[z][x] = Floor;
-//				}
-//				else if (tutoFloorData[z][x] == Holl)
-//				{
-//					floorData[z][x] = Holl;
-//				}
-//			}
-//		}
-//		break;
-//	case stage1:
-//		for (int z = 0; z < mapMax; z++)
-//		{
-//			for (int x = 0; x < mapMax; x++)
-//			{
-//				if (stage1WallData[z][x] == none)
-//				{
-//					mapData[z][x] = none;
-//				}
-//				else if (stage1WallData[z][x] == Block)
-//				{
-//					mapData[z][x] = Block;
-//				}
-//				else if (stage1WallData[z][x] == BlockObj)
-//				{
-//					mapData[z][x] = BlockObj;
-//				}
-//				else if (stage1WallData[z][x] == Goal)
-//				{
-//					mapData[z][x] = Goal;
-//				}
-//
-//				if (stage1FloorData[z][x] == Floor)
-//				{
-//					floorData[z][x] = Floor;
-//				}
-//				else if (stage1FloorData[z][x] == Holl)
-//				{
-//					floorData[z][x] = Holl;
-//				}
-//			}
-//		}
-//		break;
-//	case stage2:
-//		for (int z = 0; z < mapMax; z++)
-//		{
-//			for (int x = 0; x < mapMax; x++)
-//			{
-//				if (stage2Wall[z][x] == none)
-//				{
-//					mapData[z][x] = none;
-//				}
-//				else if (stage2Wall[z][x] == Block)
-//				{
-//					mapData[z][x] = Block;
-//				}
-//				else if (stage2Wall[z][x] == BlockObj)
-//				{
-//					mapData[z][x] = BlockObj;
-//				}
-//				else if (stage2Wall[z][x] == Goal)
-//				{
-//					mapData[z][x] = Goal;
-//				}
-//
-//
-//				if (stage2Floor[z][x] == Floor)
-//				{
-//					floorData[z][x] = Floor;
-//				}
-//				else if (stage2Floor[z][x] == Holl)
-//				{
-//					floorData[z][x] = Holl;
-//				}
-//			}
-//		}
-//		break;
-//	}
-//}
-
 bool stageMap::CollisionGoal(float px, float pz)
 {
 	Vector3 position;
@@ -650,5 +547,4 @@ void stageMap::ResetStage()
 
 	//ブロックを取れる回数
 	countPossBlock_ = 2;
-
 }
