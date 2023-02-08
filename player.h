@@ -35,7 +35,20 @@ public:
 
 	float GetPlayerDir() { return playerDir; }
 
+	int GetScene(uint32_t& scene) { return scene_ = scene; }
+
+	
+
 private:
+	enum シーン
+	{
+		title,				//0
+		tutorial,			//1
+		stage1,				//2
+		stage2,				//3
+		gameOver,			//4
+		gameClear			//5
+	};
 
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -61,6 +74,13 @@ private:
 	int deathFlag_ = 0;
 
 	//プレイヤー初期位置
-	uint32_t x = 1;
-	uint32_t y = 10;
+	uint32_t x = 2;
+	uint32_t y = 7;
+	uint32_t x1 = 1;
+	uint32_t y1 = 6;
+	uint32_t x2 = 1;
+	uint32_t y2 = 10;
+
+	uint32_t scene_ = 0;
+
 };

@@ -17,15 +17,32 @@ void Player::Initialize(Model* model, stageMap* stageMap)
 	debugText_ = DebugText::GetInstance();
 
 
-	worldTransform_.translation_ = {};
-	// ワールド変換の初期化	{0,0,0}
-
 	worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
+	// ワールド変換の初期化	{0,0,0}
 	worldTransform_.Initialize();
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
 }
+
+//void Player::SetPos()
+//{
+//	if (scene_ == tutorial)
+//	{
+//		worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
+//		worldTransform_.Initialize();
+//	}
+//	if (scene_ == stage1)
+//	{
+//		worldTransform_.translation_ = { -7 + x1 * 2.0f, 0, 10 + y1 * -2.0f };
+//		worldTransform_.Initialize();
+//	}
+//	if (scene_ == stage2)
+//	{
+//		worldTransform_.translation_ = { -7 + x2 * 2.0f, 0, 10 + y2 * -2.0f };
+//		worldTransform_.Initialize();
+//	}
+//}
 
 //ワールド座標を入れる変数
 Vector3 Player::GetWorldPosition()
@@ -46,11 +63,11 @@ void Player::Update()
 
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
-	float px = 0;
-	float py = 0;
-	float pz = 0;
-	
-	if (deathFlag_ == 0)
+	float px = worldTransform_.translation_.x;
+	float py = worldTransform_.translation_.y;
+	float pz = worldTransform_.translation_.z;
+
+	if (deathFlag_ == 0 && stageMap_->CollisionGoal(px, pz) == false)
 	{
 		//左方向
 		if (input_->PushKey(DIK_A)) { playerDir += 0.05f; }
@@ -95,7 +112,7 @@ void Player::Update()
 			px = worldTransform_.translation_.x;
 			pz = worldTransform_.translation_.z;
 
-			stageMap_->PutBlock(px, pz);             
+			stageMap_->PutBlock(px, pz);
 			stageMap_->DeleteBlock(px, pz);
 
 
@@ -108,12 +125,41 @@ void Player::Update()
 		worldTransform_.rotation_.z = dir;
 		worldTransform_.translation_ += move;
 
+		if (stageMap_->CollisionGoal(px, pz) == true)
+		{
+			//停止
+			
+
+			if (input_->TriggerKey(DIK_SPACE))
+			{
+				switch (stageMap_->iswhereStage_)
+				{
+				case tutorial:
+					worldTransform_.translation_ = { -7 + x * 2.0f, 0, 10 + y * -2.0f };
+					
+					break;
+
+				case stage1:
+					worldTransform_.translation_ = { -7 + x1 * 2.0f, 0, 10 + y1 * -2.0f };
+					
+					break;
+
+				case stage2:
+					worldTransform_.translation_ = { -14 + x2 * 2.0f, 0, 10 + y2 * -2.0f };
+					
+					break;
+				}
+			}
+		}
+
+		worldTransform_.translation_ += move;
+
 		//行列の計算
 		worldTransform_.matWorld_ = playerMatworld->CreateMatWorld(worldTransform_);
 		//行列の転送
 		worldTransform_.TransferMatrix();
-
 	}
+
 	if (input_->TriggerKey(DIK_R))
 	{
 		deathFlag_ = 0;

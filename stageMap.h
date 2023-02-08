@@ -17,6 +17,8 @@ class stageMap
 public:
 	void Initialize();
 
+	void Update();
+
 	void Draw(ViewProjection viewProjection_);
 
 	void DrawHand();
@@ -25,20 +27,33 @@ public:
 
 	bool CollisionHoll(float px, float pz);
 
+	bool CollisionGoal(float px, float pz);
+
 	void DeleteBlock(float px, float pz);
 
 	void PutBlock(float px, float pz);
 
 	void ResetStage();
-	
-	int GetScene(uint32_t& scene) { return scene_ = scene; }
 
-	void ChangeMap();
+	int GetScene(uint32_t& scene) { return scene_ = scene; }
+	int SetScene() { return scene_; }
+
+	//void ChangeMap();
+
+
+	bool SetGoal(bool& goalFlag) { return goalFlag = isTouchedGoal; }
+
+	void SetPauseFlag_()
+	{
+		pauseFlag_ = 0;
+	}
+
+	bool SetPauseFlag(bool& pauseFlag) { return pauseFlag = pauseFlag_; }
 
 public:
 	static const int mapMax = 12;
 
-
+	static int iswhereStage_;
 private:
 
 	//壁のブロック対応表
@@ -63,7 +78,7 @@ private:
 		FilledFloor		//埋めたフロア(生成には関係なし)
 	};
 
-	enum シーン
+	enum Scene
 	{
 		title,				//0
 		tutorial,			//1
@@ -88,25 +103,22 @@ private:
 
 
 	int mapData[mapMax][mapMax] = {//[11][2]
-	{ 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-	{ 2, 0, 0, 0, 1, 0, 1, 0, 2 },
-	{ 2, 0, 1, 0, 1, 0, 1, 0, 2 },
-	{ 2, 0, 1, 0, 1, 0, 0, 0, 2 },
-	{ 2, 0, 0, 0, 1, 0, 1, 0, 2 },
-	{ 2, 0, 1, 0, 0, 0, 1, 0, 2 },
-	{ 2, 0, 1, 0, 1, 0, 1, 3, 2 },
-	{ 2, 0, 1, 0, 1, 1, 1, 2, 2 },
-	{ 2, 0, 1, 0, 1, 0, 0, 0, 2 },
-	{ 2, 0, 0, 0, 1, 1, 1, 0, 2 },
-	{ 2, 0, 0, 0, 1, 0, 0, 0, 2 },
-	{ 2, 2, 2, 2, 2, 2, 2, 2, 2 }
+	{2,2,2,2,2},
+	{2,2,3,2,2},
+	{2,2,0,2,2},
+	{2,2,0,2,2},
+	{2,2,0,2,2},
+	{2,2,1,2,2},
+	{2,2,0,2,2},
+	{2,2,0,2,2},
+	{2,2,2,2,2}
 	};
 
 
 
-	int tutoStageData[mapMax][mapMax] = {
+	int tutoStageData[mapMax][mapMax] = {//[7][2]
 		{2,2,2,2,2},
-		{2,2,4,2,2},
+		{2,2,3,2,2},
 		{2,2,0,2,2},
 		{2,2,0,2,2},
 		{2,2,0,2,2},
@@ -128,7 +140,7 @@ private:
 		{0,0,0,0,0}
 	};
 
-	int stage1WallData[mapMax][mapMax] = {
+	int stage1WallData[mapMax][mapMax] = {//[6][1]
 		{2,2,2,2,2,2,2,2},
 		{2,1,1,0,0,0,0,2},
 		{2,1,1,0,1,0,3,2},
@@ -168,9 +180,9 @@ private:
 	{ 2, 2, 2, 2, 2, 2, 2, 2, 2 }
 	};
 
-	
 
-	
+
+
 	//サクライの落とし穴
 	int stage2Floor[mapMax][mapMax] = {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -187,18 +199,16 @@ private:
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 	};
 	int floorData[mapMax][mapMax] = {
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 1, 0, 0, 1, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 1, 0, 0, 1, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 1, 0, 1, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 1, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+					{0,0,0,0,0},
+					{0,0,0,0,0},
+					{0,0,0,0,0},
+					{0,0,1,0,0},
+					{0,0,0,0,0},
+					{0,0,0,0,0},
+					{0,0,0,0,0},
+					{0,0,0,0,0},
+					{0,0,0,0,0}
+
 	};
 
 	int touchData[mapMax][mapMax] = {
@@ -277,4 +287,13 @@ private:
 
 	//ブロックを取れる回数
 	int countPossBlock_ = 2;
+
+	//ゴールに触れたかのフラグ
+	int isTouchedGoal = 0;
+
+	//ステージを更新するかのフラグ
+	int isCreateStage_ = 0;
+
+	//
+	int pauseFlag_ = 1;
 };

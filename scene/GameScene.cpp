@@ -77,18 +77,50 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	switch (scene)
+	switch (stageMap_->iswhereStage_)
 	{
 	case title:
-
+		if (input_->PushKey(DIK_SPACE))
+		{
+			stageMap_->iswhereStage_++;
+		}
 		break;
 	case tutorial:
+		
+		player_->Update();
+		stageMap_->Update();
+		//カウントダウン
+		Count();
+
+		//カメラ追従
+		viewProjection_.eye.x = player_->GetX();
+		viewProjection_.eye.y = player_->GetY();
+		viewProjection_.eye.z = player_->GetZ();
+
+		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
+		viewProjection_.target.y = player_->GetY();
+		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 		break;
 	case stage1:
+		
+		player_->Update();
+		stageMap_->Update();
+		//カウントダウン
+		Count();
+
+		//カメラ追従
+		viewProjection_.eye.x = player_->GetX();
+		viewProjection_.eye.y = player_->GetY();
+		viewProjection_.eye.z = player_->GetZ();
+
+		viewProjection_.target.x = viewProjection_.eye.x - cos(player_->GetPlayerDir()) * 8;
+		viewProjection_.target.y = player_->GetY();
+		viewProjection_.target.z = viewProjection_.eye.z - sin(player_->GetPlayerDir()) * 8;
 		break;
 	case stage2:
+		
 		player_->Update();
-
+		stageMap_->Update();
 		//カウントダウン
 		Count();
 
@@ -107,19 +139,34 @@ void GameScene::Update() {
 	default:
 		break;
 	}
-	//spaceでシーンチェンジ
-	if (input_->TriggerKey(DIK_SPACE) && scene < stage2)
+
+	//stageMap_->SetPauseFlag(pauseFlag);
+	////spaceでシーンチェンジ
+	//if (input_->TriggerKey(DIK_SPACE) && scene==title||pauseFlag==0)
+	//{
+	//	//scene += 1;
+	//	//シーンを取得
+	//	stageMap_->GetScene(scene);
+	//	player_->GetScene(scene);
+	//	//stageを変える
+	//	stageMap_->ChangeMap();
+	//	pauseFlag == true;
+	//}
+
+	//ゴール処理
+
+
+	/*if (stageMap_->SetGoal(goalFlag))
 	{
 		scene += 1;
-		//シーンを取得
-		stageMap_->GetScene(scene);
-		//stageを変える
-		stageMap_->ChangeMap();
-	}
+		goalFlag = 0;
+	}*/
+
+
 	//gameOver&gameClearの時,titleに戻る
-	else if (input_->TriggerKey(DIK_SPACE) && scene > stage2)
+	if (input_->TriggerKey(DIK_SPACE) && (stageMap_->iswhereStage_ ==gameOver|| stageMap_->iswhereStage_ ==gameClear))
 	{
-		scene = title;
+		stageMap_->iswhereStage_ = title;
 	}
 
 	//行列を更新する
@@ -156,7 +203,7 @@ void GameScene::Draw() {
 	debugText_->Printf("count:%d", count_);
 	debugText_->SetPos(20, 60);
 	debugText_->Printf("time:%d", time);
-	switch (scene)
+	switch (stageMap_->iswhereStage_)
 	{
 	case title:
 		break;
@@ -199,12 +246,12 @@ void GameScene::Draw() {
 	/// </summary>
 //sprite_THEBLOCK->Draw();
 //タイトル
-if (scene == title)
+if (stageMap_->iswhereStage_ == title)
 {
 	sprite_title->Draw();
 }
 //ゲーム画面
-if (scene == stage2)
+if (stageMap_->iswhereStage_ == stage2)
 {
 	//プレイヤーの手
 	stageMap_->DrawHand();
@@ -214,12 +261,12 @@ if (scene == stage2)
 	sprite_reticle->Draw();
 }
 //ゲームクリア
-if (scene == gameClear)
+if (stageMap_->iswhereStage_ == gameClear)
 {
 	sprite_gameclear->Draw();
 }
 //ゲームオーバー
-if (scene == gameOver)
+if (stageMap_->iswhereStage_ == gameOver)
 {
 	sprite_gameover->Draw();
 }

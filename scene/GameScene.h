@@ -118,4 +118,8 @@ private: // メンバ変数
 
 	char eachNumber[Digit] = {};
 
+	bool goalFlag = 0;
+
+	bool pauseFlag = 0;
+
 };
